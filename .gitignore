@@ -18,3 +18,4 @@ logs/
 bin/
 libs/
 /build.gradle
+/crash-reports/
