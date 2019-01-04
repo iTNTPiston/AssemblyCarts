@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.tntp.assemblycarts.api.IProvider;
+import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
+import com.tntp.assemblycarts.tileentity.IRequester;
 import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.block.Block;
@@ -25,98 +28,29 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityMinecartAssembly extends EntityMinecartContainer {
+public class EntityMinecartAssembly extends EntityMinecartContainer implements IProvider, IRequester {
 
-  private ItemStack crafting;
-  private List<ItemStack> requesting = new ArrayList<ItemStack>();
+  private ItemStack target;
+  private RequestManager requestManager;
 
   public EntityMinecartAssembly(World world) {
     super(world);
+    requestManager = new RequestManager(this, 0, 26);
   }
 
   public EntityMinecartAssembly(World world, double x, double y, double z) {
     super(world, x, y, z);
+    requestManager = new RequestManager(this, 0, 26);
   }
 
-  public void setCrafting(ItemStack stack) {
-    crafting = stack;
-  }
-
-  public ItemStack getCrafting() {
-    return crafting;
-  }
-
-  public List<ItemStack> getRequesting() {
-    return requesting;
-  }
-
-  public boolean isRequesting() {
-    return !requesting.isEmpty();
-  }
-
-  /**
-   * Called by loader
-   * 
-   * @param stack
-   */
-  public ItemStack loadItemStack(ItemStack stack) {
-    for (Iterator<ItemStack> iter = requesting.iterator(); iter.hasNext();) {
-      ItemStack request = iter.next();
-      if (ItemUtil.areItemAndTagEqual(request, stack)) {
-        int needed = request.stackSize;
-        int provided = stack.stackSize;
-        ItemStack leftOver;
-        if (needed >= provided) {
-          leftOver = stack.splitStack(0);
-        } else {
-          leftOver = stack.splitStack(provided - needed);
-        }
-        int putIn = stack.stackSize;
-        ItemStack leftOverAfterAdd = addToInventory(stack);
-        int sizeAfterAdd = leftOverAfterAdd == null ? 0 : leftOverAfterAdd.stackSize;
-        int got = putIn - sizeAfterAdd;
-        request.stackSize -= got;
-        if (request.stackSize <= 0) {
-          iter.remove();
-        }
-        if (sizeAfterAdd <= 0)
-          return leftOver.stackSize <= 0 ? null : leftOver;
-        leftOver.stackSize += sizeAfterAdd;
-        return leftOver;
-      }
-    }
-    return stack;
-  }
-
-  private ItemStack addToInventory(ItemStack stack) {
-    for (int i = 0; i < this.getSizeInventory(); i++) {
-      ItemStack slot = this.getStackInSlot(i);
-      int max = Math.min(this.getInventoryStackLimit(), stack.getMaxStackSize());
-      if (slot == null) {
-        if (stack.stackSize <= max) {
-          this.setInventorySlotContents(i, stack);
-          return null;
-        } else {
-          this.setInventorySlotContents(i, stack.splitStack(max));
-        }
-      } else {
-        if (ItemUtil.areItemAndTagEqual(stack, slot)) {
-          int putIn = slot.stackSize + stack.stackSize <= max ? stack.stackSize : max - slot.stackSize;
-          stack.splitStack(putIn);
-          slot.stackSize += putIn;
-        }
-      }
-      if (stack.stackSize == 0)
-        return null;
-    }
-    if (stack.stackSize == 0)
-      return null;
-    return stack;
+  public void setTarget(ItemStack stack, List<ItemStack> need) {
+    requestManager.initRequestDirectly(stack, need);
+    target = stack;
   }
 
   @Override
-  public AxisAlignedBB getCollisionBox(Entity entity) {
-    return super.getCollisionBox(entity);
+  public ItemStack getProviderTarget() {
+    return target;
   }
 
   @Override
@@ -168,12 +102,51 @@ public class EntityMinecartAssembly extends EntityMinecartContainer {
 
   @Override
   public int getSizeInventory() {
-    return 27;
+    return 18;
   }
 
   @Override
   public int getMinecartType() {
     return -1;
+  }
+
+  @Override
+  public boolean provide(RequestManager rm) {
+    for (int i = 0; i < getSizeInventory(); i++) {
+      ItemStack stackInSlot = getStackInSlot(i);
+      if (stackInSlot != null && rm.isRequesting(stackInSlot)) {
+        ItemStack sup = stackInSlot.splitStack(1);
+        rm.supply(sup);
+        if (sup.stackSize > 0) {// supply failed, add the stack back
+          stackInSlot.stackSize++;
+        } else {
+          // supply succeeded, apply change to inventory
+          if (stackInSlot.stackSize == 0)
+            stackInSlot = null;
+          setInventorySlotContents(i, stackInSlot);
+          return true;
+        }
+
+      }
+    }
+    return false;
+  }
+
+  @Override
+  protected void writeEntityToNBT(NBTTagCompound tag) {
+    super.writeEntityToNBT(tag);
+    requestManager.writeToNBT(tag);
+  }
+
+  @Override
+  protected void readEntityFromNBT(NBTTagCompound tag) {
+    super.readEntityFromNBT(tag);
+    requestManager.readFromNBT(tag);
+  }
+
+  @Override
+  public RequestManager getRequestManager() {
+    return requestManager;
   }
 
 }

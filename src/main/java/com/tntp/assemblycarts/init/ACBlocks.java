@@ -2,10 +2,12 @@ package com.tntp.assemblycarts.init;
 
 import com.tntp.assemblycarts.block.BlockAssemblyFrame;
 import com.tntp.assemblycarts.block.BlockAssemblyManager;
+import com.tntp.assemblycarts.block.BlockAssemblyRequester;
 import com.tntp.assemblycarts.block.BlockProviderTrack;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.tileentity.TileAssemblyFrame;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
+import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import com.tntp.assemblycarts.tileentity.TileProviderTrack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -18,6 +20,7 @@ public class ACBlocks {
 
   public static final Block assembly_manager = null;
   public static final Block assembly_frame = null;
+  public static final Block assembly_requester = null;
 
   public static final Block provider_track = null;
 
@@ -26,6 +29,8 @@ public class ACBlocks {
     regTileEntity(TileAssemblyManager.class);
     regBlock(new BlockAssemblyFrame(), "assembly_frame");
     regTileEntity(TileAssemblyFrame.class);
+    regBlock(new BlockAssemblyRequester(), "assembly_requester");
+    regTileEntity(TileAssemblyRequester.class);
     regBlock(new BlockProviderTrack(), "provider_track");
     regTileEntity(TileProviderTrack.class);
 

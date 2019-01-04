@@ -15,7 +15,7 @@ public class ACItems {
 
   public static final Item crowbar_assemblium = null;
 
-  public static final Item process_book = null;
+  public static final ItemProcessBook process_book = null;
 
   public static void loadItems() {
     regItem(new ItemAssemblyCart(), "assembly_cart");

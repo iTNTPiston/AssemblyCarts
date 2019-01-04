@@ -27,7 +27,9 @@ public class ACGuis {
 
   public static void loadGuis() {
     // don't use class here to prevent server side from loading those classes
-    assignGuiID("GuiProcessBook");
+    assignGuiID("ProcessBook");
+    assignGuiID("MinecartAssembly");
+    assignGuiID("AssemblyRequester");
 
     NetworkRegistry.INSTANCE.registerGuiHandler(AssemblyCartsMod.MODID, guiHandler);
 

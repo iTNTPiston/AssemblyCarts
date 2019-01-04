@@ -61,13 +61,13 @@ public class ACNetwork {
     regMS(MSGuiProcessBookSlotClick.class);
   }
 
-  private static void loadClientMessagesServerSide() {
-
+  private static void loadClientMessagesServerSide() throws Exception {
+    regMCS(MCGuiRequestManager.class);
   }
 
   @SideOnly(Side.CLIENT)
   private static void loadClientMessagesClientSide() {
-
+    regMCC(MCGuiRequestManager.class, new MCGuiRequestManagerHandler());
   }
 
 }

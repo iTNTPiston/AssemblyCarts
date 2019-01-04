@@ -8,6 +8,18 @@ public class TileProviderTrack extends STile {
   private boolean reversed;
   private boolean occupied;
   private EntityMinecartAssembly dockedCart;
+  // private boolean hasCartInThisTick;
+
+//  private
+//
+//  @Override public void updateEntity() {
+//    super.updateEntity();
+//    if (worldObj != null) {
+//      if (hasCartInThisTick) {
+//        
+//      }
+//    }
+//  }
 
   public boolean isReversed() {
     return reversed;
@@ -29,12 +41,14 @@ public class TileProviderTrack extends STile {
     super.writeToNBT(tag);
     tag.setBoolean("reversed", reversed);
     tag.setBoolean("occupied", occupied);
+    // tag.setBoolean("hasCart", hasCartInThisTick);
   }
 
   public void readFromNBT(NBTTagCompound tag) {
     super.readFromNBT(tag);
     reversed = tag.getBoolean("reversed");
     occupied = tag.getBoolean("occupied");
+    // hasCartInThisTick = tag.getBoolean("hasCart");
   }
 
   public EntityMinecartAssembly getDockedCart() {

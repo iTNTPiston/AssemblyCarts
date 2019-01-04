@@ -5,20 +5,37 @@ import java.util.List;
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.init.ACGuis;
+import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.util.KeyUtil;
 import com.tntp.assemblycarts.util.LocalUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ItemProcessBook extends SItem {
+  private IIcon slotIcon;
+
   public ItemProcessBook() {
     this.setMaxStackSize(1);
+  }
+
+  @SideOnly(Side.CLIENT)
+  public static IIcon getEmptySlotIcon() {
+    return ACItems.process_book.slotIcon;
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Override
+  public void registerIcons(IIconRegister reg) {
+    super.registerIcons(reg);
+    slotIcon = reg.registerIcon(this.getIconString() + "_bg");
   }
 
   /**
@@ -27,7 +44,7 @@ public class ItemProcessBook extends SItem {
    */
   public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
     if (!world.isRemote) {
-      player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("GuiProcessBook"), world, (int) (player.posX),
+      player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("ProcessBook"), world, (int) (player.posX),
           (int) (player.posY), (int) (player.posZ));
     }
     return stack;

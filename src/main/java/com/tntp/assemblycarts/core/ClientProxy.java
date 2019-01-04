@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.core;
 
+import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACRender;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -18,6 +19,7 @@ public class ClientProxy extends Proxy {
 
   public void postInit(FMLPostInitializationEvent event) {
     super.postInit(event);
+    ACEvents.loadClientEvents();
   }
 
 }

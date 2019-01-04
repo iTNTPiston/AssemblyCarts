@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 
 public class BlockProviderTrack extends BlockRailBase implements ITileEntityProvider {
   private IIcon powered;
-  private IIcon occupied;
 
   public BlockProviderTrack() {
     super(true);
@@ -42,13 +41,16 @@ public class BlockProviderTrack extends BlockRailBase implements ITileEntityProv
     this.powered = reg.registerIcon(this.getTextureName() + "_powered");
   }
 
-  public void setPowered(World world, int x, int y, int z, boolean power) {
+  public static void setPowered(World world, int x, int y, int z, boolean power) {
     int oldMeta = world.getBlockMetadata(x, y, z);
     int newMeta = power ? (oldMeta | 8) : (oldMeta & 7);
     world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);
+    if (oldMeta != newMeta) {
+      world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+    }
   }
 
-  public boolean isPowered(World world, int x, int y, int z) {
+  public static boolean isPowered(World world, int x, int y, int z) {
     return (world.getBlockMetadata(x, y, z) & 8) == 8;
   }
 
@@ -114,39 +116,51 @@ public class BlockProviderTrack extends BlockRailBase implements ITileEntityProv
    */
   @Override
   public void onMinecartPass(World world, EntityMinecart cart, int x, int y, int z) {
-    if (!world.isRemote) {
+    // if (!world.isRemote) {
 
-      if (isPowered(world, x, y, z)) {
-
-      } else {
-        TileProviderTrack tile = (TileProviderTrack) world.getTileEntity(x, y, z);
-        if (cart instanceof EntityMinecartAssembly) {
-          if (!tile.isOccupied() || tile.getDockedCart() == cart) {
-            cart.motionX = 0;
-            cart.motionZ = 0;
-            cart.posX = x + 0.5;
-            cart.posZ = z + 0.5;
-            tile.setOccupied(true);
+    if (isPowered(world, x, y, z)) {
+      double accel = 0.03;
+      int meta = world.getBlockMetadata(x, y, z) & 7;
+      TileProviderTrack tile = (TileProviderTrack) world.getTileEntity(x, y, z);
+      if (tile.isReversed()) {
+        accel = -accel;
+      }
+      if (meta == 0) {
+        cart.motionZ -= accel;
+      } else if (meta == 1) {
+        cart.motionX -= accel;
+      }
+      tile.setOccupied(false);
+      tile.setDockedCart(null);
+    } else {
+      TileProviderTrack tile = (TileProviderTrack) world.getTileEntity(x, y, z);
+      if (cart instanceof EntityMinecartAssembly) {
+        if (!tile.isOccupied() || tile.getDockedCart() == cart) {
+          cart.motionX = 0;
+          cart.motionZ = 0;
+          cart.posX = x + 0.5;
+          cart.posZ = z + 0.5;
+          tile.setOccupied(true);
+          tile.setDockedCart((EntityMinecartAssembly) cart);
+        } else {
+          if (tile.getDockedCart() == null) {
             tile.setDockedCart((EntityMinecartAssembly) cart);
           } else {
-            if (tile.getDockedCart() == null) {
-              tile.setDockedCart((EntityMinecartAssembly) cart);
-            } else {
-              // bounce the cart back
-              cart.motionX = -cart.motionX / 2;
-              cart.motionZ = -cart.motionZ / 2;
-            }
-          }
-        } else {
-          if (tile.isOccupied()) {
             // bounce the cart back
             cart.motionX = -cart.motionX / 2;
             cart.motionZ = -cart.motionZ / 2;
           }
         }
-
+      } else {
+        if (tile.isOccupied()) {
+          // bounce the cart back
+          cart.motionX = -cart.motionX / 2;
+          cart.motionZ = -cart.motionZ / 2;
+        }
       }
+
     }
+    // }
   }
 
   @Override

@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.api;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
@@ -94,6 +95,37 @@ public class AssemblyProcess {
       }
     }
     tag.setTag("otherOut", out);
+  }
+
+  public Iterator<ItemStack> inputIterator() {
+    return new InputIterator();
+  }
+
+  private class InputIterator implements Iterator<ItemStack> {
+    private int i = 0;
+
+    private InputIterator() {
+      findNext();
+    }
+
+    private void findNext() {
+      while (i < inputs.length && inputs[i] == null)
+        i++;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return i < inputs.length;
+    }
+
+    @Override
+    public ItemStack next() {
+      ItemStack s = inputs[i];
+      i++;
+      findNext();
+      return s;
+    }
+
   }
 
 }
