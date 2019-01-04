@@ -23,34 +23,45 @@ public class ItemUtil {
     return false;
   }
 
+  public static void addToInventory(ItemStack stackToPut, IInventory inventory, int start, int end) {
+    int[] slots = new int[end - start + 1];
+    for (int i = 0; i < slots.length; i++) {
+      slots[i] = i + start;
+    }
+    addToInventory(stackToPut, inventory, slots);
+  }
+
   /**
    * Add the stack to the inventory. The stacksize of the stack will decrease when
    * items are put into the inventory
    * 
    * @param stackToPut
    * @param inventory  The inventory to put the stack
-   * @param startSlot  The start slot, inclusive
-   * @param endSlot    The end slot, inclusive
+   * @param slots      An array containing the slots to put the stacks
    */
-  public static void addToInventory(ItemStack stackToPut, IInventory inventory, int startSlot, int endSlot) {
-    if (endSlot >= inventory.getSizeInventory())
-      endSlot = inventory.getSizeInventory() - 1;
+  public static void addToInventory(ItemStack stackToPut, IInventory inventory, int[] slots) {
     boolean inventoryChanged = false;
-    for (int i = startSlot; i <= endSlot && stackToPut.stackSize > 0; i++) {
+    for (int slotsID = 0; slotsID < slots.length && stackToPut.stackSize > 0; slotsID++) {
+      int i = slots[slotsID];
+      if (i < 0 || i >= inventory.getSizeInventory())
+        continue;
       ItemStack stackInInventory = inventory.getStackInSlot(i);
       int maxStackSize = Math.min(inventory.getInventoryStackLimit(), stackToPut.getMaxStackSize());
       if (stackInInventory == null) {
-        // Can directly putin the stack
-        int putInSize;
-        if (stackToPut.stackSize <= maxStackSize) {
-          // put the whole stack
-          putInSize = stackToPut.stackSize;
-        } else {
-          // put in max
-          putInSize = maxStackSize;
+        if (inventory.isItemValidForSlot(i, stackToPut)) {
+          // Can directly putin the stack
+          int putInSize;
+          if (stackToPut.stackSize <= maxStackSize) {
+            // put the whole stack
+            putInSize = stackToPut.stackSize;
+          } else {
+            // put in max
+            putInSize = maxStackSize;
+          }
+
+          inventory.setInventorySlotContents(i, stackToPut.splitStack(putInSize));
+          inventoryChanged = true;
         }
-        inventory.setInventorySlotContents(i, stackToPut.splitStack(putInSize));
-        inventoryChanged = true;
       } else {
         // There is already a stack in the slot
         if (ItemUtil.areItemAndTagEqual(stackToPut, stackInInventory)) {
@@ -65,7 +76,7 @@ public class ItemUtil {
             putInSize = maxStackSize - stackInInventory.stackSize;
             stackToPut.stackSize -= putInSize;
           }
-          stackToPut.splitStack(putInSize);
+          // stackToPut.splitStack(putInSize);
           stackInInventory.stackSize += putInSize;
           inventoryChanged = true;
         }

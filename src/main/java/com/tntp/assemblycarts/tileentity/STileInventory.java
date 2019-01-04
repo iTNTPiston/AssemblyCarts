@@ -3,13 +3,14 @@ package com.tntp.assemblycarts.tileentity;
 import com.tntp.assemblycarts.util.UniversalUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class STileInventory extends STile implements ISidedInventory {
+public class STileInventory extends STile implements IInventory {
   private ItemStack[] inventory;
 
   public STileInventory(int size) {
@@ -81,22 +82,7 @@ public class STileInventory extends STile implements ISidedInventory {
 
   @Override
   public boolean isItemValidForSlot(int slot, ItemStack stack) {
-    return false;
-  }
-
-  @Override
-  public int[] getAccessibleSlotsFromSide(int side) {
-    return UniversalUtil.EMPTY_INT_ARRAY;
-  }
-
-  @Override
-  public boolean canInsertItem(int slot, ItemStack stack, int side) {
-    return false;
-  }
-
-  @Override
-  public boolean canExtractItem(int slot, ItemStack stack, int side) {
-    return false;
+    return true;
   }
 
   @Override

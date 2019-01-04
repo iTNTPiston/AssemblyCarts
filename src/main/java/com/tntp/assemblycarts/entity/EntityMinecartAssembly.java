@@ -5,10 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.tntp.assemblycarts.api.IProvider;
+import com.tntp.assemblycarts.api.IRequester;
+import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
-import com.tntp.assemblycarts.tileentity.IRequester;
 import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.block.Block;
@@ -21,6 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,74 +32,55 @@ import net.minecraft.world.World;
 
 public class EntityMinecartAssembly extends EntityMinecartContainer implements IProvider, IRequester {
 
-  private ItemStack target;
   private RequestManager requestManager;
+  private ProvideManager provideManager;
 
   public EntityMinecartAssembly(World world) {
     super(world);
-    requestManager = new RequestManager(this, 0, 26);
+    initManagers();
   }
 
   public EntityMinecartAssembly(World world, double x, double y, double z) {
     super(world, x, y, z);
-    requestManager = new RequestManager(this, 0, 26);
+    initManagers();
+  }
+
+  private void initManagers() {
+    requestManager = new RequestManager(this, 0, 17);
+    int[] slots = new int[18];
+    for (int i = 0; i < slots.length; i++)
+      slots[i] = i;
+    provideManager = new ProvideManager(this, slots);
   }
 
   public void setTarget(ItemStack stack, List<ItemStack> need) {
     requestManager.initRequestDirectly(stack, need);
-    target = stack;
+    provideManager.setProvideTarget(stack);
   }
 
   @Override
-  public ItemStack getProviderTarget() {
-    return target;
+  public void onUpdate() {
+    super.onUpdate();
+    if (worldObj != null && !worldObj.isRemote) {
+      if (requestManager.isFulfilled())
+        provideManager.setProvideTarget(null);
+    }
   }
 
   @Override
-  public ItemStack getCartItem() {
-    return new ItemStack(ACItems.assembly_cart);
-  }
-
-  @Override
-  public Block func_145820_n() {
+  public Block func_145817_o() {
     return Blocks.diamond_ore;
   }
 
+  @Override
   public void killMinecart(DamageSource p_94095_1_) {
-    this.setDead();
-    ItemStack cart = new ItemStack(ACItems.assembly_cart, 1);
-    if (this.func_95999_t() != null) {
-      cart.setStackDisplayName(this.func_95999_t());
-    }
+    if (!worldObj.isRemote)
+      super.killMinecart(p_94095_1_);
+  }
 
-    this.entityDropItem(cart, 0.0F);
-
-    for (int i = 0; i < this.getSizeInventory(); ++i) {
-      ItemStack itemstack = this.getStackInSlot(i);
-
-      if (itemstack != null) {
-        float f = this.rand.nextFloat() * 0.8F + 0.1F;
-        float f1 = this.rand.nextFloat() * 0.8F + 0.1F;
-        float f2 = this.rand.nextFloat() * 0.8F + 0.1F;
-
-        while (itemstack.stackSize > 0) {
-          int j = this.rand.nextInt(21) + 10;
-
-          if (j > itemstack.stackSize) {
-            j = itemstack.stackSize;
-          }
-
-          itemstack.stackSize -= j;
-          EntityItem entityitem = new EntityItem(this.worldObj, this.posX + (double) f, this.posY + (double) f1,
-              this.posZ + (double) f2, new ItemStack(itemstack.getItem(), j, itemstack.getItemDamage()));
-          float f3 = 0.05F;
-          entityitem.motionX = (double) ((float) this.rand.nextGaussian() * f3);
-          entityitem.motionY = (double) ((float) this.rand.nextGaussian() * f3 + 0.2F);
-          entityitem.motionZ = (double) ((float) this.rand.nextGaussian() * f3);
-          this.worldObj.spawnEntityInWorld(entityitem);
-        }
-      }
-    }
+  @Override
+  public void setDead() {
+    this.isDead = true;
   }
 
   @Override
@@ -111,42 +94,27 @@ public class EntityMinecartAssembly extends EntityMinecartContainer implements I
   }
 
   @Override
-  public boolean provide(RequestManager rm) {
-    for (int i = 0; i < getSizeInventory(); i++) {
-      ItemStack stackInSlot = getStackInSlot(i);
-      if (stackInSlot != null && rm.isRequesting(stackInSlot)) {
-        ItemStack sup = stackInSlot.splitStack(1);
-        rm.supply(sup);
-        if (sup.stackSize > 0) {// supply failed, add the stack back
-          stackInSlot.stackSize++;
-        } else {
-          // supply succeeded, apply change to inventory
-          if (stackInSlot.stackSize == 0)
-            stackInSlot = null;
-          setInventorySlotContents(i, stackInSlot);
-          return true;
-        }
-
-      }
-    }
-    return false;
-  }
-
-  @Override
   protected void writeEntityToNBT(NBTTagCompound tag) {
     super.writeEntityToNBT(tag);
     requestManager.writeToNBT(tag);
+    provideManager.writeToNBT(tag);
   }
 
   @Override
   protected void readEntityFromNBT(NBTTagCompound tag) {
     super.readEntityFromNBT(tag);
     requestManager.readFromNBT(tag);
+    provideManager.readFromNBT(tag);
   }
 
   @Override
   public RequestManager getRequestManager() {
     return requestManager;
+  }
+
+  @Override
+  public ProvideManager getProvideManager() {
+    return provideManager;
   }
 
 }

@@ -1,6 +1,4 @@
-package com.tntp.assemblycarts.tileentity;
-
-import com.tntp.assemblycarts.api.RequestManager;
+package com.tntp.assemblycarts.api;
 
 public interface IRequester {
   public RequestManager getRequestManager();

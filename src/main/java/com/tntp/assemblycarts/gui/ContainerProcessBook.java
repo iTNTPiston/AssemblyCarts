@@ -58,6 +58,8 @@ public class ContainerProcessBook extends SContainer {
       ItemStack main = process.getMainOutput();
       if (main == null || (current != null && !ItemUtil.areItemAndTagEqual(current, main))) {
         process.setMainOutput(current);
+        if (mouseButton == 1)
+          process.getMainOutput().stackSize = 1;
       } else {
         if (mouseButton == 0) {
           main.stackSize--;
@@ -74,6 +76,8 @@ public class ContainerProcessBook extends SContainer {
       ItemStack input = process.getInput(slotID);
       if (input == null || (current != null && !ItemUtil.areItemAndTagEqual(current, input))) {
         process.setInput(slotID, current);
+        if (mouseButton == 1)
+          process.getInput(slotID).stackSize = 1;
       } else {
         if (mouseButton == 0) {
           input.stackSize--;
@@ -90,6 +94,8 @@ public class ContainerProcessBook extends SContainer {
       ItemStack output = process.getOtherOutput(slotID);
       if (output == null || (current != null && !ItemUtil.areItemAndTagEqual(current, output))) {
         process.setOtherOutput(slotID, current);
+        if (mouseButton == 1)
+          process.getOtherOutput(slotID).stackSize = 1;
       } else {
         if (mouseButton == 0) {
           output.stackSize--;

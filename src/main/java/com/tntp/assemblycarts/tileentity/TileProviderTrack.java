@@ -8,18 +8,9 @@ public class TileProviderTrack extends STile {
   private boolean reversed;
   private boolean occupied;
   private EntityMinecartAssembly dockedCart;
-  // private boolean hasCartInThisTick;
 
-//  private
-//
-//  @Override public void updateEntity() {
-//    super.updateEntity();
-//    if (worldObj != null) {
-//      if (hasCartInThisTick) {
-//        
-//      }
-//    }
-//  }
+  public TileProviderTrack() {
+  }
 
   public boolean isReversed() {
     return reversed;
@@ -27,6 +18,8 @@ public class TileProviderTrack extends STile {
 
   public void setReversed(boolean reversed) {
     this.reversed = reversed;
+    if (worldObj != null && !worldObj.isRemote)
+      this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), EVENT_TRACK_REVERSE, reversed ? 1 : 0);
   }
 
   public boolean isOccupied() {
@@ -46,7 +39,7 @@ public class TileProviderTrack extends STile {
 
   public void readFromNBT(NBTTagCompound tag) {
     super.readFromNBT(tag);
-    reversed = tag.getBoolean("reversed");
+    setReversed(tag.getBoolean("reversed"));
     occupied = tag.getBoolean("occupied");
     // hasCartInThisTick = tag.getBoolean("hasCart");
   }
@@ -57,5 +50,17 @@ public class TileProviderTrack extends STile {
 
   public void setDockedCart(EntityMinecartAssembly dockedCart) {
     this.dockedCart = dockedCart;
+  }
+
+  @Override
+  public boolean receiveClientEvent(int event, int param) {
+    if (super.receiveClientEvent(event, param))
+      return true;
+    if (event == EVENT_TRACK_REVERSE) {
+      reversed = param == 1;
+      worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+      return true;
+    }
+    return false;
   }
 }

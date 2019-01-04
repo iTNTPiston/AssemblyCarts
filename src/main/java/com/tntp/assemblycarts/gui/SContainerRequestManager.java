@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.gui;
 
+import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MCGuiRequestManager;
 
@@ -8,7 +9,7 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class SContainerRequestManager extends SContainer implements IContainerRequestManager {
+public abstract class SContainerRequestManager extends SContainer implements IRequester {
 
   public SContainerRequestManager(IInventory playerInventory, int slots, IInventory machine, int playerSlotsX,
       int playerSlotsY) {
@@ -25,20 +26,20 @@ public abstract class SContainerRequestManager extends SContainer implements ICo
 
   public void detectAndSendChanges() {
     super.detectAndSendChanges();
-    if (getContainerRequestManager().update) {
+    if (getRequestManager().update) {
       for (int j = 0; j < this.crafters.size(); ++j) {
         ICrafting ic = (ICrafting) this.crafters.get(j);
         if (ic instanceof EntityPlayerMP) {
           sendRequestManager((EntityPlayerMP) ic);
         }
       }
-      getContainerRequestManager().update = false;
+      getRequestManager().update = false;
     }
   }
 
   public void sendRequestManager(EntityPlayerMP player) {
     NBTTagCompound tag = new NBTTagCompound();
-    getContainerRequestManager().writeToNBT(tag);
+    getRequestManager().writeToNBT(tag);
     ACNetwork.network.sendTo(new MCGuiRequestManager(this.windowId, tag), player);
   }
 

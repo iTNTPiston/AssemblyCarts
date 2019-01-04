@@ -1,5 +1,7 @@
 package com.tntp.assemblycarts.block;
 
+import java.util.Arrays;
+
 import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.item.Crowbar;
@@ -44,10 +46,11 @@ public class BlockProviderTrack extends BlockRailBase implements ITileEntityProv
   public static void setPowered(World world, int x, int y, int z, boolean power) {
     int oldMeta = world.getBlockMetadata(x, y, z);
     int newMeta = power ? (oldMeta | 8) : (oldMeta & 7);
+    TileProviderTrack tile = (TileProviderTrack) world.getTileEntity(x, y, z);
+    boolean reversed = tile.isReversed();
     world.setBlockMetadataWithNotify(x, y, z, newMeta, 3);
-    if (oldMeta != newMeta) {
-      world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-    }
+    tile = (TileProviderTrack) world.getTileEntity(x, y, z);
+    tile.setReversed(reversed);
   }
 
   public static boolean isPowered(World world, int x, int y, int z) {
@@ -126,7 +129,7 @@ public class BlockProviderTrack extends BlockRailBase implements ITileEntityProv
         accel = -accel;
       }
       if (meta == 0) {
-        cart.motionZ -= accel;
+        cart.motionZ += accel;
       } else if (meta == 1) {
         cart.motionX -= accel;
       }
@@ -166,6 +169,16 @@ public class BlockProviderTrack extends BlockRailBase implements ITileEntityProv
   @Override
   public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
     return new TileProviderTrack();
+  }
+
+  @Override
+  public boolean onBlockEventReceived(World world, int x, int y, int z, int p_149696_5_, int p_149696_6_) {
+    super.onBlockEventReceived(world, x, y, z, p_149696_5_, p_149696_6_);
+    if (this.hasTileEntity(world.getBlockMetadata(x, y, z))) {
+      TileEntity tileentity = world.getTileEntity(x, y, z);
+      return tileentity != null ? tileentity.receiveClientEvent(p_149696_5_, p_149696_6_) : false;
+    }
+    return false;
   }
 
 }

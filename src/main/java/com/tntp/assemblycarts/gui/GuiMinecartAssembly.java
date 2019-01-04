@@ -39,6 +39,8 @@ public class GuiMinecartAssembly extends SGui {
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     EntityMinecartAssembly cart = ((ContainerMinecartAssembly) this.inventorySlots).getCart();
     ItemStack main = cart.getRequestManager().getCraftingTarget();
+    if (main == null)
+      main = cart.getProvideManager().getProvideTarget();
 
     if (main != null) {
       GL11.glPushMatrix();

@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.block.BlockProviderTrack;
 import com.tntp.assemblycarts.block.IAssemblyStructure;
@@ -48,24 +49,19 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
       EntityMinecartAssembly cart = getDockedCart();
       if (cart != null) {
         if (requestManager.isFulfilled()) {
+          System.out.println("Fulfilled! let go");
           // Let all passed carts go in this case
           powerTrack(30);
-        } else if (cart.getProviderTarget() != null) {
-          // If the cart already has a target
-          if (!ItemUtil.areItemAndTagEqual(requestManager.getCraftingTarget(), cart.getProviderTarget())) {
-            // If the target doesn't match, let the cart go
+        } else if (cart.getProvideManager().canProvideTo(requestManager)) {
+          if (cart.getProvideManager().getProvideTarget() == null) {
+            System.out.println("Set Target");
+            // If the cart doesn't have a target, set the target
+            cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
+          } else if (!cart.getProvideManager().tryProvide(requestManager, -1)) {
+            // Let the cart provide. If cannot provide then let the cart go.
+            System.out.println("Nothing to provide, let go");
             powerTrack(30);
-          } else {
-            // try provide
-            if (!cart.provide(requestManager)) {
-              powerTrack(30);
-            }
           }
-
-        } else {
-          // Set the target of the cart
-          cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
-          powerTrack(30);
         }
       }
     }

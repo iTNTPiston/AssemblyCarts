@@ -38,7 +38,7 @@ public class ContainerAssemblyRequester extends SContainerRequestManager {
   }
 
   @Override
-  public RequestManager getContainerRequestManager() {
+  public RequestManager getRequestManager() {
     return tile.getRequestManager();
   }
 

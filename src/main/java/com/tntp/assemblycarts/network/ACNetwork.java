@@ -63,11 +63,13 @@ public class ACNetwork {
 
   private static void loadClientMessagesServerSide() throws Exception {
     regMCS(MCGuiRequestManager.class);
+    regMCS(MCGuiProvideManager.class);
   }
 
   @SideOnly(Side.CLIENT)
   private static void loadClientMessagesClientSide() {
     regMCC(MCGuiRequestManager.class, new MCGuiRequestManagerHandler());
+    regMCC(MCGuiProvideManager.class, new MCGuiProvideManagerHandler());
   }
 
 }

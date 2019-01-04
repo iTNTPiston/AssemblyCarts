@@ -45,7 +45,10 @@ public class RequestManager {
 
   public void initRequestDirectly(ItemStack tar, List<ItemStack> request) {
     need.clear();
-    need.addAll(request);
+    for (ItemStack stack : request) {
+      if (stack != null)
+        need.add(ItemStack.copyItemStack(stack));
+    }
     target = tar;
     update = true;
   }
@@ -91,20 +94,26 @@ public class RequestManager {
    * @param stack
    */
   public void supply(ItemStack stack) {
+    System.out.println("Sup " + stack.stackSize);
     int stackSizeBefore = stack.stackSize;
     ItemUtil.addToInventory(stack, requestingInventory, startSlot, endSlot);
 
     int stackSizeChange = stack.stackSize - stackSizeBefore;// change is negative
+    System.out.println(stack.stackSize);
+    System.out.println(stackSizeChange);
     if (stackSizeChange < 0) {
 
       for (Iterator<ItemStack> iter = need.iterator(); iter.hasNext();) {
         ItemStack needStack = iter.next();
         if (ItemUtil.areItemAndTagEqual(needStack, stack)) {
+          System.out.println("need before " + needStack.stackSize);
           needStack.stackSize += stackSizeChange;
+          System.out.println("need after " + needStack.stackSize);
           update = true;
           if (needStack.stackSize <= 0) {
             iter.remove();// remove the need;
           }
+          break;
         }
       }
       if (need.isEmpty()) {
