@@ -9,7 +9,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class MNMNetwork {
+public class ACNetwork {
   public static final SimpleNetworkWrapper network = NetworkRegistry.INSTANCE.newSimpleChannel(AssemblyCartsMod.MODID);
   private static int id = 0;
 
@@ -57,8 +57,8 @@ public class MNMNetwork {
     }
   }
 
-  private static void loadServerMessages() {
-
+  private static void loadServerMessages() throws Exception {
+    regMS(MSGuiProcessBookSlotClick.class);
   }
 
   private static void loadClientMessagesServerSide() {

@@ -1,0 +1,112 @@
+AssemblyCarts Language File
+Visit https://github.com/iTNTPiston/MinecraftLangBuilder to see how this works
+Author: iTNTPiston
+
+#SCRIPT
+en_US
+zh_CN
+
+#NAME
+	itemGroup.assemblycarts
+	Assembly Carts
+	矿车装配线
+
+Blocks
+
+#GROUP
+	tile
+	#SUFFIX
+		.name
+	#NAME
+		assembly_manager
+		Assembly Manager
+		装配线主管
+		
+	#NAME
+		assembly_frame
+		Assembly Frame
+		装配线框架
+		
+	#NAME
+		provider_track
+		Provider Track
+		供应轨道
+		
+	#SUFFIX
+	
+#RETURN tile
+
+Items
+
+#GROUP
+	item
+	#SUFFIX
+		.name
+	#NAME
+		assembly_cart
+		Assembly Cart
+		装配车
+		
+	#NAME
+		crowbar_assemblium
+		Assemblium Crowbar
+		配金撬棍
+		
+	#NAME
+		process_book
+		Process Book
+		流程书
+		
+	#SUFFIX
+	
+#RETURN item
+
+Assembly Carts
+
+#GROUP
+	ac
+	#GROUP
+		gui
+		#NAME 
+			processbook
+			Process Book
+			流程书
+		
+	#RETURN gui
+	#GROUP
+		tooltip
+		#NAME
+			hold_shift
+			§7<Hold §6SHIFT§7 for more>
+			§7<按住 §6SHIFT§7 显示更多>
+			
+		#NAME
+			hold_ctrl
+			§7<Hold §bCTRL§7 for more>
+			§7<按住 §bCTRL§7 显示更多>
+			
+		#GROUP
+			process_book
+			#NAME
+				craft
+				Craft:
+				合成:
+				
+			#NAME
+				input
+				§6Ingredients:
+				§6材料
+				
+			#NAME
+				other_output
+				§bByproducts:
+				§b副产物:
+				
+			#NAME
+				stack_arg_s_d
+				%s x %d
+				%s x %d
+				
+		#RETURN process_book
+	#RETURN tooltip
+#RETURN ac

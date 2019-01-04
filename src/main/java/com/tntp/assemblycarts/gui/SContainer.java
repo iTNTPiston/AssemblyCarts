@@ -9,16 +9,21 @@ import net.minecraft.item.ItemStack;
 public abstract class SContainer extends Container {
   private int machineSlots;
 
-  public SContainer(IInventory playerInventory, int slots, IInventory machine) {
+  public SContainer(IInventory playerInventory, int slots, IInventory machine, int playerSlotsX, int playerSlotsY) {
     machineSlots = slots;
     this.setupMachineSlots(machine);
+    setupPlayerInventory(playerInventory, playerSlotsX, playerSlotsY);
+
+  }
+
+  public void setupPlayerInventory(IInventory playerInventory, int playerSlotsX, int playerSlotsY) {
+    for (int j = 0; j < 9; j++) {
+      this.addSlotToContainer(new Slot(playerInventory, j, playerSlotsX + j * 18, playerSlotsY + 58));
+    }
     for (int k = 0; k < 3; k++) {
       for (int j = 0; j < 9; j++) {
-        this.addSlotToContainer(new Slot(playerInventory, j + 9 + k * 9, 8 + j * 18, 123 + k * 18));
+        this.addSlotToContainer(new Slot(playerInventory, j + 9 + k * 9, playerSlotsX + j * 18, playerSlotsY + k * 18));
       }
-    }
-    for (int j = 0; j < 9; j++) {
-      this.addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 181));
     }
   }
 

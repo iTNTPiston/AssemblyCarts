@@ -7,7 +7,7 @@ public class ACCreativeTabs extends CreativeTabs {
   public static final ACCreativeTabs instance = new ACCreativeTabs();
 
   public ACCreativeTabs() {
-    super("metalnetworkmainframe");
+    super("assemblycarts");
   }
 
   @Override
