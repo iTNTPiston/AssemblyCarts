@@ -57,7 +57,7 @@ public class ContainerMinecartAssembly extends SContainerRequestManager implemen
   public void setupMachineSlots(IInventory machine) {
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 9; j++) {
-        this.addSlotToContainer(new Slot(machine, i * 9 + j, 8 + j * 18, 90 + i * 18));
+        this.addSlotToContainer(new SlotDecorative(machine, i * 9 + j, 8 + j * 18, 90 + i * 18));
       }
     }
   }
