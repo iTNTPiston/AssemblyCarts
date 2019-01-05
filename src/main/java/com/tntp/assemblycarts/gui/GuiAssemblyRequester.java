@@ -16,8 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiAssemblyRequester extends SGui {
-  private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID,
-      "textures/guis/process_book.png");
+  private static final ResourceLocation background = GuiProcessBook.background;
 
   public GuiAssemblyRequester(IInventory playerInventory, TileAssemblyRequester tile) {
     super(new ContainerAssemblyRequester(playerInventory, tile), tile.getInventoryName());

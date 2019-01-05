@@ -59,17 +59,20 @@ public class ACNetwork {
 
   private static void loadServerMessages() throws Exception {
     regMS(MSGuiProcessBookSlotClick.class);
+    regMS(MSGuiAssemblyPortSlotClick.class);
   }
 
   private static void loadClientMessagesServerSide() throws Exception {
     regMCS(MCGuiRequestManager.class);
     regMCS(MCGuiProvideManager.class);
+    regMCS(MCGuiAssemblyPortMarkedItems.class);
   }
 
   @SideOnly(Side.CLIENT)
   private static void loadClientMessagesClientSide() {
     regMCC(MCGuiRequestManager.class, new MCGuiRequestManagerHandler());
     regMCC(MCGuiProvideManager.class, new MCGuiProvideManagerHandler());
+    regMCC(MCGuiAssemblyPortMarkedItems.class, new MCGuiAssemblyPortMarkedItemsHandler());
   }
 
 }

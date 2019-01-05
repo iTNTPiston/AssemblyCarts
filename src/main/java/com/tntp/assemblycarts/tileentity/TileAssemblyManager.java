@@ -1,19 +1,30 @@
 package com.tntp.assemblycarts.tileentity;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.IRequester;
+import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.block.IAssemblyStructure;
+import com.tntp.assemblycarts.init.ACItems;
+import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyManager extends STileInventory {
-  private Process activeProcess;
-  private List<ItemStack> activeRequesting;
+public class TileAssemblyManager extends STileInventory implements IRequester {
+  private RequestManager requestManager;
   private boolean formed;
+  private boolean bypassInsertionCheck;
+  private List<IAssemblyStructure> cachedStructure;
 
   public TileAssemblyManager() {
-    super(73);// 0-8 for process 9-72 for storage
+    super(54);// 0-26 for process 27-53 for storage
+    requestManager = new RequestManager(this, 27, 53);
+    bypassInsertionCheck = false;
+    cachedStructure = new ArrayList<IAssemblyStructure>();
   }
 
   public void updateEntity() {
@@ -25,6 +36,7 @@ public class TileAssemblyManager extends STileInventory {
   }
 
   public boolean detectStructure() {
+    cachedStructure.clear();
     if (this.isInvalid())
       return false;
     int minY = yCoord;
@@ -61,8 +73,10 @@ public class TileAssemblyManager extends STileInventory {
 
           if (!(tile instanceof IAssemblyStructure))
             return false;
-          else
+          else {
             ((IAssemblyStructure) tile).setManager(this);
+            cachedStructure.add((IAssemblyStructure) tile);
+          }
         }
       }
     }
@@ -82,8 +96,45 @@ public class TileAssemblyManager extends STileInventory {
     return formed;
   }
 
-  public void startProcess() {
+  public void startProcess(int processBookSlotID, int multiplier) {
+    ItemStack book = getStackInSlot(processBookSlotID);
+    if (book != null && book.getItem() == ACItems.process_book) {
+      if (ItemProcessBook.hasProcess(book)) {
+        AssemblyProcess process = ItemProcessBook.getProcessFromStack(book);
+        if (process.getMainOutput() != null) {
+          initRequest(process, multiplier);
+          markDirty();
+        }
+      }
+    }
+  }
 
+  private void initRequest(AssemblyProcess p, int multiplier) {
+    if (detectStructure()) {
+      requestManager.initRequestWithProcess(p, multiplier);
+
+    }
+  }
+
+  @Override
+  public RequestManager getRequestManager() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public boolean isItemValidForSlot(int slot, ItemStack stack) {
+    return bypassInsertionCheck;
+  }
+
+  public void supplyToPort(TileAssemblyPort port) {
+    for (int i = 27; i < getSizeInventory(); i++) {
+      ItemStack takenOut = getStackInSlot(i);
+      ItemUtil.addToInventory(takenOut, port, 0, port.getSizeInventory(), -1);
+      if (takenOut.stackSize <= 0)
+        takenOut = null;
+      setInventorySlotContents(i, takenOut);
+    }
   }
 
 }

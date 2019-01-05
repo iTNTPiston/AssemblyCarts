@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiProcessBook extends SGui {
-  private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID,
+  static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID,
       "textures/guis/process_book.png");
 
   public GuiProcessBook(IInventory playerInventory, AssemblyProcess proc) {

@@ -138,6 +138,8 @@ public class TileAssemblyProvider extends STileInventory implements IProvider, I
 
   @Override
   public TileAssemblyManager getManager() {
+    if (!manager.isValidInWorld())
+      manager = null;
     return manager;
   }
 

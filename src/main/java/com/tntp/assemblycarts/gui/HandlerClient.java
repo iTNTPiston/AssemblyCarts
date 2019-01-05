@@ -7,6 +7,7 @@ import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,6 +37,10 @@ public class HandlerClient extends HandlerServer {
     } else if (ID == ACGuis.getGuiID("AssemblyRequester")) {
       if (tile instanceof TileAssemblyRequester) {
         return new GuiAssemblyRequester(player.inventory, (TileAssemblyRequester) tile);
+      }
+    } else if (ID == ACGuis.getGuiID("AssemblyPort")) {
+      if (tile instanceof TileAssemblyPort) {
+        return new GuiAssemblyPort(player.inventory, (TileAssemblyPort) tile);
       }
     }
 

@@ -55,58 +55,16 @@ public class ContainerProcessBook extends SContainer {
     // both server and client
     ItemStack current = playerInv.getItemStack();
     if (slotID == 0) {
-      ItemStack main = process.getMainOutput();
-      if (main == null || (current != null && !ItemUtil.areItemAndTagEqual(current, main))) {
-        process.setMainOutput(current);
-        if (mouseButton == 1)
-          process.getMainOutput().stackSize = 1;
-      } else {
-        if (mouseButton == 0) {
-          main.stackSize--;
-          if (main.stackSize <= 0)
-            process.setMainOutput(null);
-        } else if (mouseButton == 1) {
-          main.stackSize++;
-        } else {
-          process.setMainOutput(null);
-        }
-      }
+      ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getMainOutput());
+      process.setMainOutput(mark);
     } else if (slotID <= 18) {
       slotID--;// match list id
-      ItemStack input = process.getInput(slotID);
-      if (input == null || (current != null && !ItemUtil.areItemAndTagEqual(current, input))) {
-        process.setInput(slotID, current);
-        if (mouseButton == 1)
-          process.getInput(slotID).stackSize = 1;
-      } else {
-        if (mouseButton == 0) {
-          input.stackSize--;
-          if (input.stackSize <= 0)
-            process.setInput(slotID, null);
-        } else if (mouseButton == 1) {
-          input.stackSize++;
-        } else {
-          process.setInput(slotID, null);
-        }
-      }
+      ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getInput(slotID));
+      process.setInput(slotID, mark);
     } else if (slotID <= 36) {
       slotID -= 19;// match list id
-      ItemStack output = process.getOtherOutput(slotID);
-      if (output == null || (current != null && !ItemUtil.areItemAndTagEqual(current, output))) {
-        process.setOtherOutput(slotID, current);
-        if (mouseButton == 1)
-          process.getOtherOutput(slotID).stackSize = 1;
-      } else {
-        if (mouseButton == 0) {
-          output.stackSize--;
-          if (output.stackSize <= 0)
-            process.setOtherOutput(slotID, null);
-        } else if (mouseButton == 1) {
-          output.stackSize++;
-        } else {
-          process.setOtherOutput(slotID, null);
-        }
-      }
+      ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getOtherOutput(slotID));
+      process.setOtherOutput(slotID, mark);
     }
   }
 

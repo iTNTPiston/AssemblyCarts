@@ -23,7 +23,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockProviderTrack extends BlockRailBase implements ITileEntityProvider {
-  private IIcon powered;
+  public IIcon powered;
+  public IIcon base;
 
   public BlockProviderTrack() {
     super(true);
@@ -41,6 +42,7 @@ public class BlockProviderTrack extends BlockRailBase implements ITileEntityProv
   public void registerBlockIcons(IIconRegister reg) {
     super.registerBlockIcons(reg);
     this.powered = reg.registerIcon(this.getTextureName() + "_powered");
+    this.base = reg.registerIcon("minecraft:rail_normal");
   }
 
   public static void setPowered(World world, int x, int y, int z, boolean power) {

@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.util;
 
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -23,12 +24,12 @@ public class ItemUtil {
     return false;
   }
 
-  public static void addToInventory(ItemStack stackToPut, IInventory inventory, int start, int end) {
+  public static boolean addToInventory(ItemStack stackToPut, IInventory inventory, int start, int end, int side) {
     int[] slots = new int[end - start + 1];
     for (int i = 0; i < slots.length; i++) {
       slots[i] = i + start;
     }
-    addToInventory(stackToPut, inventory, slots);
+    return addToInventory(stackToPut, inventory, slots, -1);
   }
 
   /**
@@ -39,12 +40,19 @@ public class ItemUtil {
    * @param inventory  The inventory to put the stack
    * @param slots      An array containing the slots to put the stacks
    */
-  public static void addToInventory(ItemStack stackToPut, IInventory inventory, int[] slots) {
+  public static boolean addToInventory(ItemStack stackToPut, IInventory inventory, int[] slots, int side) {
     boolean inventoryChanged = false;
+    boolean sided = side >= 0 && side < 6 && inventory instanceof ISidedInventory;
     for (int slotsID = 0; slotsID < slots.length && stackToPut.stackSize > 0; slotsID++) {
       int i = slots[slotsID];
       if (i < 0 || i >= inventory.getSizeInventory())
         continue;
+
+      if (sided) {
+        if (!((ISidedInventory) inventory).canInsertItem(i, stackToPut, side))
+          continue;
+      }
+
       ItemStack stackInInventory = inventory.getStackInSlot(i);
       int maxStackSize = Math.min(inventory.getInventoryStackLimit(), stackToPut.getMaxStackSize());
       if (stackInInventory == null) {
@@ -84,6 +92,7 @@ public class ItemUtil {
     }
     if (inventoryChanged)
       inventory.markDirty();
+    return inventoryChanged;
   }
 
   public static String toTwoDigitStackSizeDisplay(int stacksize) {

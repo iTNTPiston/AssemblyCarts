@@ -7,6 +7,8 @@ public class TileAssemblyFrame extends STile implements IAssemblyStructure {
 
   @Override
   public TileAssemblyManager getManager() {
+    if (!manager.isValidInWorld())
+      manager = null;
     return manager;
   }
 

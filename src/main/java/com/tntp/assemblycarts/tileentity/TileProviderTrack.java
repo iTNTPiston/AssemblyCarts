@@ -12,6 +12,13 @@ public class TileProviderTrack extends STile {
   public TileProviderTrack() {
   }
 
+  @Override
+  public void updateEntity() {
+    if (dockedCart != null && dockedCart.isDead) {
+      dockedCart = null;
+    }
+  }
+
   public boolean isReversed() {
     return reversed;
   }

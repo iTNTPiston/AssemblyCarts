@@ -1,7 +1,9 @@
 package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.IRequester;
+import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.block.BlockProviderTrack;
 import com.tntp.assemblycarts.block.IAssemblyStructure;
@@ -16,17 +18,36 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester {
+public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester, IProvider {
 
   private int trackPowerTimeLeft;
+  /**
+   * Stop untargetted carts if itself is untargetted
+   */
+  private boolean sticky;
 
   public TileAssemblyRequester() {
+    this(false);
+  }
+
+  public TileAssemblyRequester(boolean sticky) {
     super(19);// 0 for book
     requestManager = new RequestManager(this, 1, 18);
+    int[] slots = new int[18];
+    for (int i = 0; i < slots.length; i++)
+      slots[i] = i + 1;
+    provideManager = new ProvideManager(this, slots);
+    this.sticky = sticky;
+  }
+
+  private void updateManager() {
+    TileAssemblyManager manager = getManager();
+    if (manager == null)
+      return;
+
   }
 
   private void updateBook() {
-
     if (getManager() == null && requestManager.getCraftingTarget() == null) {
       ItemStack stack = getStackInSlot(0);
       if (stack != null && stack.getItem() == ACItems.process_book) {
@@ -50,8 +71,16 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
       if (cart != null) {
         if (requestManager.isFulfilled()) {
           System.out.println("Fulfilled! let go");
-          // Let all passed carts go in this case
-          powerTrack(30);
+
+          if (!sticky) {
+            // Let all passed carts go in this case
+            powerTrack(30);
+          } else {
+            // If the cart has a target, let go
+            if (cart.getRequestManager().getCraftingTarget() != null) {
+              powerTrack(30);
+            }
+          }
         } else if (cart.getProvideManager().canProvideTo(requestManager)) {
           if (cart.getProvideManager().getProvideTarget() == null) {
             System.out.println("Set Target");
@@ -102,6 +131,8 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
 
   @Override
   public TileAssemblyManager getManager() {
+    if (!manager.isValidInWorld())
+      manager = null;
     return manager;
   }
 
@@ -121,14 +152,25 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
   public void writeToNBT(NBTTagCompound tag) {
     super.writeToNBT(tag);
     requestManager.writeToNBT(tag);
+    provideManager.writeToNBT(tag);
     tag.setInteger("trackPowerTimeLeft", trackPowerTimeLeft);
+    tag.setBoolean("sticky", sticky);
   }
 
   @Override
   public void readFromNBT(NBTTagCompound tag) {
     super.readFromNBT(tag);
     requestManager.readFromNBT(tag);
+    provideManager.readFromNBT(tag);
     trackPowerTimeLeft = tag.getInteger("trackPowerTimeLeft");
+    sticky = tag.getBoolean("sticky");
+  }
+
+  private ProvideManager provideManager;
+
+  @Override
+  public ProvideManager getProvideManager() {
+    return provideManager;
   }
 
 }

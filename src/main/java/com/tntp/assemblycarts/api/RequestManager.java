@@ -53,6 +53,12 @@ public class RequestManager {
     update = true;
   }
 
+  public void cancelRequest() {
+    need.clear();
+    target = null;
+    update = true;
+  }
+
   public void setStartSlot(int s) {
     startSlot = s;
   }
@@ -96,7 +102,7 @@ public class RequestManager {
   public void supply(ItemStack stack) {
     System.out.println("Sup " + stack.stackSize);
     int stackSizeBefore = stack.stackSize;
-    ItemUtil.addToInventory(stack, requestingInventory, startSlot, endSlot);
+    ItemUtil.addToInventory(stack, requestingInventory, startSlot, endSlot, -1);
 
     int stackSizeChange = stack.stackSize - stackSizeBefore;// change is negative
     System.out.println(stack.stackSize);

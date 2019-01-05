@@ -62,8 +62,19 @@ public class EntityMinecartAssembly extends EntityMinecartContainer implements I
   public void onUpdate() {
     super.onUpdate();
     if (worldObj != null && !worldObj.isRemote) {
-      if (requestManager.isFulfilled())
-        provideManager.setProvideTarget(null);
+      if (requestManager.isFulfilled()) {
+        boolean isEmpty = true;
+        for (int i = 0; i < getSizeInventory(); i++) {
+          if (getStackInSlot(i) != null) {
+            isEmpty = false;
+            break;
+          }
+        }
+        if (isEmpty) {
+          provideManager.setProvideTarget(null);
+        }
+      }
+
     }
   }
 

@@ -12,7 +12,7 @@ public class STile extends TileEntity {
   protected static final int EVENT_TRACK_REVERSE = 0;
 
   public boolean isValidInWorld() {
-    return this.hasWorldObj() && this.worldObj.getTileEntity(xCoord, yCoord, zCoord) == this;
+    return this.hasWorldObj() && this.worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && !this.isInvalid();
   }
 
   /**

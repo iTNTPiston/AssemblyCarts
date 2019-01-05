@@ -1,5 +1,7 @@
 package com.tntp.assemblycarts.gui;
 
+import com.tntp.assemblycarts.util.ItemUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -152,6 +154,33 @@ public abstract class SContainer extends Container {
         return null;
     }
     return super.slotClick(slotID, p_75144_2_, p_75144_3_, p_75144_4_);
+  }
+
+  public ItemStack processMarkSlotClick(int mouseButton, ItemStack playerHolding, ItemStack markedStack) {
+    // both server and client
+    ItemStack returnStack = markedStack;
+    int returnSize = -1;
+    if (markedStack == null || (playerHolding != null && !ItemUtil.areItemAndTagEqual(playerHolding, markedStack))) {
+      returnStack = playerHolding;
+      if (mouseButton == 1)
+        returnSize = 1;
+    } else {
+      if (mouseButton == 0) {
+        markedStack.stackSize--;
+        if (markedStack.stackSize <= 0)
+          returnStack = null;
+      } else if (mouseButton == 1) {
+        markedStack.stackSize++;
+      } else {
+        returnStack = null;
+      }
+    }
+
+    returnStack = ItemStack.copyItemStack(returnStack);
+    if (returnStack != null && returnSize != -1) {
+      returnStack.stackSize = returnSize;
+    }
+    return returnStack;
   }
 
 }

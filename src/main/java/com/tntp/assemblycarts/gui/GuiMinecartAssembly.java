@@ -15,8 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiMinecartAssembly extends SGui {
-  private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID,
-      "textures/guis/process_book.png");
+  private static final ResourceLocation background = GuiProcessBook.background;
 
   public GuiMinecartAssembly(IInventory playerInventory, EntityMinecartAssembly cart) {
     super(new ContainerMinecartAssembly(playerInventory, cart), cart.getInventoryName());

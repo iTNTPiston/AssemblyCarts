@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 
@@ -46,10 +47,11 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
       boolean reversed) {
     Tessellator tessellator = Tessellator.instance;
     int meta = renderBlock.blockAccess.getBlockMetadata(x, y, z);
-    IIcon iicon = renderBlock.getBlockIconFromSideAndMetadata(block, 0, meta);
+    IIcon base = renderBlock.getBlockIcon(Blocks.rail);
+    IIcon overlay = renderBlock.getBlockIconFromSideAndMetadata(block, 0, meta);
 
     if (renderBlock.hasOverrideBlockTexture()) {
-      iicon = renderBlock.overrideBlockTexture;
+      overlay = renderBlock.overrideBlockTexture;
     }
 
     if (block.isPowered()) {
@@ -58,10 +60,14 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
 
     tessellator.setBrightness(block.getMixedBrightnessForBlock(renderBlock.blockAccess, x, y, z));
     tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-    double minU = (double) iicon.getMinU();
-    double minV = (double) iicon.getMinV();
-    double maxU = (double) iicon.getMaxU();
-    double maxV = (double) iicon.getMaxV();
+    double ominU = (double) overlay.getMinU();
+    double ominV = (double) overlay.getMinV();
+    double omaxU = (double) overlay.getMaxU();
+    double omaxV = (double) overlay.getMaxV();
+    double bminU = base.getMinU();
+    double bminV = base.getMinV();
+    double bmaxU = base.getMaxU();
+    double bmaxV = base.getMaxV();
     double height = 0.0625D;
     double x1 = (double) (x + 1);
     double x2 = (double) (x + 1);
@@ -104,7 +110,17 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
       ++y1;
       ++y4;
     }
-    // Reversion hack
+    // render base
+    tessellator.addVertexWithUV(x1, y1, z1, bmaxU, bminV);
+    tessellator.addVertexWithUV(x2, y2, z2, bmaxU, bmaxV);
+    tessellator.addVertexWithUV(x3, y3, z3, bminU, bmaxV);
+    tessellator.addVertexWithUV(x4, y4, z4, bminU, bminV);
+    tessellator.addVertexWithUV(x4, y4, z4, bminU, bminV);
+    tessellator.addVertexWithUV(x3, y3, z3, bminU, bmaxV);
+    tessellator.addVertexWithUV(x2, y2, z2, bmaxU, bmaxV);
+    tessellator.addVertexWithUV(x1, y1, z1, bmaxU, bminV);
+    // overlay
+    double ytrans = 0.001;
     if (reversed) {
       if (meta == 0 || meta == 4 || meta == 5) {
         double zt = z1;
@@ -119,16 +135,17 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
       double yt = y1;
       y4 = y1 = y2;
       y2 = y3 = yt;
+      tessellator.addVertexWithUV(x1, y1 + ytrans, z1, omaxU, ominV);
+      tessellator.addVertexWithUV(x2, y2 + ytrans, z2, omaxU, omaxV);
+      tessellator.addVertexWithUV(x3, y3 + ytrans, z3, ominU, omaxV);
+      tessellator.addVertexWithUV(x4, y4 + ytrans, z4, ominU, ominV);
+    } else {
+      tessellator.addVertexWithUV(x4, y4 + ytrans, z4, ominU, ominV);
+      tessellator.addVertexWithUV(x3, y3 + ytrans, z3, ominU, omaxV);
+      tessellator.addVertexWithUV(x2, y2 + ytrans, z2, omaxU, omaxV);
+      tessellator.addVertexWithUV(x1, y1 + ytrans, z1, omaxU, ominV);
     }
 
-    tessellator.addVertexWithUV(x1, y1, z1, maxU, minV);
-    tessellator.addVertexWithUV(x2, y2, z2, maxU, maxV);
-    tessellator.addVertexWithUV(x3, y3, z3, minU, maxV);
-    tessellator.addVertexWithUV(x4, y4, z4, minU, minV);
-    tessellator.addVertexWithUV(x4, y4, z4, minU, minV);
-    tessellator.addVertexWithUV(x3, y3, z3, minU, maxV);
-    tessellator.addVertexWithUV(x2, y2, z2, maxU, maxV);
-    tessellator.addVertexWithUV(x1, y1, z1, maxU, minV);
     return true;
   }
 
