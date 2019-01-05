@@ -1,6 +1,8 @@
 package com.tntp.assemblycarts.network;
 
+import com.tntp.assemblycarts.api.IMarker;
 import com.tntp.assemblycarts.api.IProvider;
+import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.gui.ContainerAssemblyPort;
 
@@ -11,17 +13,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
-public class MCGuiAssemblyPortMarkedItemsHandler implements IMessageHandler<MCGuiAssemblyPortMarkedItems, IMessage> {
+public class MCGuiMarkManagerHandler implements IMessageHandler<MCGuiMarkManager, IMessage> {
 
   @Override
-  public IMessage onMessage(MCGuiAssemblyPortMarkedItems message, MessageContext ctx) {
+  public IMessage onMessage(MCGuiMarkManager message, MessageContext ctx) {
     EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     if (player.openContainer.windowId == message.windowID) {
-      if (player.openContainer instanceof ContainerAssemblyPort) {
-        ItemStack[] marked = MCGuiAssemblyPortMarkedItems.toStacks(message.getNBT1());
-        for (int i = 0; i < marked.length; i++) {
-          ((ContainerAssemblyPort) player.openContainer).setMarkedItemStack(i, marked[i]);
-        }
+      if (player.openContainer instanceof IMarker) {
+        MarkManager markManager = ((IMarker) player.openContainer).getMarkManager();
+        markManager.readFromNBT(message.getNBT1());
       }
     }
     return null;

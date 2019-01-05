@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.tileentity;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
@@ -18,6 +19,7 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
   private RequestManager requestManager;
   private boolean formed;
   private boolean bypassInsertionCheck;
+  private boolean isStructureCached;
   private List<IAssemblyStructure> cachedStructure;
 
   public TileAssemblyManager() {
@@ -28,6 +30,8 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
   }
 
   public void updateEntity() {
+    super.updateEntity();
+    isStructureCached = false;
     if (worldObj != null && !worldObj.isRemote) {
       if (!formed) {
         setFormed(detectStructure());
@@ -36,9 +40,12 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
   }
 
   public boolean detectStructure() {
-    cachedStructure.clear();
     if (this.isInvalid())
       return false;
+    if (isStructureCached)
+      return true;
+    cachedStructure.clear();
+
     int minY = yCoord;
     int maxY = yCoord;
     int minX = xCoord;
@@ -80,6 +87,7 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
         }
       }
     }
+    isStructureCached = true;
     return true;
 
   }
@@ -109,17 +117,105 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
     }
   }
 
-  private void initRequest(AssemblyProcess p, int multiplier) {
+  public void cancelProcess() {
+    requestManager.cancelRequest();
     if (detectStructure()) {
+      for (IAssemblyStructure t : cachedStructure) {
+        if (t instanceof TileAssemblyRequester) {
+          ((TileAssemblyRequester) t).getRequestManager().cancelRequest();
+        }
+      }
+    }
+  }
+
+  private boolean initRequest(AssemblyProcess p, int multiplier) {
+    if (detectStructure()) {
+      // init request
       requestManager.initRequestWithProcess(p, multiplier);
 
+      // Init requesters
+      ItemStack target = requestManager.getCraftingTarget();
+      LinkedList<ItemStack> needCopied = new LinkedList<ItemStack>();
+      for (ItemStack s : requestManager.getNeed()) {
+        needCopied.add(ItemStack.copyItemStack(s));
+      }
+
+      // Find all requesters
+      ArrayList<TileAssemblyRequester> requesters = new ArrayList<TileAssemblyRequester>();
+      for (IAssemblyStructure t : cachedStructure) {
+        if (t instanceof TileAssemblyRequester) {
+          requesters.add(((TileAssemblyRequester) t));
+        }
+      }
+      // Create a list for each requester
+      ArrayList<ArrayList<ItemStack>> needList = new ArrayList<ArrayList<ItemStack>>(requesters.size());
+      for (int i = 0; i < requesters.size(); i++) {
+        needList.add(new ArrayList<ItemStack>());
+      }
+
+      // Distribute the request to all requesters
+      ArrayList<Integer> selectedRequesters = new ArrayList<Integer>();
+      while (!needCopied.isEmpty()) {
+        selectedRequesters.clear();
+        ItemStack toRequest = needCopied.removeFirst();
+        // Search marked requesters first
+        for (int i = 0; i < requesters.size(); i++) {
+          if (requesters.get(i).getMarkManager().isMarked(toRequest)) {
+            selectedRequesters.add(i);
+          }
+        }
+        // if there is no marked requesters, select all unmarked
+        if (selectedRequesters.isEmpty()) {
+          for (int i = 0; i < requesters.size(); i++) {
+            if (!requesters.get(i).getMarkManager().hasMark()) {
+              selectedRequesters.add(i);
+            }
+          }
+        }
+        // If there is no requesters, cancel the request
+        if (selectedRequesters.isEmpty()) {
+          requestManager.cancelRequest();
+          return false;
+        }
+        int distributionAmount = toRequest.stackSize / selectedRequesters.size();
+        int remainder = toRequest.stackSize % selectedRequesters.size();
+        for (int i = 0; i < selectedRequesters.size(); i++) {
+          int r = selectedRequesters.get(i);
+          ArrayList<ItemStack> need = needList.get(r);
+          int amount = i < remainder ? distributionAmount + 1 : distributionAmount;
+          boolean added = false;
+          for (ItemStack s : need) {
+            if (ItemUtil.areItemAndTagEqual(s, toRequest)) {
+              s.stackSize += amount;
+              added = true;
+            }
+          }
+          if (!added) {
+            ItemStack add = ItemStack.copyItemStack(toRequest);
+            add.stackSize = amount;
+            need.add(add);
+          }
+        }
+
+      }
+
+      // Add the request to the requesters
+      for (int i = 0; i < requesters.size(); i++) {
+        ArrayList<ItemStack> need = needList.get(i);
+        if (!need.isEmpty()) {
+          requesters.get(i).getRequestManager().initRequestDirectly(target, need);
+          requesters.get(i).markDirty();
+        }
+      }
+      return true;
     }
+    // incomplete structure
+    return false;
   }
 
   @Override
   public RequestManager getRequestManager() {
-    // TODO Auto-generated method stub
-    return null;
+    return requestManager;
   }
 
   @Override
@@ -135,6 +231,12 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
         takenOut = null;
       setInventorySlotContents(i, takenOut);
     }
+  }
+
+  public void supplyFromRequester(TileAssemblyRequester requester) {
+    bypassInsertionCheck = true;
+    requester.getProvideManager().tryProvide(getRequestManager(), -1);
+    bypassInsertionCheck = false;
   }
 
 }

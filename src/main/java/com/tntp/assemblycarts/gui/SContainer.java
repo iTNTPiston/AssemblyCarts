@@ -183,4 +183,8 @@ public abstract class SContainer extends Container {
     return returnStack;
   }
 
+  public void processSlotClick(int slotID, int mouseButton) {
+
+  }
+
 }

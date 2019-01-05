@@ -56,23 +56,22 @@ public class ProvideManager {
    * 
    * @param rm
    * @param side the side of the INVENTORY that is providing, or -1 if the
-   *             provider is not a tileentity
+   *             side doesn't apply
    * @return true if any item is provided
    */
   public boolean tryProvide(RequestManager rm, int side) {
     System.out.println("try Providing");
+    boolean sided = side >= 0 && side < 6 && providingInventory instanceof ISidedInventory;
     for (int slotsID = 0; slotsID < providingSlots.length; slotsID++) {
       int i = providingSlots[slotsID];
       if (i < 0 || i >= providingInventory.getSizeInventory())
         continue;
       ItemStack stackInSlot = providingInventory.getStackInSlot(i);
 
-      // validation check
-      if (side >= 0 && side < 6) {
-        if (providingInventory instanceof ISidedInventory) {
-          if (!((ISidedInventory) providingInventory).canExtractItem(i, stackInSlot, side))
-            continue;
-        }
+      // side check
+      if (sided) {
+        if (!((ISidedInventory) providingInventory).canExtractItem(i, stackInSlot, side))
+          continue;
       }
       if (stackInSlot != null && rm.isRequesting(stackInSlot)) {
         ItemStack sup = stackInSlot.splitStack(1);

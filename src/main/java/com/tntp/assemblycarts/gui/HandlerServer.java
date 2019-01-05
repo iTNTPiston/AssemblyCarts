@@ -7,6 +7,7 @@ import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
@@ -42,6 +43,10 @@ public class HandlerServer implements IGuiHandler {
     } else if (ID == ACGuis.getGuiID("AssemblyPort")) {
       if (tile instanceof TileAssemblyPort) {
         return new ContainerAssemblyPort(player.inventory, (TileAssemblyPort) tile);
+      }
+    } else if (ID == ACGuis.getGuiID("AssemblyManagerBooks")) {
+      if (tile instanceof TileAssemblyManager) {
+        return new ContainerAssemblyManagerBooks(player.inventory, (TileAssemblyManager) tile);
       }
     }
     return null;

@@ -1,22 +1,17 @@
 package com.tntp.assemblycarts.gui;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import org.lwjgl.opengl.GL11;
 
-import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.network.ACNetwork;
-import com.tntp.assemblycarts.network.MSGuiAssemblyPortSlotClick;
-import com.tntp.assemblycarts.network.MSGuiProcessBookSlotClick;
+import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.util.LocalUtil;
 
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiAssemblyPort extends SGui {
@@ -67,8 +62,7 @@ public class GuiAssemblyPort extends SGui {
       int j = x / 18;
       int processSlotID = i * 3 + j;
       ((ContainerAssemblyPort) this.inventorySlots).processSlotClick(processSlotID, button);
-      ACNetwork.network
-          .sendToServer(new MSGuiAssemblyPortSlotClick(this.inventorySlots.windowId, processSlotID, button));
+      ACNetwork.network.sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
 
     }
     // System.out.println(processSlotID);

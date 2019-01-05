@@ -1,5 +1,7 @@
 package com.tntp.assemblycarts.tileentity;
 
+import com.tntp.assemblycarts.api.IMarker;
+import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.block.IAssemblyStructure;
 import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.assemblycarts.util.ItemUtil;
@@ -12,36 +14,38 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class TileAssemblyPort extends STileInventory implements IAssemblyStructure, ISidedInventory {
+public class TileAssemblyPort extends STileInventory implements IAssemblyStructure, ISidedInventory, IMarker {
   private int[] cachedSlots;
   private int iteratingSlot;
-  private ItemStack[] markedItemStack;
+  private MarkManager markManager;
   public boolean bypassInsertionSide;
 
   public TileAssemblyPort() {
     super(9);
     iteratingSlot = -1;
-    markedItemStack = new ItemStack[9];
+    markManager = new MarkManager(9);
     bypassInsertionSide = false;
+
   }
 
   public void setMarkedItemStack(int i, ItemStack s) {
-    markedItemStack[i] = s;
+    markManager.setMarkedItem(i, s);
     markDirty();
   }
 
   public ItemStack getMarkedItemStack(int i) {
-    return markedItemStack[i];
+    return markManager.getMarkedItem(i);
   }
 
   public ItemStack[] getMarkedItemStacks() {
-    return markedItemStack;
+    return markManager.getAllMarked();
   }
 
   @Override
   public void updateEntity() {
     super.updateEntity();
     if (worldObj != null && !worldObj.isRemote) {
+      importFromManager();
       int outputSide = this.getBlockMetadata();
       int[] off = DirUtil.OFFSETS[outputSide];
       IInventory inv = detectContainer(xCoord + off[0], yCoord + off[1], zCoord + off[2], outputSide ^ 1);
@@ -115,7 +119,7 @@ public class TileAssemblyPort extends STileInventory implements IAssemblyStructu
 
   @Override
   public TileAssemblyManager getManager() {
-    if (!manager.isValidInWorld())
+    if (manager != null && !manager.isValidInWorld())
       manager = null;
     return manager;
   }
@@ -129,37 +133,19 @@ public class TileAssemblyPort extends STileInventory implements IAssemblyStructu
   public void writeToNBT(NBTTagCompound tag) {
     super.writeToNBT(tag);
     tag.setInteger("iterSlot", iteratingSlot);
-    NBTTagList markedList = new NBTTagList();
-    for (int i = 0; i < markedItemStack.length; i++) {
-      if (markedItemStack[i] != null) {
-        NBTTagCompound entry = new NBTTagCompound();
-        entry.setInteger("slot", i);
-        NBTTagCompound stack = new NBTTagCompound();
-        markedItemStack[i].writeToNBT(stack);
-        entry.setTag("item", stack);
-        markedList.appendTag(entry);
-      }
-    }
-    tag.setTag("mark", markedList);
+    markManager.writeToNBT(tag);
   }
 
   @Override
   public void readFromNBT(NBTTagCompound tag) {
     super.readFromNBT(tag);
     iteratingSlot = tag.getInteger("iterSlot");
-    markedItemStack = new ItemStack[9];
-    NBTTagList markedList = tag.getTagList("mark", NBT.TAG_COMPOUND);
-    for (int i = 0; i < markedList.tagCount(); i++) {
-      NBTTagCompound entry = markedList.getCompoundTagAt(i);
-      int slot = entry.getInteger("slot");
-      ItemStack item = ItemStack.loadItemStackFromNBT(entry.getCompoundTag("item"));
-      markedItemStack[slot] = item;
-    }
+    markManager.readFromNBT(tag);
   }
 
   @Override
   public boolean isItemValidForSlot(int slot, ItemStack stack) {
-    return stack != null && ItemUtil.areItemAndTagEqual(stack, markedItemStack[slot]);
+    return stack != null && ItemUtil.areItemAndTagEqual(stack, markManager.getMarkedItem(slot));
   }
 
   @Override
@@ -175,6 +161,11 @@ public class TileAssemblyPort extends STileInventory implements IAssemblyStructu
   @Override
   public boolean canExtractItem(int slot, ItemStack stack, int side) {
     return side == getBlockMetadata();
+  }
+
+  @Override
+  public MarkManager getMarkManager() {
+    return markManager;
   }
 
 }

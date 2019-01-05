@@ -1,8 +1,10 @@
 package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.IMarker;
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.IRequester;
+import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.block.BlockProviderTrack;
@@ -18,7 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester, IProvider {
+public class TileAssemblyRequester extends STileInventory
+    implements IAssemblyStructure, IRequester, IProvider, IMarker {
 
   private int trackPowerTimeLeft;
   /**
@@ -37,14 +40,16 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
     for (int i = 0; i < slots.length; i++)
       slots[i] = i + 1;
     provideManager = new ProvideManager(this, slots);
+    markManager = new MarkManager(9);
     this.sticky = sticky;
+
   }
 
-  private void updateManager() {
+  private void supplyToManager() {
     TileAssemblyManager manager = getManager();
     if (manager == null)
       return;
-
+    manager.supplyFromRequester(this);
   }
 
   private void updateBook() {
@@ -100,7 +105,7 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
   public void updateEntity() {
     super.updateEntity();
     if (worldObj != null && !worldObj.isRemote) {
-
+      supplyToManager();
       updateBook();
       updateCart();
 
@@ -131,7 +136,7 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
 
   @Override
   public TileAssemblyManager getManager() {
-    if (!manager.isValidInWorld())
+    if (manager != null && !manager.isValidInWorld())
       manager = null;
     return manager;
   }
@@ -153,6 +158,7 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
     super.writeToNBT(tag);
     requestManager.writeToNBT(tag);
     provideManager.writeToNBT(tag);
+    markManager.writeToNBT(tag);
     tag.setInteger("trackPowerTimeLeft", trackPowerTimeLeft);
     tag.setBoolean("sticky", sticky);
   }
@@ -162,6 +168,7 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
     super.readFromNBT(tag);
     requestManager.readFromNBT(tag);
     provideManager.readFromNBT(tag);
+    markManager.readFromNBT(tag);
     trackPowerTimeLeft = tag.getInteger("trackPowerTimeLeft");
     sticky = tag.getBoolean("sticky");
   }
@@ -171,6 +178,13 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
   @Override
   public ProvideManager getProvideManager() {
     return provideManager;
+  }
+
+  private MarkManager markManager;
+
+  @Override
+  public MarkManager getMarkManager() {
+    return markManager;
   }
 
 }

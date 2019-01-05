@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.network.ACNetwork;
-import com.tntp.assemblycarts.network.MSGuiProcessBookSlotClick;
+import com.tntp.assemblycarts.network.MSGuiSlotClick;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
@@ -110,7 +110,7 @@ public class GuiProcessBook extends SGui {
     if (processSlotID != -1) {
       ((ContainerProcessBook) this.inventorySlots).processSlotClick(processSlotID, button);
       ACNetwork.network
-          .sendToServer(new MSGuiProcessBookSlotClick(this.inventorySlots.windowId, processSlotID, button));
+          .sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
     }
     // System.out.println(processSlotID);
   }

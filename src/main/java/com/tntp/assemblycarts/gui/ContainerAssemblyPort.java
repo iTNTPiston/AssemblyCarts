@@ -1,7 +1,8 @@
 package com.tntp.assemblycarts.gui;
 
+import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.network.ACNetwork;
-import com.tntp.assemblycarts.network.MCGuiAssemblyPortMarkedItems;
+import com.tntp.assemblycarts.network.MCGuiMarkManager;
 import com.tntp.assemblycarts.network.MCGuiProvideManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 
@@ -14,7 +15,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ContainerAssemblyPort extends SContainer {
+public class ContainerAssemblyPort extends SContainerMarkManager {
   private TileAssemblyPort tile;
   private InventoryPlayer playerInv;
 
@@ -47,21 +48,18 @@ public class ContainerAssemblyPort extends SContainer {
     return tile.isUseableByPlayer(player);
   }
 
+  @Override
   public void processSlotClick(int slotID, int mouseButton) {
-    ItemStack mark = this.processMarkSlotClick(mouseButton, playerInv.getItemStack(), tile.getMarkedItemStack(slotID));
-    setMarkedItemStack(slotID, mark);
-  }
-
-  public void sendMarkedItemStack(EntityPlayerMP player) {
-    ACNetwork.network.sendTo(new MCGuiAssemblyPortMarkedItems(this.windowId, tile.getMarkedItemStacks()), player);
+    if (slotID >= 0 && slotID < 9) {
+      ItemStack mark = this.processMarkSlotClick(mouseButton, playerInv.getItemStack(),
+          tile.getMarkedItemStack(slotID));
+      setMarkedItemStack(slotID, mark);
+    }
   }
 
   @Override
-  public void addCraftingToCrafters(ICrafting ic) {
-    super.addCraftingToCrafters(ic);
-    if (ic instanceof EntityPlayerMP) {
-      sendMarkedItemStack((EntityPlayerMP) ic);
-    }
+  public MarkManager getMarkManager() {
+    return tile.getMarkManager();
   }
 
 }

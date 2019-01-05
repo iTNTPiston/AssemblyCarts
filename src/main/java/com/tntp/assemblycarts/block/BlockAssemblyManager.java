@@ -1,5 +1,8 @@
 package com.tntp.assemblycarts.block;
 
+import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.init.ACGuis;
+import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -7,6 +10,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
@@ -18,15 +23,6 @@ public class BlockAssemblyManager extends SBlockContainer {
   public BlockAssemblyManager() {
     super(Material.iron, 5.0f, 10.0f);
   }
-
-//  @Override
-//  @SideOnly(Side.CLIENT)
-//  public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-//    TileAssemblyManager tile = (TileAssemblyManager) world.getTileEntity(x, y, z);
-//    if (tile != null && tile.isFormed())
-//      return on;
-//    return blockIcon;
-//  }
 
   @Override
   @SideOnly(Side.CLIENT)
@@ -58,6 +54,20 @@ public class BlockAssemblyManager extends SBlockContainer {
   @Override
   public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
     return new TileAssemblyManager();
+  }
+
+  @Override
+  public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX,
+      float hitY, float hitZ) {
+    if (!world.isRemote) {
+      ItemStack item = player.getCurrentEquippedItem();
+      if (item != null && Crowbar.isCrowbar(item.getItem())) {
+        player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyManagerBooks"), world, x, y, z);
+      } else {
+
+      }
+    }
+    return true;
   }
 
 }

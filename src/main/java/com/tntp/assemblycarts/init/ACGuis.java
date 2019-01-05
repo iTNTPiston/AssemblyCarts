@@ -31,6 +31,7 @@ public class ACGuis {
     assignGuiID("MinecartAssembly");
     assignGuiID("AssemblyRequester");
     assignGuiID("AssemblyPort");
+    assignGuiID("AssemblyManagerBooks");
 
     NetworkRegistry.INSTANCE.registerGuiHandler(AssemblyCartsMod.MODID, guiHandler);
 
