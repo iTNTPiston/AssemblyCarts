@@ -48,6 +48,10 @@ public class HandlerServer implements IGuiHandler {
       if (tile instanceof TileAssemblyManager) {
         return new ContainerAssemblyManagerBooks(player.inventory, (TileAssemblyManager) tile);
       }
+    } else if (ID == ACGuis.getGuiID("AssemblyManager")) {
+      if (tile instanceof TileAssemblyManager) {
+        return new ContainerAssemblyManager(player.inventory, (TileAssemblyManager) tile);
+      }
     }
     return null;
   }

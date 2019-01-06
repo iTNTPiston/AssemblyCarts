@@ -64,6 +64,7 @@ public class BlockAssemblyManager extends SBlockContainer {
       if (item != null && Crowbar.isCrowbar(item.getItem())) {
         player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyManagerBooks"), world, x, y, z);
       } else {
+        player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyManager"), world, x, y, z);
 
       }
     }

@@ -104,16 +104,23 @@ public class TileAssemblyManager extends STileInventory implements IRequester {
     return formed;
   }
 
-  public void startProcess(int processBookSlotID, int multiplier) {
-    ItemStack book = getStackInSlot(processBookSlotID);
+  public AssemblyProcess getProcessBySlot(int slot) {
+    ItemStack book = getStackInSlot(slot);
     if (book != null && book.getItem() == ACItems.process_book) {
       if (ItemProcessBook.hasProcess(book)) {
         AssemblyProcess process = ItemProcessBook.getProcessFromStack(book);
-        if (process.getMainOutput() != null) {
-          initRequest(process, multiplier);
-          markDirty();
-        }
+        if (process.getMainOutput() != null)
+          return process;
       }
+    }
+    return null;
+  }
+
+  public void startProcess(int processBookSlotID, int multiplier) {
+    AssemblyProcess process = getProcessBySlot(processBookSlotID);
+    if (process != null) {
+      initRequest(process, multiplier);
+      markDirty();
     }
   }
 

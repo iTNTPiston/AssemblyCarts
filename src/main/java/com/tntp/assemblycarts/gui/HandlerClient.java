@@ -47,6 +47,10 @@ public class HandlerClient extends HandlerServer {
       if (tile instanceof TileAssemblyManager) {
         return new GuiAssemblyManagerBooks(player.inventory, (TileAssemblyManager) tile);
       }
+    } else if (ID == ACGuis.getGuiID("AssemblyManager")) {
+      if (tile instanceof TileAssemblyManager) {
+        return new GuiAssemblyManager(player.inventory, (TileAssemblyManager) tile);
+      }
     }
 
     return null;
