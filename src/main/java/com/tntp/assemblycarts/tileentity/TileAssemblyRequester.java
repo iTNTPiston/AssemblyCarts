@@ -20,171 +20,167 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyRequester extends STileInventory
-    implements IAssemblyStructure, IRequester, IProvider, IMarker {
+public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester, IProvider, IMarker {
 
-  private int trackPowerTimeLeft;
-  /**
-   * Stop untargetted carts if itself is untargetted
-   */
-  private boolean sticky;
+    private int trackPowerTimeLeft;
+    /**
+     * Stop untargetted carts if itself is untargetted
+     */
+    private boolean sticky;
 
-  public TileAssemblyRequester() {
-    this(false);
-  }
-
-  public TileAssemblyRequester(boolean sticky) {
-    super(19);// 0 for book
-    requestManager = new RequestManager(this, 1, 18);
-    int[] slots = new int[18];
-    for (int i = 0; i < slots.length; i++)
-      slots[i] = i + 1;
-    provideManager = new ProvideManager(this, slots);
-    markManager = new MarkManager(9);
-    this.sticky = sticky;
-
-  }
-
-  private void supplyToManager() {
-    TileAssemblyManager manager = getManager();
-    if (manager == null)
-      return;
-    manager.supplyFromRequester(this);
-  }
-
-  private void updateBook() {
-    if (getManager() == null && requestManager.getCraftingTarget() == null) {
-      ItemStack stack = getStackInSlot(0);
-      if (stack != null && stack.getItem() == ACItems.process_book) {
-        AssemblyProcess process = ItemProcessBook.getProcessFromStack(stack);
-        if (process.getMainOutput() != null) {
-          requestManager.initRequestWithProcess(process, 1);
-          markDirty();
-        }
-      }
+    public TileAssemblyRequester() {
+        this(false);
     }
-  }
 
-  private void updateCart() {
-    if (trackPowerTimeLeft > 0) {
-      trackPowerTimeLeft--;
-      if (trackPowerTimeLeft == 0) {
-        setTrackPowered(false);
-      }
-    } else {
-      EntityMinecartAssembly cart = getDockedCart();
-      if (cart != null) {
-        if (requestManager.isFulfilled()) {
-          System.out.println("Fulfilled! let go");
+    public TileAssemblyRequester(boolean sticky) {
+        super(19);// 0 for book
+        requestManager = new RequestManager(this, 1, 18);
+        int[] slots = new int[18];
+        for (int i = 0; i < slots.length; i++)
+            slots[i] = i + 1;
+        provideManager = new ProvideManager(this, slots);
+        markManager = new MarkManager(9);
+        this.sticky = sticky;
 
-          if (!sticky) {
-            // Let all passed carts go in this case
-            powerTrack(30);
-          } else {
-            // If the cart has a target, let go
-            if (cart.getRequestManager().getCraftingTarget() != null) {
-              powerTrack(30);
+    }
+
+    private void supplyToManager() {
+        TileAssemblyManager manager = getManager();
+        if (manager == null)
+            return;
+        manager.supplyFromRequester(this);
+    }
+
+    private void updateBook() {
+        if (getManager() == null && requestManager.getCraftingTarget() == null) {
+            ItemStack stack = getStackInSlot(0);
+            if (stack != null && stack.getItem() == ACItems.process_book) {
+                AssemblyProcess process = ItemProcessBook.getProcessFromStack(stack);
+                if (process.getMainOutput() != null) {
+                    requestManager.initRequestWithProcess(process, 1);
+                    markDirty();
+                }
             }
-          }
-        } else if (cart.getProvideManager().canProvideTo(requestManager)) {
-          if (cart.getProvideManager().getProvideTarget() == null) {
-            System.out.println("Set Target");
-            // If the cart doesn't have a target, set the target
-            cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
-          } else if (!cart.getProvideManager().tryProvide(requestManager, -1)) {
-            // Let the cart provide. If cannot provide then let the cart go.
-            System.out.println("Nothing to provide, let go");
-            powerTrack(30);
-          }
         }
-      }
     }
-  }
 
-  @Override
-  public void updateEntity() {
-    super.updateEntity();
-    if (worldObj != null && !worldObj.isRemote) {
-      supplyToManager();
-      updateBook();
-      updateCart();
+    private void updateCart() {
+        if (trackPowerTimeLeft > 0) {
+            trackPowerTimeLeft--;
+            if (trackPowerTimeLeft == 0) {
+                setTrackPowered(false);
+            }
+        } else {
+            EntityMinecartAssembly cart = getDockedCart();
+            if (cart != null) {
+                if (requestManager.isFulfilled()) {
 
+                    if (!sticky) {
+                        // Let all passed carts go in this case
+                        powerTrack(30);
+                    } else {
+                        // If the cart has a target, let go
+                        if (cart.getRequestManager().getCraftingTarget() != null) {
+                            powerTrack(30);
+                        }
+                    }
+                } else if (cart.getProvideManager().canProvideTo(requestManager)) {
+                    if (cart.getProvideManager().getProvideTarget() == null) {
+                        // If the cart doesn't have a target, set the target
+                        cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
+                    } else if (!cart.getProvideManager().tryProvide(requestManager, -1)) {
+                        // Let the cart provide. If cannot provide then let the cart go.
+                        powerTrack(30);
+                    }
+                }
+            }
+        }
     }
-  }
 
-  private void powerTrack(int time) {
-    trackPowerTimeLeft = time;
-    setTrackPowered(true);
-  }
+    @Override
+    public void updateEntity() {
+        super.updateEntity();
+        if (worldObj != null && !worldObj.isRemote) {
+            supplyToManager();
+            updateBook();
+            updateCart();
 
-  public void setTrackPowered(boolean powered) {
-    Block b = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
-    if (b == ACBlocks.provider_track) {
-      BlockProviderTrack.setPowered(worldObj, xCoord, yCoord + 1, zCoord, powered);
+        }
     }
-  }
 
-  public EntityMinecartAssembly getDockedCart() {
-    TileEntity tile = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
-    if (tile instanceof TileProviderTrack) {
-      return ((TileProviderTrack) tile).getDockedCart();
+    private void powerTrack(int time) {
+        trackPowerTimeLeft = time;
+        setTrackPowered(true);
     }
-    return null;
-  }
 
-  private TileAssemblyManager manager;
+    public void setTrackPowered(boolean powered) {
+        Block b = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
+        if (b == ACBlocks.provider_track) {
+            BlockProviderTrack.setPowered(worldObj, xCoord, yCoord + 1, zCoord, powered);
+        }
+    }
 
-  @Override
-  public TileAssemblyManager getManager() {
-    if (manager != null && !manager.isValidInWorld())
-      manager = null;
-    return manager;
-  }
+    public EntityMinecartAssembly getDockedCart() {
+        TileEntity tile = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+        if (tile instanceof TileProviderTrack) {
+            return ((TileProviderTrack) tile).getDockedCart();
+        }
+        return null;
+    }
 
-  @Override
-  public void setManager(TileAssemblyManager tile) {
-    manager = tile;
-  }
+    private TileAssemblyManager manager;
 
-  private RequestManager requestManager;
+    @Override
+    public TileAssemblyManager getManager() {
+        if (manager != null && !manager.isValidInWorld())
+            manager = null;
+        return manager;
+    }
 
-  @Override
-  public RequestManager getRequestManager() {
-    return requestManager;
-  }
+    @Override
+    public void setManager(TileAssemblyManager tile) {
+        manager = tile;
+    }
 
-  @Override
-  public void writeToNBT(NBTTagCompound tag) {
-    super.writeToNBT(tag);
-    requestManager.writeToNBT(tag);
-    provideManager.writeToNBT(tag);
-    markManager.writeToNBT(tag);
-    tag.setInteger("trackPowerTimeLeft", trackPowerTimeLeft);
-    tag.setBoolean("sticky", sticky);
-  }
+    private RequestManager requestManager;
 
-  @Override
-  public void readFromNBT(NBTTagCompound tag) {
-    super.readFromNBT(tag);
-    requestManager.readFromNBT(tag);
-    provideManager.readFromNBT(tag);
-    markManager.readFromNBT(tag);
-    trackPowerTimeLeft = tag.getInteger("trackPowerTimeLeft");
-    sticky = tag.getBoolean("sticky");
-  }
+    @Override
+    public RequestManager getRequestManager() {
+        return requestManager;
+    }
 
-  private ProvideManager provideManager;
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        super.writeToNBT(tag);
+        requestManager.writeToNBT(tag);
+        provideManager.writeToNBT(tag);
+        markManager.writeToNBT(tag);
+        tag.setInteger("trackPowerTimeLeft", trackPowerTimeLeft);
+        tag.setBoolean("sticky", sticky);
+    }
 
-  @Override
-  public ProvideManager getProvideManager() {
-    return provideManager;
-  }
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        requestManager.readFromNBT(tag);
+        provideManager.readFromNBT(tag);
+        markManager.readFromNBT(tag);
+        trackPowerTimeLeft = tag.getInteger("trackPowerTimeLeft");
+        sticky = tag.getBoolean("sticky");
+    }
 
-  private MarkManager markManager;
+    private ProvideManager provideManager;
 
-  @Override
-  public MarkManager getMarkManager() {
-    return markManager;
-  }
+    @Override
+    public ProvideManager getProvideManager() {
+        return provideManager;
+    }
+
+    private MarkManager markManager;
+
+    @Override
+    public MarkManager getMarkManager() {
+        return markManager;
+    }
 
 }

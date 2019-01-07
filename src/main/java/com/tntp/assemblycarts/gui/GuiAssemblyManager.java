@@ -6,12 +6,16 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
+import com.tntp.assemblycarts.util.LocalUtil;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -19,103 +23,161 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiAssemblyManager extends SGui {
-  private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID,
-      "textures/guis/assembly_manager.png");
-  private static final int[] INCREMENTS = { 1, 16, 64, 256 };
+    private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/assembly_manager.png");
+    private static final int[] INCREMENTS = { 1, 16, 64, 256 };
 
-  public GuiAssemblyManager(IInventory player, IInventory tile) {
-    super(new ContainerAssemblyManager(player, tile), tile.getInventoryName());
-    xSize = 176;
-    ySize = 222;
-  }
+    private static class MultiplierButton extends GuiButton {
+        int index;
 
-  @Override
-  public void initGui() {
-    super.initGui();
-    ((ContainerAssemblyManager) this.inventorySlots).selectNextProcess();
-  }
-
-  @Override
-  protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
-    tooltips.clear();
-    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    this.mc.getTextureManager().bindTexture(background);
-    this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-
-  }
-
-  @Override
-  protected void drawGuiContainerForegroundLayer(int mx, int my) {
-    super.drawGuiContainerForegroundLayer(mx, my);
-    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    int multiplier = ((ContainerAssemblyManager) this.inventorySlots).getProcessMultiplier();
-
-    AssemblyProcess process = ((ContainerAssemblyManager) this.inventorySlots).getSelectedProcess();
-    if (process != null) {
-      ItemStack main = ItemStack.copyItemStack(process.getMainOutput());
-
-      if (main != null) {
-        main.stackSize *= multiplier;
-        GL11.glPushMatrix();
-        GL11.glTranslatef(15, 28, 0);
-        GL11.glScalef(2, 2, 1);
-        RenderHelper.enableGUIStandardItemLighting();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.getTextureManager(), main, 0, 0);
-        itemRender.renderItemOverlayIntoGUI(fontRendererObj, this.mc.getTextureManager(), main, 0, 0);
-        GL11.glEnable(GL11.GL_BLEND);
-        RenderHelper.disableStandardItemLighting();
-        if (withInRect(mx, my, 15 + guiLeft, 28 + guiTop, 32, 32)) {
-          this.setStackTooltip(main);
-          tooltipX = mx - guiLeft;
-          tooltipY = my - guiTop;
+        MultiplierButton(int i, int guiLeft, int guiTop) {
+            super(i, 26 * (i % INCREMENTS.length) + 64 + guiLeft, 153 + (i / 4 * 41) + guiTop, 24, 20, (i >= INCREMENTS.length ? "" : "+") + String.valueOf(change(i)));
+            index = i;
         }
-        GL11.glPopMatrix();
-      }
-    }
-    if (withInRect(mx, my, 14 + guiLeft, 27 + guiTop, 34, 34)) {
-      GL11.glDisable(GL11.GL_LIGHTING);
-      GL11.glDisable(GL11.GL_DEPTH_TEST);
-      GL11.glColorMask(true, true, true, false);
-      this.drawGradientRect(14, 27, 48, 61, -2130706433, -2130706433);
-      GL11.glColorMask(true, true, true, true);
-      GL11.glEnable(GL11.GL_LIGHTING);
-      GL11.glEnable(GL11.GL_DEPTH_TEST);
+
+        int getChange() {
+            return change(index);
+        }
+
+        static int change(int index) {
+            if (index >= INCREMENTS.length)
+                return -INCREMENTS[index - INCREMENTS.length];
+            else
+                return INCREMENTS[index];
+        }
     }
 
-    // GL11.glTranslatef(-guiLeft, -guiTop, 0);
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 6; j++) {
-        ItemStack stack = process != null ? ItemStack.copyItemStack(process.getInput(i * 6 + j)) : null;
-        if (stack != null)
-          stack.stackSize *= multiplier;
-        this.drawItemStack(stack, 62 + j * 18, 18 + i * 18, mx, my, Collections.EMPTY_LIST);
-      }
-    }
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 9; j++) {
-        ItemStack stack = process != null ? ItemStack.copyItemStack(process.getOtherOutput(i * 6 + j)) : null;
-        if (stack != null)
-          stack.stackSize *= multiplier;
-        this.drawItemStack(stack, 8 + j * 18, 90 + i * 18, mx, my, Collections.EMPTY_LIST);
-      }
-    }
-    RenderHelper.enableGUIStandardItemLighting();
+    private GuiTextField textField;
+    private GuiButton startButton;
+    private GuiButton cancelButton;
 
-    // GL11.glTranslatef(guiLeft, guiTop, 0);
-  }
+    public GuiAssemblyManager(IInventory player, IInventory tile) {
+        super(new ContainerAssemblyManager(player, tile), tile.getInventoryName());
+        xSize = 176;
+        ySize = 222;
 
-  @Override
-  protected void mouseClicked(int x, int y, int button) {
-    super.mouseClicked(x, y, button);
-    x -= guiLeft;
-    y -= guiTop;
-    if (withInRect(x, y, 14, 27, 32, 32)) {
-      this.playButtonSound();
-      ((ContainerAssemblyManager) this.inventorySlots).selectNextProcess();
     }
 
-  }
+    @Override
+    public void initGui() {
+        super.initGui();
+        if (((ContainerAssemblyManager) this.inventorySlots).getSelectedProcess() == null)
+            ((ContainerAssemblyManager) this.inventorySlots).selectNextProcess();
+        for (int i = 0; i < INCREMENTS.length * 2; i++) {
+            MultiplierButton button = new MultiplierButton(i, guiLeft, guiTop);
+            this.buttonList.add(button);
+        }
+        startButton = new GuiButton(INCREMENTS.length * 2, 8 + guiLeft, 153 + guiTop, 52, 20, LocalUtil.localize("ac.gui.start"));
+        cancelButton = new GuiButton(INCREMENTS.length * 2 + 1, 8 + guiLeft, 194 + guiTop, 52, 20, LocalUtil.localize("ac.gui.cancel"));
+        this.buttonList.add(startButton);
+        this.buttonList.add(cancelButton);
+        textField = new GuiTextField(this.fontRendererObj, 74 + guiLeft, 178 + guiTop, 52, 11);
+        textField.setText("1");
+    }
+
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        ContainerAssemblyManager container = (ContainerAssemblyManager) this.inventorySlots;
+        AssemblyProcess p = container.getSelectedProcess();
+        RequestManager rm = container.getTile().getRequestManager();
+
+        startButton.enabled = rm.isFulfilled() && p != null;
+        cancelButton.enabled = !rm.isFulfilled();
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+        tooltips.clear();
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.getTextureManager().bindTexture(background);
+        this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        ContainerAssemblyManager container = (ContainerAssemblyManager) this.inventorySlots;
+        if (container.selectedProcessID >= 0) {
+            this.drawTexturedModalRect(guiLeft + 7 + container.selectedProcessID * 18, guiTop + 128, xSize, 0, 18, 18);
+        }
+        textField.drawTextBox();
+        int color = 0xFF000000;
+        this.fontRendererObj.drawString(LocalUtil.localize("ac.gui.processes"), 8 + guiLeft, 178 + guiTop, color);
+        this.fontRendererObj.drawString(LocalUtil.localize("ac.gui.times"), 130 + guiLeft, 178 + guiTop, color);
+
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mx, int my) {
+        super.drawGuiContainerForegroundLayer(mx, my);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        ContainerAssemblyManager container = (ContainerAssemblyManager) this.inventorySlots;
+        RequestManager rm = container.getTile().getRequestManager();
+        if (rm.isFulfilled()) {
+            int multiplier = container.getProcessMultiplier();
+            AssemblyProcess process = null;
+            if (withInRect(mx - guiLeft, my - guiTop, 7, 128, 162, 18)) {
+                int i = (mx - guiLeft - 7) / 18;
+                process = container.getTile().getProcessBySlot(i);
+            }
+            if (process == null) {
+                process = container.getSelectedProcess();
+            }
+
+            drawProcess(process, mx, my, multiplier);
+        } else {
+            drawBigStack(rm.getCraftingTarget(), mx, my);
+            drawRequestManagerStacks(rm, mx, my);
+        }
+        // GL11.glTranslatef(guiLeft, guiTop, 0);
+    }
+
+    @Override
+    protected void mouseClicked(int x, int y, int button) {
+        super.mouseClicked(x, y, button);
+        textField.mouseClicked(x, y, button);
+        x -= guiLeft;
+        y -= guiTop;
+        if (withInRect(x, y, 14, 27, 32, 32)) {
+            this.playButtonSound();
+            ((ContainerAssemblyManager) this.inventorySlots).selectNextProcess();
+        } else if (withInRect(x, y, 7, 128, 162, 18)) {
+            this.playButtonSound();
+            int i = (x - 7) / 18;
+            ((ContainerAssemblyManager) this.inventorySlots).selectProcessBySlot(i);
+            System.out.println("selected " + i);
+        }
+
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        super.actionPerformed(button);
+        ContainerAssemblyManager container = (ContainerAssemblyManager) this.inventorySlots;
+        if (button instanceof MultiplierButton) {
+            int multiplier = container.getProcessMultiplier();
+            int change = ((MultiplierButton) button).getChange();
+            if (multiplier == 1 && change != 1)
+                multiplier = 0;
+            multiplier += change;
+            container.setProcessMultiplier(multiplier);
+            textField.setText(String.valueOf(container.getProcessMultiplier()));
+        } else if (button == startButton) {
+            System.out.println("start");
+            ACNetwork.network.sendToServer(new MSGuiSlotClick(container.windowId, container.selectedProcessID, container.getProcessMultiplier()));
+        } else if (button == cancelButton) {
+            System.out.println("cancel");
+            ACNetwork.network.sendToServer(new MSGuiSlotClick(container.windowId, -1, container.getProcessMultiplier()));
+        }
+    }
+
+    protected void keyTyped(char c, int i) {
+        if (textField.textboxKeyTyped(c, i)) {
+            try {
+                int m = Integer.parseInt(textField.getText());
+                ((ContainerAssemblyManager) this.inventorySlots).setProcessMultiplier(m);
+            } catch (NumberFormatException e) {
+                ((ContainerAssemblyManager) this.inventorySlots).setProcessMultiplier(1);
+                textField.setText("1");
+            }
+            return;
+        }
+        super.keyTyped(c, i);
+    }
 
 }

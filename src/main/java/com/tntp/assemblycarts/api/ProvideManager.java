@@ -9,112 +9,111 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ProvideManager {
-  public boolean update;
-  private ItemStack target;
-  private IInventory providingInventory;
-  private int[] providingSlots;
+    public boolean update;
+    private ItemStack target;
+    private IInventory providingInventory;
+    private int[] providingSlots;
 
-  public ProvideManager(IInventory inv, int[] slots) {
-    providingInventory = inv;
-    setProvidingSlots(slots);
-  }
-
-  public IInventory getProvidingInventory() {
-    return providingInventory;
-  }
-
-  public void setProvidingInventory(IInventory inv) {
-    providingInventory = inv;
-  }
-
-  /**
-   * A null return value represents that this provider can provide to any target
-   * 
-   * @return
-   */
-  public ItemStack getProvideTarget() {
-    return target;
-  }
-
-  public void setProvideTarget(ItemStack t) {
-    target = t;
-    update = true;
-  }
-
-  public boolean canProvideTo(RequestManager rm) {
-    if (target == null)
-      return true;
-    ItemStack requestTarget = rm.getCraftingTarget();
-    if (ItemUtil.areItemAndTagEqual(requestTarget, target))
-      return true;
-    return false;
-  }
-
-  /**
-   * Called to try to provide 1 item (stacksize=1) to the request manager. Does
-   * not check provide type
-   * 
-   * @param rm
-   * @param side the side of the INVENTORY that is providing, or -1 if the
-   *             side doesn't apply
-   * @return true if any item is provided
-   */
-  public boolean tryProvide(RequestManager rm, int side) {
-    System.out.println("try Providing");
-    boolean sided = side >= 0 && side < 6 && providingInventory instanceof ISidedInventory;
-    for (int slotsID = 0; slotsID < providingSlots.length; slotsID++) {
-      int i = providingSlots[slotsID];
-      if (i < 0 || i >= providingInventory.getSizeInventory())
-        continue;
-      ItemStack stackInSlot = providingInventory.getStackInSlot(i);
-
-      // side check
-      if (sided) {
-        if (!((ISidedInventory) providingInventory).canExtractItem(i, stackInSlot, side))
-          continue;
-      }
-      if (stackInSlot != null && rm.isRequesting(stackInSlot)) {
-        ItemStack sup = stackInSlot.splitStack(1);
-        rm.supply(sup);
-        if (sup.stackSize > 0) {// supply failed, add the stack back
-          stackInSlot.stackSize++;
-        } else {
-          // supply succeeded, apply change to inventory
-          if (stackInSlot.stackSize == 0)
-            stackInSlot = null;
-          providingInventory.setInventorySlotContents(i, stackInSlot);
-          providingInventory.markDirty();
-          return true;
-        }
-
-      }
+    public ProvideManager(IInventory inv, int[] slots) {
+        providingInventory = inv;
+        setProvidingSlots(slots);
     }
-    return false;
-  }
 
-  public void readFromNBT(NBTTagCompound tag) {
-    NBTTagCompound provideTag = tag.getCompoundTag("provideTarget");
-    target = ItemStack.loadItemStackFromNBT(provideTag);
-    providingSlots = tag.getIntArray("providingSlots");
-  }
+    public IInventory getProvidingInventory() {
+        return providingInventory;
+    }
 
-  public void writeToNBT(NBTTagCompound tag) {
-    NBTTagCompound provideTag = new NBTTagCompound();
+    public void setProvidingInventory(IInventory inv) {
+        providingInventory = inv;
+    }
 
-    if (target != null)
-      target.writeToNBT(provideTag);
-    tag.setTag("provideTarget", provideTag);
-    tag.setIntArray("providingSlots", providingSlots);
-  }
+    /**
+     * A null return value represents that this provider can provide to any target
+     * 
+     * @return
+     */
+    public ItemStack getProvideTarget() {
+        return target;
+    }
 
-  public int[] getProvidingSlots() {
-    return providingSlots;
-  }
+    public void setProvideTarget(ItemStack t) {
+        target = t;
+        update = true;
+    }
 
-  public void setProvidingSlots(int[] providingSlots) {
-    if (providingSlots == null)
-      providingSlots = UniversalUtil.EMPTY_INT_ARRAY;
-    this.providingSlots = providingSlots;
-  }
+    public boolean canProvideTo(RequestManager rm) {
+        if (target == null)
+            return true;
+        ItemStack requestTarget = rm.getCraftingTarget();
+        if (ItemUtil.areItemAndTagEqual(requestTarget, target))
+            return true;
+        return false;
+    }
+
+    /**
+     * Called to try to provide 1 item (stacksize=1) to the request manager. Does
+     * not check provide type
+     * 
+     * @param rm
+     * @param side the side of the INVENTORY that is providing, or -1 if the
+     *             side doesn't apply
+     * @return true if any item is provided
+     */
+    public boolean tryProvide(RequestManager rm, int side) {
+        boolean sided = side >= 0 && side < 6 && providingInventory instanceof ISidedInventory;
+        for (int slotsID = 0; slotsID < providingSlots.length; slotsID++) {
+            int i = providingSlots[slotsID];
+            if (i < 0 || i >= providingInventory.getSizeInventory())
+                continue;
+            ItemStack stackInSlot = providingInventory.getStackInSlot(i);
+
+            // side check
+            if (sided) {
+                if (!((ISidedInventory) providingInventory).canExtractItem(i, stackInSlot, side))
+                    continue;
+            }
+            if (stackInSlot != null && rm.isRequesting(stackInSlot)) {
+                ItemStack sup = stackInSlot.splitStack(1);
+                rm.supply(sup);
+                if (sup.stackSize > 0) {// supply failed, add the stack back
+                    stackInSlot.stackSize++;
+                } else {
+                    // supply succeeded, apply change to inventory
+                    if (stackInSlot.stackSize == 0)
+                        stackInSlot = null;
+                    providingInventory.setInventorySlotContents(i, stackInSlot);
+                    providingInventory.markDirty();
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public void readFromNBT(NBTTagCompound tag) {
+        NBTTagCompound provideTag = tag.getCompoundTag("provideTarget");
+        target = ItemStack.loadItemStackFromNBT(provideTag);
+        providingSlots = tag.getIntArray("providingSlots");
+    }
+
+    public void writeToNBT(NBTTagCompound tag) {
+        NBTTagCompound provideTag = new NBTTagCompound();
+
+        if (target != null)
+            target.writeToNBT(provideTag);
+        tag.setTag("provideTarget", provideTag);
+        tag.setIntArray("providingSlots", providingSlots);
+    }
+
+    public int[] getProvidingSlots() {
+        return providingSlots;
+    }
+
+    public void setProvidingSlots(int[] providingSlots) {
+        if (providingSlots == null)
+            providingSlots = UniversalUtil.EMPTY_INT_ARRAY;
+        this.providingSlots = providingSlots;
+    }
 
 }

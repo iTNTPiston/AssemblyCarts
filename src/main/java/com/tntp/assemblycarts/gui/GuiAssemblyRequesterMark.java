@@ -1,28 +1,29 @@
 package com.tntp.assemblycarts.gui;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 import org.lwjgl.opengl.GL11;
 
-import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.IMarker;
+import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
+import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
+import com.tntp.assemblycarts.util.LocalUtil;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiProcessBook extends SGui {
-    static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/process_book.png");
+public class GuiAssemblyRequesterMark extends SGui {
+    private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/assembly_requester_mark.png");
 
-    public GuiProcessBook(IInventory playerInventory, AssemblyProcess proc) {
-        super(new ContainerProcessBook(playerInventory, proc), "ac.gui.processbook");
+    public GuiAssemblyRequesterMark(IInventory player, IInventory tile) {
+        super(new ContainerAssemblyRequesterMark(player, tile), tile.getInventoryName());
         xSize = 176;
-        ySize = 222;
-
+        ySize = 168;
     }
 
     @Override
@@ -38,34 +39,32 @@ public class GuiProcessBook extends SGui {
     protected void drawGuiContainerForegroundLayer(int mx, int my) {
         super.drawGuiContainerForegroundLayer(mx, my);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        AssemblyProcess process = ((ContainerProcessBook) this.inventorySlots).getProcess();
-        drawProcess(process, mx, my, 1);
+        MarkManager markManager = ((IMarker) this.inventorySlots).getMarkManager();
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                this.drawItemStack(markManager.getMarkedItem(i * 3 + j), 62 + j * 18, 18 + i * 18, mx, my, Arrays.asList(LocalUtil.localize("ac.tooltip.mark")));
+            }
+        }
+
+        RenderHelper.enableGUIStandardItemLighting();
+
     }
 
     @Override
     protected void mouseClicked(int x, int y, int button) {
         super.mouseClicked(x, y, button);
-        int processSlotID = -1;
         x -= guiLeft;
         y -= guiTop;
-        if (withInRect(x, y, 14, 27, 32, 32)) {
-            processSlotID = 0;
-        } else if (withInRect(x, y, 61, 17, 108, 54)) {
+        if (withInRect(x, y, 61, 17, 54, 54)) {
             x -= 61;
             y -= 17;
             int i = y / 18;
             int j = x / 18;
-            processSlotID = 1 + i * 6 + j;
-        } else if (withInRect(x, y, 7, 89, 162, 36)) {
-            x -= 7;
-            y -= 89;
-            int i = y / 18;
-            int j = x / 18;
-            processSlotID = 19 + i * 9 + j;
-        }
-        if (processSlotID != -1) {
-            ((ContainerProcessBook) this.inventorySlots).processSlotClick(processSlotID, button);
+            int processSlotID = i * 3 + j;
+            ((SContainer) this.inventorySlots).processSlotClick(processSlotID, button);
             ACNetwork.network.sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
+
         }
         // System.out.println(processSlotID);
     }
