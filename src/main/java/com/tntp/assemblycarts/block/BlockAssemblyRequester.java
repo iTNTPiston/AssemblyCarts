@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.block;
 
+import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
@@ -16,11 +17,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class BlockAssemblyRequester extends SBlockContainer {
-    private IIcon bottom;
-    protected IIcon side;
+    private IIcon port;
+    private IIcon back;
 
     public BlockAssemblyRequester() {
-        super(Material.iron, 5.0f, 10.0f);
+        super(Assemblium.BLOCK_MATERIAL, 5.0f, 10.0f);
     }
 
     @Override
@@ -30,35 +31,47 @@ public class BlockAssemblyRequester extends SBlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote) {
-            ItemStack item = player.getCurrentEquippedItem();
-            if (item != null && Crowbar.isCrowbar(item.getItem())) {
-                player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyRequesterMark"), world, x, y, z);
-            } else {
-                player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyRequester"), world, x, y, z);
+        // change direction
+        ItemStack item = player.getCurrentEquippedItem();
+        if (item != null && Crowbar.isCrowbar(item.getItem())) {
+            int meta = world.getBlockMetadata(x, y, z);
+            if (meta == side)
+                side ^= 1;
+            world.setBlockMetadataWithNotify(x, y, z, side, 2);
+            if (world.isRemote) {
+                world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+            }
+        } else {
+            // open gui
+            if (!world.isRemote) {
+                int meta = world.getBlockMetadata(x, y, z);
+                if (meta == (side ^ 1)) {
+                    player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyRequesterMark"), world, x, y, z);
+                } else {
+                    player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyRequester"), world, x, y, z);
+                }
             }
         }
         return true;
+
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int s, int meta) {
-        switch (s) {
-        case 0:
-            return bottom;
-        case 1:
-            return blockIcon;
-        }
-        return side;
+        if (s == meta)
+            return port;
+        if ((s ^ 1) == meta)
+            return back;
+        return blockIcon;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister reg) {
-        blockIcon = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_provider_top");
-        side = reg.registerIcon(this.getTextureName() + "_side");
-        bottom = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_requester_bottom");
+        blockIcon = reg.registerIcon(this.getTextureName() + "_base");
+        port = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_requester_port");
+        back = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_requester_back");
     }
 
 }

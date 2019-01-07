@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.block;
 
+import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
@@ -21,12 +22,12 @@ public class BlockAssemblyManager extends SBlockContainer {
     private IIcon on;
 
     public BlockAssemblyManager() {
-        super(Material.iron, 5.0f, 10.0f);
+        super(Assemblium.BLOCK_MATERIAL, 5.0f, 10.0f);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int p_149691_1_, int meta) {
+    public IIcon getIcon(int side, int meta) {
         return meta == 0 ? blockIcon : on;
     }
 

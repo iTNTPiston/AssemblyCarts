@@ -13,6 +13,7 @@ import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.block.Block;
@@ -114,14 +115,22 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
     }
 
     public void setTrackPowered(boolean powered) {
-        Block b = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
+        int[] off = DirUtil.OFFSETS[getBlockMetadata()];
+        int x = xCoord + off[0];
+        int y = yCoord + off[1];
+        int z = zCoord + off[2];
+        Block b = worldObj.getBlock(x, y, z);
         if (b == ACBlocks.provider_track) {
-            BlockProviderTrack.setPowered(worldObj, xCoord, yCoord + 1, zCoord, powered);
+            BlockProviderTrack.setPowered(worldObj, x, y, z, powered);
         }
     }
 
     public EntityMinecartAssembly getDockedCart() {
-        TileEntity tile = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+        int[] off = DirUtil.OFFSETS[getBlockMetadata()];
+        int x = xCoord + off[0];
+        int y = yCoord + off[1];
+        int z = zCoord + off[2];
+        TileEntity tile = worldObj.getTileEntity(x, y, z);
         if (tile instanceof TileProviderTrack) {
             return ((TileProviderTrack) tile).getDockedCart();
         }

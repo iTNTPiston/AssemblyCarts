@@ -63,12 +63,10 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
     public boolean provideToCart(EntityMinecartAssembly cart) {
         provideManager.setProvideTarget(null);
         for (int dir : DirUtil.ALL_DIR) {
-            if (dir != DirUtil.DOWN_MY) {
-                int[] off = DirUtil.OFFSETS[dir ^ 1];
-                if (detectContainer(xCoord + off[0], yCoord + off[1], zCoord + off[2], dir)) {
-                    if (provideManager.tryProvide(cart.getRequestManager(), dir))
-                        return true;
-                }
+            int[] off = DirUtil.OFFSETS[dir ^ 1];
+            if (detectContainer(xCoord + off[0], yCoord + off[1], zCoord + off[2], dir)) {
+                if (provideManager.tryProvide(cart.getRequestManager(), dir))
+                    return true;
             }
         }
         return false;
@@ -131,20 +129,26 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
     }
 
     public void setTrackPowered(boolean powered) {
-        Block b = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
+        int[] off = DirUtil.OFFSETS[getBlockMetadata()];
+        int x = xCoord + off[0];
+        int y = yCoord + off[1];
+        int z = zCoord + off[2];
+        Block b = worldObj.getBlock(x, y, z);
         if (b == ACBlocks.provider_track) {
-            BlockProviderTrack.setPowered(worldObj, xCoord, yCoord + 1, zCoord, powered);
+            BlockProviderTrack.setPowered(worldObj, x, y, z, powered);
         }
     }
 
     public EntityMinecartAssembly getDockedCart() {
-        TileEntity tile = worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+        int[] off = DirUtil.OFFSETS[getBlockMetadata()];
+        int x = xCoord + off[0];
+        int y = yCoord + off[1];
+        int z = zCoord + off[2];
+        TileEntity tile = worldObj.getTileEntity(x, y, z);
         if (tile instanceof TileProviderTrack) {
             return ((TileProviderTrack) tile).getDockedCart();
         }
         return null;
     }
-
-    private TileAssemblyManager manager;
 
 }

@@ -32,100 +32,105 @@ import net.minecraft.world.World;
 
 public class EntityMinecartAssembly extends EntityMinecartContainer implements IProvider, IRequester {
 
-  private RequestManager requestManager;
-  private ProvideManager provideManager;
+    private RequestManager requestManager;
+    private ProvideManager provideManager;
 
-  public EntityMinecartAssembly(World world) {
-    super(world);
-    initManagers();
-  }
-
-  public EntityMinecartAssembly(World world, double x, double y, double z) {
-    super(world, x, y, z);
-    initManagers();
-  }
-
-  private void initManagers() {
-    requestManager = new RequestManager(this, 0, 17);
-    int[] slots = new int[18];
-    for (int i = 0; i < slots.length; i++)
-      slots[i] = i;
-    provideManager = new ProvideManager(this, slots);
-  }
-
-  public void setTarget(ItemStack stack, List<ItemStack> need) {
-    requestManager.initRequestDirectly(stack, need);
-    provideManager.setProvideTarget(stack);
-  }
-
-  @Override
-  public void onUpdate() {
-    super.onUpdate();
-    if (worldObj != null && !worldObj.isRemote) {
-      if (requestManager.isFulfilled()) {
-        boolean isEmpty = true;
-        for (int i = 0; i < getSizeInventory(); i++) {
-          if (getStackInSlot(i) != null) {
-            isEmpty = false;
-            break;
-          }
-        }
-        if (isEmpty) {
-          provideManager.setProvideTarget(null);
-        }
-      }
-
+    public EntityMinecartAssembly(World world) {
+        super(world);
+        initManagers();
     }
-  }
 
-  @Override
-  public Block func_145817_o() {
-    return Blocks.diamond_ore;
-  }
+    public EntityMinecartAssembly(World world, double x, double y, double z) {
+        super(world, x, y, z);
+        initManagers();
+    }
 
-  @Override
-  public void killMinecart(DamageSource p_94095_1_) {
-    if (!worldObj.isRemote)
-      super.killMinecart(p_94095_1_);
-  }
+    private void initManagers() {
+        requestManager = new RequestManager(this, 0, 17);
+        int[] slots = new int[18];
+        for (int i = 0; i < slots.length; i++)
+            slots[i] = i;
+        provideManager = new ProvideManager(this, slots);
+    }
 
-  @Override
-  public void setDead() {
-    this.isDead = true;
-  }
+    public void setTarget(ItemStack stack, List<ItemStack> need) {
+        requestManager.initRequestDirectly(stack, need);
+        provideManager.setProvideTarget(stack);
+    }
 
-  @Override
-  public int getSizeInventory() {
-    return 18;
-  }
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (worldObj != null && !worldObj.isRemote) {
+            if (requestManager.isFulfilled()) {
+                boolean isEmpty = true;
+                for (int i = 0; i < getSizeInventory(); i++) {
+                    if (getStackInSlot(i) != null) {
+                        isEmpty = false;
+                        break;
+                    }
+                }
+                if (isEmpty) {
+                    provideManager.setProvideTarget(null);
+                }
+            }
 
-  @Override
-  public int getMinecartType() {
-    return -1;
-  }
+        }
+    }
 
-  @Override
-  protected void writeEntityToNBT(NBTTagCompound tag) {
-    super.writeEntityToNBT(tag);
-    requestManager.writeToNBT(tag);
-    provideManager.writeToNBT(tag);
-  }
+    public int getDefaultDisplayTileData() {
+        return 2;
+    }
 
-  @Override
-  protected void readEntityFromNBT(NBTTagCompound tag) {
-    super.readEntityFromNBT(tag);
-    requestManager.readFromNBT(tag);
-    provideManager.readFromNBT(tag);
-  }
+    @Override
+    public Block func_145817_o() {
+        return ACBlocks.assembly_worker;
+    }
 
-  @Override
-  public RequestManager getRequestManager() {
-    return requestManager;
-  }
+    @Override
+    public void killMinecart(DamageSource p_94095_1_) {
+        if (!worldObj.isRemote)
+            super.killMinecart(p_94095_1_);
+        this.func_145778_a(Item.getItemFromBlock(ACBlocks.assembly_worker), 1, 0.0F);
+    }
 
-  @Override
-  public ProvideManager getProvideManager() {
-    return provideManager;
-  }
+    @Override
+    public void setDead() {
+        this.isDead = true;
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return 18;
+    }
+
+    @Override
+    public int getMinecartType() {
+        return -1;
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound tag) {
+        super.writeEntityToNBT(tag);
+        requestManager.writeToNBT(tag);
+        provideManager.writeToNBT(tag);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound tag) {
+        super.readEntityFromNBT(tag);
+        requestManager.readFromNBT(tag);
+        provideManager.readFromNBT(tag);
+    }
+
+    @Override
+    public RequestManager getRequestManager() {
+        return requestManager;
+    }
+
+    @Override
+    public ProvideManager getProvideManager() {
+        return provideManager;
+    }
 
 }
