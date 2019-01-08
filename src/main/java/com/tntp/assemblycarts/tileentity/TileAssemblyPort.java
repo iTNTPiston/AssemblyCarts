@@ -9,9 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.Constants.NBT;
 
 public class TileAssemblyPort extends STileInventory implements IAssemblyStructure, ISidedInventory, IMarker {
     private int[] cachedSlots;

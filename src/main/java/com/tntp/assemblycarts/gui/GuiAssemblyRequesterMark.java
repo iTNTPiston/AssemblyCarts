@@ -9,11 +9,9 @@ import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
-import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.util.LocalUtil;
 
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 

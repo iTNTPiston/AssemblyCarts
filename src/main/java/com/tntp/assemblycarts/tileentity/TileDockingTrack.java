@@ -1,6 +1,5 @@
 package com.tntp.assemblycarts.tileentity;
 
-import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.util.DirUtil;
 
 import net.minecraft.entity.item.EntityMinecart;

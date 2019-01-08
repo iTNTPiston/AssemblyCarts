@@ -3,7 +3,6 @@ package com.tntp.assemblycarts.gui;
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
-import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -12,73 +11,73 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class ContainerProcessBook extends SContainer {
-  private AssemblyProcess process;
-  private InventoryPlayer playerInv;
+    private AssemblyProcess process;
+    private InventoryPlayer playerInv;
 
-  public ContainerProcessBook(IInventory playerInventory, AssemblyProcess p) {
-    super(playerInventory, 0, null, 8, 140);
-    process = p;
-    playerInv = (InventoryPlayer) playerInventory;
-  }
-
-  public void setupPlayerInventory(IInventory playerInventory, int playerSlotsX, int playerSlotsY) {
-    for (int j = 0; j < 9; j++) {
-      Slot s;
-      if (j == ((InventoryPlayer) playerInventory).currentItem) {
-        s = new SlotDecorative(playerInventory, j, playerSlotsX + j * 18, playerSlotsY + 58);
-      } else
-        s = new Slot(playerInventory, j, playerSlotsX + j * 18, playerSlotsY + 58);
-      this.addSlotToContainer(s);
+    public ContainerProcessBook(IInventory playerInventory, AssemblyProcess p) {
+        super(playerInventory, 0, null, 8, 140);
+        process = p;
+        playerInv = (InventoryPlayer) playerInventory;
     }
-    for (int k = 0; k < 3; k++) {
-      for (int j = 0; j < 9; j++) {
-        this.addSlotToContainer(new Slot(playerInventory, j + 9 + k * 9, playerSlotsX + j * 18, playerSlotsY + k * 18));
-      }
+
+    public void setupPlayerInventory(IInventory playerInventory, int playerSlotsX, int playerSlotsY) {
+        for (int j = 0; j < 9; j++) {
+            Slot s;
+            if (j == ((InventoryPlayer) playerInventory).currentItem) {
+                s = new SlotDecorative(playerInventory, j, playerSlotsX + j * 18, playerSlotsY + 58);
+            } else
+                s = new Slot(playerInventory, j, playerSlotsX + j * 18, playerSlotsY + 58);
+            this.addSlotToContainer(s);
+        }
+        for (int k = 0; k < 3; k++) {
+            for (int j = 0; j < 9; j++) {
+                this.addSlotToContainer(new Slot(playerInventory, j + 9 + k * 9, playerSlotsX + j * 18, playerSlotsY + k * 18));
+            }
+        }
     }
-  }
 
-  protected AssemblyProcess getProcess() {
-    return process;
-  }
-
-  @Override
-  public void setupMachineSlots(IInventory machine) {
-
-  }
-
-  @Override
-  public boolean canInteractWith(EntityPlayer p_75145_1_) {
-    return true;
-  }
-
-  public void processSlotClick(int slotID, int mouseButton) {
-    // both server and client
-    ItemStack current = playerInv.getItemStack();
-    if (slotID == 0) {
-      ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getMainOutput());
-      process.setMainOutput(mark);
-    } else if (slotID <= 18) {
-      slotID--;// match list id
-      ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getInput(slotID));
-      process.setInput(slotID, mark);
-    } else if (slotID <= 36) {
-      slotID -= 19;// match list id
-      ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getOtherOutput(slotID));
-      process.setOtherOutput(slotID, mark);
+    protected AssemblyProcess getProcess() {
+        return process;
     }
-  }
 
-  /**
-   * Called when the container is closed.
-   */
-  @Override
-  public void onContainerClosed(EntityPlayer player) {
-    ItemStack current = player.inventory.getCurrentItem();
-    if (current != null && current.getItem() == ACItems.process_book) {
-      ItemProcessBook.writeProcessToStack(current, process);
-      player.inventory.setInventorySlotContents(player.inventory.currentItem, current);
+    @Override
+    public void setupMachineSlots(IInventory machine) {
+
     }
-    super.onContainerClosed(player);
-  }
+
+    @Override
+    public boolean canInteractWith(EntityPlayer p_75145_1_) {
+        return true;
+    }
+
+    public void processSlotClick(int slotID, int mouseButton) {
+        // both server and client
+        ItemStack current = playerInv.getItemStack();
+        if (slotID == 0) {
+            ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getMainOutput());
+            process.setMainOutput(mark);
+        } else if (slotID <= 18) {
+            slotID--;// match list id
+            ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getInput(slotID));
+            process.setInput(slotID, mark);
+        } else if (slotID <= 36) {
+            slotID -= 19;// match list id
+            ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getOtherOutput(slotID));
+            process.setOtherOutput(slotID, mark);
+        }
+    }
+
+    /**
+     * Called when the container is closed.
+     */
+    @Override
+    public void onContainerClosed(EntityPlayer player) {
+        ItemStack current = player.inventory.getCurrentItem();
+        if (current != null && current.getItem() == ACItems.process_book) {
+            ItemProcessBook.writeProcessToStack(current, process);
+            player.inventory.setInventorySlotContents(player.inventory.currentItem, current);
+        }
+        super.onContainerClosed(player);
+    }
 
 }

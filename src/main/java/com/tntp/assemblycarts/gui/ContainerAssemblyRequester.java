@@ -1,20 +1,12 @@
 package com.tntp.assemblycarts.gui;
 
-import com.tntp.assemblycarts.api.IMarker;
-import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.item.ItemProcessBook;
-import com.tntp.assemblycarts.network.ACNetwork;
-import com.tntp.assemblycarts.network.MCGuiMarkManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ContainerAssemblyRequester extends SContainerRequestManager {
     private TileAssemblyRequester tile;

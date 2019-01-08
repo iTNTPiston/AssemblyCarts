@@ -1,16 +1,12 @@
 package com.tntp.assemblycarts.block;
 
-import java.util.Arrays;
-
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
-import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.render.RenderTrack;
 import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -19,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvider {
@@ -101,11 +96,9 @@ public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvi
         TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
         if (tile.isOccupied())
             return 0;
-        if (cart instanceof EntityMinecartAssemblyWorker) {
-            if (!isPowered(world, x, y, z))
-                return 0;
-        }
-        return 0.4f;
+        if (!isPowered(world, x, y, z) && tile.canDock(cart))
+            return 0;
+        return super.getRailMaxSpeed(world, cart, x, y, z);
     }
 
     /**

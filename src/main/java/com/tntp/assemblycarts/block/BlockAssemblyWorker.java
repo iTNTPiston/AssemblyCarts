@@ -1,7 +1,6 @@
 package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
 
 import cpw.mods.fml.relauncher.Side;

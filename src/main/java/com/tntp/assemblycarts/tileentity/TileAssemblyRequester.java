@@ -13,7 +13,6 @@ import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.util.DirUtil;
-import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;

@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.RequestManager;
-import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.util.LocalUtil;
 
 import net.minecraft.client.audio.PositionedSoundRecord;

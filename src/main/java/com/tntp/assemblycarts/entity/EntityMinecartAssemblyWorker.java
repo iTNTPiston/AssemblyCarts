@@ -1,7 +1,5 @@
 package com.tntp.assemblycarts.entity;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.tntp.assemblycarts.api.IProvider;
@@ -9,24 +7,12 @@ import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.init.ACBlocks;
-import com.tntp.assemblycarts.init.ACItems;
-import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartContainer;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 

@@ -1,6 +1,5 @@
 package com.tntp.assemblycarts.network;
 
-import com.tntp.assemblycarts.gui.ContainerProcessBook;
 import com.tntp.assemblycarts.gui.SContainer;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -15,23 +14,22 @@ import net.minecraft.entity.player.EntityPlayer;
  */
 public class MSGuiSlotClick extends MAInt3<MSGuiSlotClick> {
 
-  public MSGuiSlotClick(int windowID, int slot, int mouse) {
-    super(windowID, slot, mouse);
-    // TODO Auto-generated constructor stub
-  }
-
-  public MSGuiSlotClick() {
-    super(0, 0, 0);
-  }
-
-  @Override
-  public IMessage onMessage(MSGuiSlotClick message, MessageContext ctx) {
-    EntityPlayer player = ctx.getServerHandler().playerEntity;
-    if (player.openContainer.windowId == message.getI1()) {
-      SContainer cont = (SContainer) player.openContainer;
-      cont.processSlotClick(message.getI2(), message.getI3());
+    public MSGuiSlotClick(int windowID, int slot, int mouse) {
+        super(windowID, slot, mouse);
     }
-    return null;
-  }
+
+    public MSGuiSlotClick() {
+        super(0, 0, 0);
+    }
+
+    @Override
+    public IMessage onMessage(MSGuiSlotClick message, MessageContext ctx) {
+        EntityPlayer player = ctx.getServerHandler().playerEntity;
+        if (player.openContainer.windowId == message.getI1()) {
+            SContainer cont = (SContainer) player.openContainer;
+            cont.processSlotClick(message.getI2(), message.getI3());
+        }
+        return null;
+    }
 
 }

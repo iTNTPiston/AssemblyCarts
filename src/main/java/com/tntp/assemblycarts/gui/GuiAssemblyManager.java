@@ -1,8 +1,5 @@
 package com.tntp.assemblycarts.gui;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
@@ -10,16 +7,11 @@ import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
-import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
-import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import com.tntp.assemblycarts.util.LocalUtil;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiAssemblyManager extends SGui {

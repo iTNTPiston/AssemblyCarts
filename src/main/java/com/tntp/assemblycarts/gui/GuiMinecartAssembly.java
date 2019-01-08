@@ -1,15 +1,9 @@
 package com.tntp.assemblycarts.gui;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
-import com.tntp.assemblycarts.api.AssemblyProcess;
-import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
