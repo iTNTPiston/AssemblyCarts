@@ -73,9 +73,9 @@ Items
 	#SUFFIX
 		.name
 	#NAME
-		assembly_cart
-		Assembly Cart
-		装配车
+		assembly_worker_cart
+		Assembly Worker Cart
+		装配工车
 		
 	#NAME
 		crowbar_assemblium
