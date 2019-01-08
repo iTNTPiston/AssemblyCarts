@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.api.Assemblium;
+import com.tntp.assemblycarts.tileentity.IAssemblyStructure;
 import com.tntp.assemblycarts.tileentity.TileAssemblyFrame;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 

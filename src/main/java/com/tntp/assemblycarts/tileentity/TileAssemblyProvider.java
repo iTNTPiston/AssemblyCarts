@@ -3,20 +3,20 @@ package com.tntp.assemblycarts.tileentity;
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.block.BlockDockingTrack;
-import com.tntp.assemblycarts.block.IAssemblyStructure;
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.util.DirUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 
-public class TileAssemblyProvider extends STileInventory implements IProvider {
+public class TileAssemblyProvider extends STileInventory implements IProvider, ICartStation {
     private ProvideManager provideManager;
     private int trackPowerTimeLeft;
 
@@ -40,13 +40,16 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
                 setTrackPowered(false);
             }
         } else {
-            EntityMinecartAssembly cart = getDockedCart();
+            EntityMinecart cart = getDockedCart();
             if (cart != null) {
-                if (cart.getRequestManager().isFulfilled()) {
-                    // Cart is ready to go
+                if (!(cart instanceof EntityMinecartAssemblyWorker)) {
                     powerTrack(30);
                 } else {
-                    if (!provideToCart(cart)) {
+                    EntityMinecartAssemblyWorker c = (EntityMinecartAssemblyWorker) cart;
+                    if (c.getRequestManager().isFulfilled()) {
+                        // Cart is ready to go
+                        powerTrack(30);
+                    } else if (!provideToCart(c)) {
                         powerTrack(30);
                     }
                 }
@@ -60,7 +63,7 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
      * @param cart
      * @return true if the provide is successful
      */
-    public boolean provideToCart(EntityMinecartAssembly cart) {
+    public boolean provideToCart(EntityMinecartAssemblyWorker cart) {
         provideManager.setProvideTarget(null);
         for (int dir : DirUtil.ALL_DIR) {
             int[] off = DirUtil.OFFSETS[dir ^ 1];
@@ -139,16 +142,21 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
         }
     }
 
-    public EntityMinecartAssembly getDockedCart() {
+    public EntityMinecart getDockedCart() {
         int[] off = DirUtil.OFFSETS[getBlockMetadata()];
         int x = xCoord + off[0];
         int y = yCoord + off[1];
         int z = zCoord + off[2];
         TileEntity tile = worldObj.getTileEntity(x, y, z);
         if (tile instanceof TileDockingTrack) {
-            return ((TileDockingTrack) tile).getDockedCart(EntityMinecartAssembly.class);
+            return ((TileDockingTrack) tile).getDockedCart();
         }
         return null;
+    }
+
+    @Override
+    public boolean canDock(EntityMinecart cart, int dockingSide) {
+        return dockingSide == getBlockMetadata() && (cart instanceof EntityMinecartAssemblyWorker);
     }
 
 }

@@ -1,7 +1,5 @@
 package com.tntp.assemblycarts.tileentity;
 
-import com.tntp.assemblycarts.block.IAssemblyStructure;
-
 public class TileAssemblyFrame extends STile implements IAssemblyStructure {
   private TileAssemblyManager manager;
 

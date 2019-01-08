@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.item;
 
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -24,7 +24,7 @@ public class ItemAssemblyCart extends SItem {
       float p_77648_8_, float p_77648_9_, float p_77648_10_) {
     if (BlockRailBase.func_150051_a(world.getBlock(x, y, z))) {
       if (!world.isRemote) {
-        EntityMinecart entityminecart = new EntityMinecartAssembly(world, x + 0.5, y + 0.5, z + 0.5);
+        EntityMinecart entityminecart = new EntityMinecartAssemblyWorker(world, x + 0.5, y + 0.5, z + 0.5);
 
         if (stack.hasDisplayName()) {
           entityminecart.setMinecartName(stack.getDisplayName());

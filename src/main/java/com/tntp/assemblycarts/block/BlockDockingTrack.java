@@ -2,7 +2,7 @@ package com.tntp.assemblycarts.block;
 
 import java.util.Arrays;
 
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.render.RenderTrack;
@@ -101,7 +101,7 @@ public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvi
         TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
         if (tile.isOccupied())
             return 0;
-        if (cart instanceof EntityMinecartAssembly) {
+        if (cart instanceof EntityMinecartAssemblyWorker) {
             if (!isPowered(world, x, y, z))
                 return 0;
         }
@@ -138,17 +138,17 @@ public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvi
             tile.setDockedCart(null);
         } else {
             TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
-            if (tile.canCartDock(cart)) {
+            if (tile.canDock(cart)) {
                 if (!tile.isOccupied() || tile.getDockedCart() == cart) {
                     cart.motionX = 0;
                     cart.motionZ = 0;
                     cart.posX = x + 0.5;
                     cart.posZ = z + 0.5;
                     tile.setOccupied(true);
-                    tile.setDockedCart((EntityMinecartAssembly) cart);
+                    tile.setDockedCart((EntityMinecartAssemblyWorker) cart);
                 } else {
                     if (tile.getDockedCart() == null) {
-                        tile.setDockedCart((EntityMinecartAssembly) cart);
+                        tile.setDockedCart((EntityMinecartAssemblyWorker) cart);
                     } else {
                         // bounce the cart back
                         cart.motionX = -cart.motionX / 2;

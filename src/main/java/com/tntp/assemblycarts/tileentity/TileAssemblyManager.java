@@ -7,7 +7,6 @@ import java.util.List;
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.RequestManager;
-import com.tntp.assemblycarts.block.IAssemblyStructure;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.util.ItemUtil;

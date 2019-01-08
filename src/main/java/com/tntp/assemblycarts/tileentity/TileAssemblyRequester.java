@@ -8,8 +8,7 @@ import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.block.BlockDockingTrack;
-import com.tntp.assemblycarts.block.IAssemblyStructure;
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
@@ -17,11 +16,12 @@ import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester, IProvider, IMarker {
+public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester, IProvider, IMarker, ICartStation {
 
     private int trackPowerTimeLeft;
     /**
@@ -72,26 +72,31 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
                 setTrackPowered(false);
             }
         } else {
-            EntityMinecartAssembly cart = getDockedCart();
-            if (cart != null) {
-                if (requestManager.isFulfilled()) {
+            EntityMinecart c = getDockedCart();
+            if (c != null) {
+                if (!(c instanceof EntityMinecartAssemblyWorker)) {
+                    powerTrack(30);
+                } else {
+                    EntityMinecartAssemblyWorker cart = (EntityMinecartAssemblyWorker) c;
+                    if (requestManager.isFulfilled()) {
 
-                    if (!sticky) {
-                        // Let all passed carts go in this case
-                        powerTrack(30);
-                    } else {
-                        // If the cart has a target, let go
-                        if (cart.getRequestManager().getCraftingTarget() != null) {
+                        if (!sticky) {
+                            // Let all passed carts go in this case
+                            powerTrack(30);
+                        } else {
+                            // If the cart has a target, let go
+                            if (cart.getRequestManager().getCraftingTarget() != null) {
+                                powerTrack(30);
+                            }
+                        }
+                    } else if (cart.getProvideManager().canProvideTo(requestManager)) {
+                        if (cart.getProvideManager().getProvideTarget() == null) {
+                            // If the cart doesn't have a target, set the target
+                            cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
+                        } else if (!cart.getProvideManager().tryProvide(requestManager, -1)) {
+                            // Let the cart provide. If cannot provide then let the cart go.
                             powerTrack(30);
                         }
-                    }
-                } else if (cart.getProvideManager().canProvideTo(requestManager)) {
-                    if (cart.getProvideManager().getProvideTarget() == null) {
-                        // If the cart doesn't have a target, set the target
-                        cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
-                    } else if (!cart.getProvideManager().tryProvide(requestManager, -1)) {
-                        // Let the cart provide. If cannot provide then let the cart go.
-                        powerTrack(30);
                     }
                 }
             }
@@ -125,14 +130,14 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
         }
     }
 
-    public EntityMinecartAssembly getDockedCart() {
+    public EntityMinecart getDockedCart() {
         int[] off = DirUtil.OFFSETS[getBlockMetadata()];
         int x = xCoord + off[0];
         int y = yCoord + off[1];
         int z = zCoord + off[2];
         TileEntity tile = worldObj.getTileEntity(x, y, z);
         if (tile instanceof TileDockingTrack) {
-            return ((TileDockingTrack) tile).getDockedCart(EntityMinecartAssembly.class);
+            return ((TileDockingTrack) tile).getDockedCart();
         }
         return null;
     }
@@ -190,6 +195,11 @@ public class TileAssemblyRequester extends STileInventory implements IAssemblySt
     @Override
     public MarkManager getMarkManager() {
         return markManager;
+    }
+
+    @Override
+    public boolean canDock(EntityMinecart cart, int dockingSide) {
+        return dockingSide == getBlockMetadata() && (cart instanceof EntityMinecartAssemblyWorker);
     }
 
 }

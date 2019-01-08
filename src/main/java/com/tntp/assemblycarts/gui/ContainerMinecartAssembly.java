@@ -3,7 +3,7 @@ package com.tntp.assemblycarts.gui;
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MCGuiProvideManager;
 
@@ -15,14 +15,14 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ContainerMinecartAssembly extends SContainerRequestManager implements IProvider {
-  private EntityMinecartAssembly cart;
+  private EntityMinecartAssemblyWorker cart;
 
-  public ContainerMinecartAssembly(IInventory playerInventory, EntityMinecartAssembly cart) {
+  public ContainerMinecartAssembly(IInventory playerInventory, EntityMinecartAssemblyWorker cart) {
     super(playerInventory, cart.getSizeInventory(), cart, 8, 140);
     this.cart = cart;
   }
 
-  public EntityMinecartAssembly getCart() {
+  public EntityMinecartAssemblyWorker getCart() {
     return cart;
   }
 

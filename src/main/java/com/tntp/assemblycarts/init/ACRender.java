@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.init;
 
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.render.RenderAssemblyCarts;
 import com.tntp.assemblycarts.render.RenderTrack;
 

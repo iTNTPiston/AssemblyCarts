@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.IInventory;
@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiMinecartAssembly extends SGui {
     private static final ResourceLocation background = GuiProcessBook.background;
 
-    public GuiMinecartAssembly(IInventory playerInventory, EntityMinecartAssembly cart) {
+    public GuiMinecartAssembly(IInventory playerInventory, EntityMinecartAssemblyWorker cart) {
         super(new ContainerMinecartAssembly(playerInventory, cart), cart.getInventoryName());
         xSize = 176;
         ySize = 222;
@@ -36,7 +36,7 @@ public class GuiMinecartAssembly extends SGui {
     protected void drawGuiContainerForegroundLayer(int mx, int my) {
         super.drawGuiContainerForegroundLayer(mx, my);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        EntityMinecartAssembly cart = ((ContainerMinecartAssembly) this.inventorySlots).getCart();
+        EntityMinecartAssemblyWorker cart = ((ContainerMinecartAssembly) this.inventorySlots).getCart();
         ItemStack main = cart.getRequestManager().getCraftingTarget();
         if (main == null)
             main = cart.getProvideManager().getProvideTarget();

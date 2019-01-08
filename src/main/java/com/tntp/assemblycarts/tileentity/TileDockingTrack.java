@@ -1,9 +1,11 @@
 package com.tntp.assemblycarts.tileentity;
 
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
+import com.tntp.assemblycarts.util.DirUtil;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileDockingTrack extends STile {
     private boolean reversed;
@@ -49,28 +51,27 @@ public class TileDockingTrack extends STile {
         super.readFromNBT(tag);
         setReversed(tag.getBoolean("reversed"));
         occupied = tag.getBoolean("occupied");
-        // hasCartInThisTick = tag.getBoolean("hasCart");
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends EntityMinecart> T getDockedCart(Class<T> cartType) {
-        if (dockedCart == null)
-            return null;
-        if (cartType.isAssignableFrom(dockedCart.getClass()))
-            return (T) dockedCart;
-        return null;
+    public boolean canDock(EntityMinecart cart) {
+        if (worldObj == null)
+            return false;
+        for (int d : DirUtil.ALL_DIR) {
+            int[] off = DirUtil.OFFSETS[d];
+            TileEntity tile = worldObj.getTileEntity(xCoord + off[0], yCoord + off[1], zCoord + off[2]);
+            if (tile instanceof ICartStation) {
+                return ((ICartStation) tile).canDock(cart, d ^ 1);
+            }
+        }
+        return false;
     }
 
     public EntityMinecart getDockedCart() {
         return dockedCart;
     }
 
-    public void setDockedCart(EntityMinecartAssembly dockedCart) {
+    public void setDockedCart(EntityMinecart dockedCart) {
         this.dockedCart = dockedCart;
-    }
-
-    public boolean canCartDock(EntityMinecart cart) {
-        return true;
     }
 
     @Override

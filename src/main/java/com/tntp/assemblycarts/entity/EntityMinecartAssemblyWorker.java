@@ -30,17 +30,17 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
-public class EntityMinecartAssembly extends EntityMinecartContainer implements IProvider, IRequester {
+public class EntityMinecartAssemblyWorker extends EntityMinecartContainer implements IProvider, IRequester {
 
     private RequestManager requestManager;
     private ProvideManager provideManager;
 
-    public EntityMinecartAssembly(World world) {
+    public EntityMinecartAssemblyWorker(World world) {
         super(world);
         initManagers();
     }
 
-    public EntityMinecartAssembly(World world, double x, double y, double z) {
+    public EntityMinecartAssemblyWorker(World world, double x, double y, double z) {
         super(world, x, y, z);
         initManagers();
     }

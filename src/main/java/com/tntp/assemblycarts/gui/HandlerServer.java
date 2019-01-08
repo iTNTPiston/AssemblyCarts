@@ -3,7 +3,7 @@ package com.tntp.assemblycarts.gui;
 import java.util.List;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
-import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
+import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
@@ -31,9 +31,9 @@ public class HandlerServer implements IGuiHandler {
             }
         } else if (ID == ACGuis.getGuiID("MinecartAssembly")) {
             AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x - 0.5, y - 0.5, z - 0.5, x + 1.5, y + 1.5, z + 1.5);
-            List<Object> entities = world.selectEntitiesWithinAABB(EntityMinecartAssembly.class, box, null);
+            List<Object> entities = world.selectEntitiesWithinAABB(EntityMinecartAssemblyWorker.class, box, null);
             if (entities.size() > 0) {
-                EntityMinecartAssembly cart = (EntityMinecartAssembly) entities.get(0);
+                EntityMinecartAssemblyWorker cart = (EntityMinecartAssemblyWorker) entities.get(0);
                 return new ContainerMinecartAssembly(player.inventory, cart);
             }
         } else if (ID == ACGuis.getGuiID("AssemblyRequester")) {

@@ -1,6 +1,4 @@
-package com.tntp.assemblycarts.block;
-
-import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
+package com.tntp.assemblycarts.tileentity;
 
 public interface IAssemblyStructure {
   public TileAssemblyManager getManager();

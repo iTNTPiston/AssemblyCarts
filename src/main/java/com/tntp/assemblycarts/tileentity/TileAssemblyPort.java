@@ -2,7 +2,6 @@ package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.api.IMarker;
 import com.tntp.assemblycarts.api.MarkManager;
-import com.tntp.assemblycarts.block.IAssemblyStructure;
 import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.assemblycarts.util.ItemUtil;
 
