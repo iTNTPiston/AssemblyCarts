@@ -2,7 +2,7 @@ package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.ProvideManager;
-import com.tntp.assemblycarts.block.BlockProviderTrack;
+import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.block.IAssemblyStructure;
 import com.tntp.assemblycarts.entity.EntityMinecartAssembly;
 import com.tntp.assemblycarts.init.ACBlocks;
@@ -134,8 +134,8 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
         int y = yCoord + off[1];
         int z = zCoord + off[2];
         Block b = worldObj.getBlock(x, y, z);
-        if (b == ACBlocks.provider_track) {
-            BlockProviderTrack.setPowered(worldObj, x, y, z, powered);
+        if (b == ACBlocks.docking_track) {
+            BlockDockingTrack.setPowered(worldObj, x, y, z, powered);
         }
     }
 
@@ -145,8 +145,8 @@ public class TileAssemblyProvider extends STileInventory implements IProvider {
         int y = yCoord + off[1];
         int z = zCoord + off[2];
         TileEntity tile = worldObj.getTileEntity(x, y, z);
-        if (tile instanceof TileProviderTrack) {
-            return ((TileProviderTrack) tile).getDockedCart();
+        if (tile instanceof TileDockingTrack) {
+            return ((TileDockingTrack) tile).getDockedCart(EntityMinecartAssembly.class);
         }
         return null;
     }

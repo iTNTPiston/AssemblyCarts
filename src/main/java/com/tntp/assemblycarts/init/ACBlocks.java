@@ -8,15 +8,15 @@ import com.tntp.assemblycarts.block.BlockAssemblyProvider;
 import com.tntp.assemblycarts.block.BlockAssemblyRequester;
 import com.tntp.assemblycarts.block.BlockAssemblyRequesterSticky;
 import com.tntp.assemblycarts.block.BlockAssemblyWorker;
-import com.tntp.assemblycarts.block.BlockProviderTrack;
+import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.item.ItemBlockProviderTrack;
+import com.tntp.assemblycarts.item.ItemBlockDockingTrack;
 import com.tntp.assemblycarts.tileentity.TileAssemblyFrame;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyProvider;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
-import com.tntp.assemblycarts.tileentity.TileProviderTrack;
+import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.GameRegistry.ObjectHolder;
@@ -37,7 +37,7 @@ public class ACBlocks {
     public static final Block assembly_requester_sticky = null;
     public static final Block assembly_port = null;
 
-    public static final Block provider_track = null;
+    public static final Block docking_track = null;
 
     public static void loadBlocks() {
         regBlock(new BlockAssemblium(), "assemblium_block");
@@ -53,8 +53,8 @@ public class ACBlocks {
         regTileEntity(TileAssemblyPort.class);
         regBlock(new BlockAssemblyProvider(), "assembly_provider");
         regTileEntity(TileAssemblyProvider.class);
-        regBlock(new BlockProviderTrack(), ItemBlockProviderTrack.class, "provider_track");
-        regTileEntity(TileProviderTrack.class);
+        regBlock(new BlockDockingTrack(), ItemBlockDockingTrack.class, "docking_track");
+        regTileEntity(TileDockingTrack.class);
 
     }
 

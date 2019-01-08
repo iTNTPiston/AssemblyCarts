@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.item;
 
-import com.tntp.assemblycarts.block.BlockProviderTrack;
+import com.tntp.assemblycarts.block.BlockDockingTrack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -10,9 +10,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-public class ItemBlockProviderTrack extends ItemBlock {
+public class ItemBlockDockingTrack extends ItemBlock {
 
-  public ItemBlockProviderTrack(Block b) {
+  public ItemBlockDockingTrack(Block b) {
     super(b);
   }
 
@@ -29,7 +29,7 @@ public class ItemBlockProviderTrack extends ItemBlock {
   @Override
   public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
     if (pass == 0)
-      return ((BlockProviderTrack) this.field_150939_a).base;
+      return ((BlockDockingTrack) this.field_150939_a).base;
     return this.getIconFromDamage(damage);
   }
 

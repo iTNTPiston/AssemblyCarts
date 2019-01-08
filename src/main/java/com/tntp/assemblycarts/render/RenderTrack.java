@@ -1,8 +1,8 @@
 package com.tntp.assemblycarts.render;
 
-import com.tntp.assemblycarts.block.BlockProviderTrack;
+import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.init.ACBlocks;
-import com.tntp.assemblycarts.tileentity.TileProviderTrack;
+import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -28,8 +28,8 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
   @Override
   public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
       RenderBlocks renderer) {
-    boolean reversed = ((TileProviderTrack) world.getTileEntity(x, y, z)).isReversed();
-    renderBlockMinecartTrack(renderer, (BlockProviderTrack) block, x, y, z, reversed);
+    boolean reversed = ((TileDockingTrack) world.getTileEntity(x, y, z)).isReversed();
+    renderBlockMinecartTrack(renderer, (BlockDockingTrack) block, x, y, z, reversed);
     return true;
   }
 
@@ -43,7 +43,7 @@ public class RenderTrack implements ISimpleBlockRenderingHandler {
     return renderID;
   }
 
-  public boolean renderBlockMinecartTrack(RenderBlocks renderBlock, BlockProviderTrack block, int x, int y, int z,
+  public boolean renderBlockMinecartTrack(RenderBlocks renderBlock, BlockDockingTrack block, int x, int y, int z,
       boolean reversed) {
     Tessellator tessellator = Tessellator.instance;
     int meta = renderBlock.blockAccess.getBlockMetadata(x, y, z);
