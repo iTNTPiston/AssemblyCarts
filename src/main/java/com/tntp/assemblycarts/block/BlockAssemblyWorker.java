@@ -37,7 +37,7 @@ public class BlockAssemblyWorker extends BlockAssemblium {
     @Override
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int s, int meta) {
-        return s == meta ? front : ((s == 0 || s == 1) ? blockIcon : base);
+        return ((s == 0 || s == 1) ? blockIcon : (s == meta || (s ^ 1) == meta) ? front : base);
     }
 
     @Override
@@ -47,4 +47,5 @@ public class BlockAssemblyWorker extends BlockAssemblium {
         front = reg.registerIcon(this.getTextureName() + "_front");
         base = reg.registerIcon(this.getTextureName() + "_base");
     }
+
 }

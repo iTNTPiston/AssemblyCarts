@@ -169,4 +169,28 @@ Assembly Carts
 			已标记
 	
 	#RETURN tooltip
+	#GROUP
+		message
+		#NAME
+			side_arg_s
+			Set Side: %s
+			设置面为: %s
+			
+		#NAMEENUM
+			side_
+			DOWN
+			UP
+			NORTH
+			SOUTH
+			WEST
+			EAST
+			
+			下
+			上
+			北
+			南
+			西
+			东
+		
+	#RETURN mesasge
 #RETURN ac

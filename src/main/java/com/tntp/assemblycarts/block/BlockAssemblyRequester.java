@@ -8,7 +8,9 @@ import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -71,6 +73,11 @@ public class BlockAssemblyRequester extends SBlockContainer {
         blockIcon = reg.registerIcon(this.getTextureName() + "_base");
         port = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_requester_port");
         back = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_requester_back");
+    }
+
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
+        world.setBlockMetadataWithNotify(x, y, z, l, 2);
     }
 
 }

@@ -5,14 +5,19 @@ import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
+import com.tntp.assemblycarts.util.ClientUtil;
+import com.tntp.assemblycarts.util.LocalUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class BlockAssemblyPort extends SBlockContainer {
@@ -36,6 +41,7 @@ public class BlockAssemblyPort extends SBlockContainer {
             world.setBlockMetadataWithNotify(x, y, z, side, 2);
             if (world.isRemote) {
                 world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+                ClientUtil.printChatMessage(LocalUtil.localize("ac.message.side_arg_s", LocalUtil.localize("ac.message.side_" + side)));
             }
 
         } else {
@@ -48,8 +54,15 @@ public class BlockAssemblyPort extends SBlockContainer {
 
     @Override
     @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        int meta = world.getBlockMetadata(x, y, z);
+        return side == meta ? blockIcon : base;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public IIcon getIcon(int s, int meta) {
-        return s == meta ? blockIcon : base;
+        return s == 4 ? blockIcon : base;
     }
 
     @Override
@@ -62,5 +75,11 @@ public class BlockAssemblyPort extends SBlockContainer {
     @Override
     public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
         return new TileAssemblyPort();
+    }
+
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
+        world.setBlockMetadataWithNotify(x, y, z, l, 2);
     }
 }
