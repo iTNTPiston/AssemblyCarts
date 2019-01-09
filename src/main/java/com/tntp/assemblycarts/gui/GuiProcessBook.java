@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.container.ContainerProcessBook;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 
@@ -13,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiProcessBook extends SGui {
     static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/process_book.png");
 
-    public GuiProcessBook(IInventory playerInventory, AssemblyProcess proc) {
+    public GuiProcessBook(IInventory playerInventory, IInventory proc) {
         super(new ContainerProcessBook(playerInventory, proc), "ac.gui.processbook");
         xSize = 176;
         ySize = 222;

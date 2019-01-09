@@ -3,6 +3,7 @@ package com.tntp.assemblycarts.gui;
 import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
+import com.tntp.assemblycarts.gui.container.ContainerMinecartAssembly;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiMinecartAssembly extends SGui {
     private static final ResourceLocation background = GuiProcessBook.background;
 
-    public GuiMinecartAssembly(IInventory playerInventory, EntityMinecartAssemblyWorker cart) {
+    public GuiMinecartAssembly(IInventory playerInventory, IInventory cart) {
         super(new ContainerMinecartAssembly(playerInventory, cart), cart.getInventoryName());
         xSize = 176;
         ySize = 222;

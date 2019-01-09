@@ -1,9 +1,11 @@
-package com.tntp.assemblycarts.gui;
+package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
+import com.tntp.assemblycarts.gui.SContainerRequestManager;
+import com.tntp.assemblycarts.gui.SlotDecorative;
 import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.assemblycarts.network.MCGuiProvideManager;
 
@@ -16,9 +18,9 @@ import net.minecraft.nbt.NBTTagCompound;
 public class ContainerMinecartAssembly extends SContainerRequestManager implements IProvider {
     private EntityMinecartAssemblyWorker cart;
 
-    public ContainerMinecartAssembly(IInventory playerInventory, EntityMinecartAssemblyWorker cart) {
+    public ContainerMinecartAssembly(IInventory playerInventory, IInventory cart) {
         super(playerInventory, cart.getSizeInventory(), cart, 8, 140);
-        this.cart = cart;
+        this.cart = (EntityMinecartAssemblyWorker) cart;
     }
 
     public EntityMinecartAssemblyWorker getCart() {
@@ -56,6 +58,7 @@ public class ContainerMinecartAssembly extends SContainerRequestManager implemen
     public void setupMachineSlots(IInventory machine) {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 9; j++) {
+                System.out.println("AddSLot");
                 this.addSlotToContainer(new SlotDecorative(machine, i * 9 + j, 8 + j * 18, 90 + i * 18));
             }
         }

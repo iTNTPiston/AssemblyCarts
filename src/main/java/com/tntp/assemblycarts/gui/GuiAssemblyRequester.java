@@ -2,6 +2,7 @@ package com.tntp.assemblycarts.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.tntp.assemblycarts.gui.container.ContainerAssemblyRequester;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
 import net.minecraft.inventory.IInventory;
@@ -11,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiAssemblyRequester extends SGui {
     private static final ResourceLocation background = GuiProcessBook.background;
 
-    public GuiAssemblyRequester(IInventory playerInventory, TileAssemblyRequester tile) {
+    public GuiAssemblyRequester(IInventory playerInventory, IInventory tile) {
         super(new ContainerAssemblyRequester(playerInventory, tile), tile.getInventoryName());
         xSize = 176;
         ySize = 222;

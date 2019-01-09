@@ -6,10 +6,22 @@ import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.init.ACBlocks;
+import com.tntp.assemblycarts.init.ACGuis;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.FMLOutboundHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.FMLOutboundHandler.OutboundTarget;
+import cpw.mods.fml.common.network.internal.FMLMessage;
+import cpw.mods.fml.relauncher.Side;
+import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecartContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -117,6 +129,22 @@ public class EntityMinecartAssemblyWorker extends EntityMinecartContainer implem
     @Override
     public ProvideManager getProvideManager() {
         return provideManager;
+    }
+
+    @Override
+    public String getInventoryName() {
+        return "item.assembly_worker_cart.name";
+    }
+
+    @Override
+    public boolean interactFirst(EntityPlayer player) {
+        System.out.println("Minecart");
+        if (!this.worldObj.isRemote) {
+            System.out.println("Open Cart GUI");
+
+            player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("MinecartAssembly"), worldObj, this.getEntityId(), -1, -1);
+        }
+        return true;
     }
 
 }

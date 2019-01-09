@@ -1,4 +1,6 @@
-package com.tntp.assemblycarts.gui;
+package com.tntp.assemblycarts.gui.container;
+
+import com.tntp.assemblycarts.gui.SContainer;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

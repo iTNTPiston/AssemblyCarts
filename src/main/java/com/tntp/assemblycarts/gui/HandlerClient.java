@@ -11,6 +11,7 @@ import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -21,6 +22,7 @@ public class HandlerClient extends HandlerServer {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         // SGui gui = null;
+        System.out.println(ACGuis.getGui(ID));
         TileEntity tile = world.getTileEntity(x, y, z);
         if (ID == ACGuis.getGuiID("ProcessBook")) {
             ItemStack stack = player.getCurrentEquippedItem();
@@ -29,11 +31,11 @@ public class HandlerClient extends HandlerServer {
                 return new GuiProcessBook(player.inventory, proc);
             }
         } else if (ID == ACGuis.getGuiID("MinecartAssembly")) {
-            AxisAlignedBB box = AxisAlignedBB.getBoundingBox(x - 0.5, y - 0.5, z - 0.5, x + 1.5, y + 1.5, z + 1.5);
-            List<Object> entities = world.selectEntitiesWithinAABB(EntityMinecartAssemblyWorker.class, box, null);
-            if (entities.size() > 0) {
-                EntityMinecartAssemblyWorker cart = (EntityMinecartAssemblyWorker) entities.get(0);
-                return new GuiMinecartAssembly(player.inventory, cart);
+            if (y < 0 && z < 0) {
+                Entity e = world.getEntityByID(x);
+                if (e instanceof EntityMinecartAssemblyWorker) {
+                    return new GuiMinecartAssembly(player.inventory, (EntityMinecartAssemblyWorker) e);
+                }
             }
         } else if (ID == ACGuis.getGuiID("AssemblyRequester")) {
             if (tile instanceof TileAssemblyRequester) {

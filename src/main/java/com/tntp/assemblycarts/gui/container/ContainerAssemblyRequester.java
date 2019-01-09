@@ -1,6 +1,7 @@
-package com.tntp.assemblycarts.gui;
+package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.gui.SContainerRequestManager;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
@@ -11,9 +12,9 @@ import net.minecraft.inventory.Slot;
 public class ContainerAssemblyRequester extends SContainerRequestManager {
     private TileAssemblyRequester tile;
 
-    public ContainerAssemblyRequester(IInventory playerInventory, TileAssemblyRequester machine) {
+    public ContainerAssemblyRequester(IInventory playerInventory, IInventory machine) {
         super(playerInventory, machine.getSizeInventory(), machine, 8, 140);
-        tile = machine;
+        tile = (TileAssemblyRequester) machine;
     }
 
     public TileAssemblyRequester getTile() {

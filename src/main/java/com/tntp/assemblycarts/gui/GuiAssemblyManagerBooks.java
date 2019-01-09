@@ -3,6 +3,7 @@ package com.tntp.assemblycarts.gui;
 import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.container.ContainerAssemblyManagerBooks;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;

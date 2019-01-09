@@ -1,7 +1,9 @@
-package com.tntp.assemblycarts.gui;
+package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.gui.SContainerRequestManager;
+import com.tntp.assemblycarts.gui.SlotDecorative;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 
 import cpw.mods.fml.relauncher.Side;
@@ -14,7 +16,7 @@ import net.minecraft.item.ItemStack;
 public class ContainerAssemblyManager extends SContainerRequestManager {
 
     private TileAssemblyManager tile;
-    protected int selectedProcessID;
+    public int selectedProcessID;
     private int processMultiplier;
 
     public ContainerAssemblyManager(IInventory playerInventory, IInventory machine) {

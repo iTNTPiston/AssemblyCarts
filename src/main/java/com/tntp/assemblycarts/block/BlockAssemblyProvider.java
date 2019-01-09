@@ -4,6 +4,8 @@ import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyProvider;
+import com.tntp.assemblycarts.util.ClientUtil;
+import com.tntp.assemblycarts.util.LocalUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,6 +42,8 @@ public class BlockAssemblyProvider extends SBlockContainer {
             world.setBlockMetadataWithNotify(x, y, z, side, 2);
             if (world.isRemote) {
                 world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+                ClientUtil.printChatMessage(LocalUtil.localize("ac.message.side_arg_s", LocalUtil.localize("ac.message.side_" + side)));
+
             }
             return true;
         }

@@ -1,6 +1,8 @@
-package com.tntp.assemblycarts.gui;
+package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.gui.SContainer;
+import com.tntp.assemblycarts.gui.SlotDecorative;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 
@@ -14,9 +16,9 @@ public class ContainerProcessBook extends SContainer {
     private AssemblyProcess process;
     private InventoryPlayer playerInv;
 
-    public ContainerProcessBook(IInventory playerInventory, AssemblyProcess p) {
+    public ContainerProcessBook(IInventory playerInventory, IInventory proc) {
         super(playerInventory, 0, null, 8, 140);
-        process = p;
+        process = (AssemblyProcess) proc;
         playerInv = (InventoryPlayer) playerInventory;
     }
 
@@ -36,7 +38,7 @@ public class ContainerProcessBook extends SContainer {
         }
     }
 
-    protected AssemblyProcess getProcess() {
+    public AssemblyProcess getProcess() {
         return process;
     }
 

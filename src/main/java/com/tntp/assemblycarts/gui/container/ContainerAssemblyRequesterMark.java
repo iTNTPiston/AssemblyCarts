@@ -1,6 +1,7 @@
-package com.tntp.assemblycarts.gui;
+package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.MarkManager;
+import com.tntp.assemblycarts.gui.SContainerMarkManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.core;
 
+import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACEntities;
 import com.tntp.assemblycarts.init.ACEvents;
@@ -15,22 +16,23 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class Proxy {
 
-  public void preInit(FMLPreInitializationEvent event) {
-    ACBlocks.loadBlocks();
-    ACItems.loadItems();
-    ACGuis.loadGuis();
-    ACEntities.loadEntities();
-  }
+    public void preInit(FMLPreInitializationEvent event) {
+        ACBlocks.loadBlocks();
+        ACItems.loadItems();
+        ACGuis.loadGuis();
+        ACEntities.loadEntities();
+        EnumGui.initContainers();
+    }
 
-  public void init(FMLInitializationEvent event) {
-    ACNetworkInit.loadNetwork(this instanceof ClientProxy);
-  }
+    public void init(FMLInitializationEvent event) {
+        ACNetworkInit.loadNetwork(this instanceof ClientProxy);
+    }
 
-  public void postInit(FMLPostInitializationEvent event) {
-    Crowbar.addToCrowbar(ACItems.crowbar_assemblium);
-    ACEvents.loadServerEvents();
+    public void postInit(FMLPostInitializationEvent event) {
+        Crowbar.addToCrowbar(ACItems.crowbar_assemblium);
+        ACEvents.loadServerEvents();
 
-    // MNMCompat.loadCompats(this instanceof ClientProxy);
-  }
+        // MNMCompat.loadCompats(this instanceof ClientProxy);
+    }
 
 }
