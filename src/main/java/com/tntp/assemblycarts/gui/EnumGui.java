@@ -1,64 +1,49 @@
 package com.tntp.assemblycarts.gui;
 
-import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import java.lang.reflect.Constructor;
+
+import com.tntp.minecraftmodapi.gui.IEnumGui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.inventory.IInventory;
 
-public enum EnumGui {
-    UNKNOWN, AssemblyManager;
-    private Class<? extends SContainer> container;
+public enum EnumGui implements IEnumGui {
+    UNKNOWN, AssemblyManager, AssemblyManagerBooks, AssemblyPort, AssemblyRequester, AssemblyRequesterMark,;
 
+    /** Injected Container Class */
+    private Class<?> container;
+    /** Injected Gui Class */
     @SideOnly(Side.CLIENT)
-    private Class<? extends SGui> gui;
+    private Class<?> gui;
 
-    public SContainer buildContainer() {
-        return null;
+    @Override
+    public boolean isValid() {
+        return this != UNKNOWN;
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     @SideOnly(Side.CLIENT)
-    private void injectGui() {
-        if (this != UNKNOWN) {
-            String fullName = "com.tntp." + AssemblyCartsMod.MODID + ".gui.Gui" + this.name();
-            try {
-                Class<?> guiClass = Class.forName(fullName);
-                gui = (Class<? extends SGui>) guiClass;
-                AssemblyCartsMod.log.info("[Gui Injecter] Injected " + fullName);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                AssemblyCartsMod.log.error("[Gui Injecter] Cannot Inject GUI: " + fullName);
-            }
+    public Constructor<?> guiConstructor() {
+        try {
+            return gui.getConstructor(IInventory.class, IInventory.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
         }
+        throw new RuntimeException("Cannot get Gui Constructor!");
     }
 
-    @SideOnly(Side.CLIENT)
-    public static void initGuis() {
-        AssemblyCartsMod.log.info("Loading Guis");
-        for (EnumGui e : EnumGui.values())
-            e.injectGui();
-        AssemblyCartsMod.log.info("Loaded Guis");
-    }
-
-    @SuppressWarnings("unchecked")
-    private void injectContainer() {
-        if (this != UNKNOWN) {
-            String fullName = "com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container" + this.name();
-            try {
-                Class<?> containerClass = Class.forName(fullName);
-                container = (Class<? extends SContainer>) containerClass;
-                AssemblyCartsMod.log.info("[Container Injecter] Injected " + fullName);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                AssemblyCartsMod.log.error("[Container Injecter] Cannot Inject Container: " + fullName);
-            }
+    @Override
+    public Constructor<?> containerConstructor() {
+        try {
+            return container.getConstructor(IInventory.class, IInventory.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
         }
-    }
-
-    public static void initContainers() {
-        AssemblyCartsMod.log.info("Loading Gui Containers");
-        for (EnumGui e : EnumGui.values())
-            e.injectContainer();
-        AssemblyCartsMod.log.info("Loaded Gui Containers");
+        throw new RuntimeException("Cannot get Container Constructor!");
     }
 }

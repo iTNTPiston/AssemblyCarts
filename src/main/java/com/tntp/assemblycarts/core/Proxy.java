@@ -9,6 +9,7 @@ import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.init.ACNetworkInit;
 import com.tntp.assemblycarts.item.Crowbar;
+import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -21,7 +22,8 @@ public class Proxy {
         ACItems.loadItems();
         ACGuis.loadGuis();
         ACEntities.loadEntities();
-        EnumGui.initContainers();
+        EnumGuiInjector.injectContainer("com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container", EnumGui.values());
+
     }
 
     public void init(FMLInitializationEvent event) {

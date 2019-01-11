@@ -3,17 +3,17 @@ package com.tntp.assemblycarts.gui;
 import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
-import com.tntp.assemblycarts.gui.container.ContainerMinecartAssembly;
+import com.tntp.assemblycarts.gui.container.ContainerMinecartAssemblyWorker;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiMinecartAssembly extends SGui {
+public class GuiMinecartAssemblyWorker extends SGui {
     private static final ResourceLocation background = GuiProcessBook.background;
 
-    public GuiMinecartAssembly(IInventory playerInventory, IInventory cart) {
-        super(new ContainerMinecartAssembly(playerInventory, cart), cart.getInventoryName());
+    public GuiMinecartAssemblyWorker(IInventory playerInventory, IInventory cart) {
+        super(new ContainerMinecartAssemblyWorker(playerInventory, cart), cart.getInventoryName());
         xSize = 176;
         ySize = 222;
     }
@@ -31,7 +31,7 @@ public class GuiMinecartAssembly extends SGui {
     protected void drawGuiContainerForegroundLayer(int mx, int my) {
         super.drawGuiContainerForegroundLayer(mx, my);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        EntityMinecartAssemblyWorker cart = ((ContainerMinecartAssembly) this.inventorySlots).getCart();
+        EntityMinecartAssemblyWorker cart = ((ContainerMinecartAssemblyWorker) this.inventorySlots).getCart();
         ItemStack main = cart.getRequestManager().getCraftingTarget();
         if (main == null)
             main = cart.getProvideManager().getProvideTarget();

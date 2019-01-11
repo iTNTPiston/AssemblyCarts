@@ -9,7 +9,7 @@ import com.tntp.assemblycarts.gui.container.ContainerAssemblyManagerBooks;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyPort;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyRequester;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyRequesterMark;
-import com.tntp.assemblycarts.gui.container.ContainerMinecartAssembly;
+import com.tntp.assemblycarts.gui.container.ContainerMinecartAssemblyWorker;
 import com.tntp.assemblycarts.gui.container.ContainerProcessBook;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
@@ -41,7 +41,7 @@ public class HandlerServer implements IGuiHandler {
             if (y < 0 && z < 0) {
                 Entity e = world.getEntityByID(x);
                 if (e instanceof EntityMinecartAssemblyWorker) {
-                    return new ContainerMinecartAssembly(player.inventory, (EntityMinecartAssemblyWorker) e);
+                    return new ContainerMinecartAssemblyWorker(player.inventory, (EntityMinecartAssemblyWorker) e);
                 }
             }
         } else if (ID == ACGuis.getGuiID("AssemblyRequester")) {

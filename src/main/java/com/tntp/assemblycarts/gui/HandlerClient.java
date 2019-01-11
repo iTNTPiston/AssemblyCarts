@@ -34,7 +34,7 @@ public class HandlerClient extends HandlerServer {
             if (y < 0 && z < 0) {
                 Entity e = world.getEntityByID(x);
                 if (e instanceof EntityMinecartAssemblyWorker) {
-                    return new GuiMinecartAssembly(player.inventory, (EntityMinecartAssemblyWorker) e);
+                    return new GuiMinecartAssemblyWorker(player.inventory, (EntityMinecartAssemblyWorker) e);
                 }
             }
         } else if (ID == ACGuis.getGuiID("AssemblyRequester")) {

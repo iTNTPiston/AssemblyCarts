@@ -15,10 +15,10 @@ import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class ContainerMinecartAssembly extends SContainerRequestManager implements IProvider {
+public class ContainerMinecartAssemblyWorker extends SContainerRequestManager implements IProvider {
     private EntityMinecartAssemblyWorker cart;
 
-    public ContainerMinecartAssembly(IInventory playerInventory, IInventory cart) {
+    public ContainerMinecartAssemblyWorker(IInventory playerInventory, IInventory cart) {
         super(playerInventory, cart.getSizeInventory(), cart, 8, 140);
         this.cart = (EntityMinecartAssemblyWorker) cart;
     }
