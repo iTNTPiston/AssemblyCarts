@@ -30,4 +30,12 @@ public interface IBlockRegister extends IRegister {
      */
     IBlockRegister hide();
 
+    /**
+     * Add a behavior
+     * 
+     * @param behavior
+     * @return
+     */
+    IBlockRegister behave(IBlockBehavior behavior);
+
 }
