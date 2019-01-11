@@ -29,7 +29,7 @@ public class RegBlock extends SuperRegister implements IBlockRegisterFactory {
     }
 
     @Override
-    public IBlockRegister ofBlock(Block block, String name) {
+    public IBlockRegister of(Block block, String name) {
         APIiTNTPiston.log.info("[Block Registry] Block >> " + name);
 
         return new Reg(block, name);

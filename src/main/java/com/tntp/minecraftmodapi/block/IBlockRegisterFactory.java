@@ -18,5 +18,5 @@ public interface IBlockRegisterFactory {
      * @param b
      * @return
      */
-    IBlockRegister ofBlock(Block b, String name);
+    IBlockRegister of(Block b, String name);
 }
