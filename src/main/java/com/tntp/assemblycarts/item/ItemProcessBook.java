@@ -4,10 +4,12 @@ import java.util.List;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.util.KeyUtil;
 import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -42,7 +44,7 @@ public class ItemProcessBook extends SItem {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if (player.isSneaking()) {
             if (!world.isRemote) {
-                player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("ProcessBook"), world, (int) (player.posX), (int) (player.posY), (int) (player.posZ));
+                EnumGuiHandler.openGuiCurrentItem(EnumGui.ProcessBook, AssemblyCartsMod.MODID, player, world);
             }
         }
         return stack;

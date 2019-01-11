@@ -7,8 +7,10 @@ import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACGuis;
+import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.FMLOutboundHandler;
@@ -138,11 +140,8 @@ public class EntityMinecartAssemblyWorker extends EntityMinecartContainer implem
 
     @Override
     public boolean interactFirst(EntityPlayer player) {
-        System.out.println("Minecart");
         if (!this.worldObj.isRemote) {
-            System.out.println("Open Cart GUI");
-
-            player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("MinecartAssembly"), worldObj, this.getEntityId(), -1, -1);
+            EnumGuiHandler.openGuiEntity(EnumGui.MinecartAssemblyWorker, AssemblyCartsMod.MODID, player, worldObj, this.getEntityId());
         }
         return true;
     }

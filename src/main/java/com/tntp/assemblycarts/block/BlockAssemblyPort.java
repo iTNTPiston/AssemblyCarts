@@ -2,11 +2,13 @@ package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.util.ClientUtil;
 import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -46,7 +48,7 @@ public class BlockAssemblyPort extends SBlockContainer {
 
         } else {
             if (!world.isRemote) {
-                player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyPort"), world, x, y, z);
+                EnumGuiHandler.openGui(EnumGui.AssemblyPort, AssemblyCartsMod.MODID, player, world, x, y, z);
             }
         }
         return true;

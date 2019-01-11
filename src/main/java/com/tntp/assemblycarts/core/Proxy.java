@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.core;
 
+import com.tntp.assemblycarts.gui.ACGuiHandler;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACEntities;
@@ -9,6 +10,7 @@ import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.init.ACNetworkInit;
 import com.tntp.assemblycarts.item.Crowbar;
+import com.tntp.assemblycarts.network.ACNetwork;
 import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -20,14 +22,14 @@ public class Proxy {
     public void preInit(FMLPreInitializationEvent event) {
         ACBlocks.loadBlocks();
         ACItems.loadItems();
-        ACGuis.loadGuis();
         ACEntities.loadEntities();
-        EnumGuiInjector.injectContainer("com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container", EnumGui.values());
 
+        EnumGuiInjector.injectContainer("com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container", EnumGui.values());
+        ACGuiHandler.registerGuiHandler();
     }
 
     public void init(FMLInitializationEvent event) {
-        ACNetworkInit.loadNetwork(this instanceof ClientProxy);
+        ACNetwork.loadMessages(this instanceof ClientProxy);
     }
 
     public void postInit(FMLPostInitializationEvent event) {

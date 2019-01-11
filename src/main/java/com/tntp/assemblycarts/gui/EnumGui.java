@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.inventory.IInventory;
 
 public enum EnumGui implements IEnumGui {
-    UNKNOWN, AssemblyManager, AssemblyManagerBooks, AssemblyPort, AssemblyRequester, AssemblyRequesterMark,;
+    UNKNOWN, AssemblyManager, AssemblyManagerBooks, AssemblyPort, AssemblyRequester, AssemblyRequesterMark, MinecartAssemblyWorker, ProcessBook;
 
     /** Injected Container Class */
     private Class<?> container;

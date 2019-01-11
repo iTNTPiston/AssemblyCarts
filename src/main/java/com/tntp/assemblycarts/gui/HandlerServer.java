@@ -26,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
+@Deprecated
 public class HandlerServer implements IGuiHandler {
 
     @Override

@@ -9,6 +9,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
+@Deprecated
 public class ACGuis {
     private static int nextID = 0;
     private static Hashtable<String, Integer> identifierToGuiId = new Hashtable<String, Integer>();

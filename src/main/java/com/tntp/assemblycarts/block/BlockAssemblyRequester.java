@@ -2,11 +2,13 @@ package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import com.tntp.assemblycarts.util.ClientUtil;
 import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -50,11 +52,13 @@ public class BlockAssemblyRequester extends SBlockContainer {
             // open gui
             if (!world.isRemote) {
                 int meta = world.getBlockMetadata(x, y, z);
+                EnumGui e;
                 if (meta == (side ^ 1)) {
-                    player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyRequesterMark"), world, x, y, z);
+                    e = EnumGui.AssemblyRequesterMark;
                 } else {
-                    player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyRequester"), world, x, y, z);
+                    e = EnumGui.AssemblyRequester;
                 }
+                EnumGuiHandler.openGui(e, AssemblyCartsMod.MODID, player, world, x, y, z);
             }
         }
         return true;

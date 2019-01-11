@@ -2,9 +2,11 @@ package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACGuis;
 import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
+import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -59,11 +61,13 @@ public class BlockAssemblyManager extends SBlockContainer {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             ItemStack item = player.getCurrentEquippedItem();
+            EnumGui e;
             if (item != null && Crowbar.isCrowbar(item.getItem())) {
-                player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyManagerBooks"), world, x, y, z);
+                e = EnumGui.AssemblyManagerBooks;
             } else {
-                player.openGui(AssemblyCartsMod.MODID, ACGuis.getGuiID("AssemblyManager"), world, x, y, z);
+                e = EnumGui.AssemblyManager;
             }
+            EnumGuiHandler.openGui(e, AssemblyCartsMod.MODID, player, world, x, y, z);
         }
         return true;
     }
