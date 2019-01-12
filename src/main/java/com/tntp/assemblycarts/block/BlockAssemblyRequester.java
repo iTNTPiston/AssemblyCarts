@@ -4,10 +4,7 @@ import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar.ICrowbarRotatable;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.EnumGui;
-import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
-import com.tntp.assemblycarts.util.ClientUtil;
-import com.tntp.assemblycarts.util.LocalUtil;
 import com.tntp.minecraftmodapi.block.BlockContainerAPIiTNTPiston;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
@@ -39,20 +36,6 @@ public class BlockAssemblyRequester extends BlockContainerAPIiTNTPiston implemen
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         if (super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ))
             return true;
-        // change direction
-//        ItemStack item = player.getCurrentEquippedItem();
-//        if (item != null && Crowbar.isCrowbar(item.getItem())) {
-//            int meta = world.getBlockMetadata(x, y, z);
-//            if (meta == side)
-//                side ^= 1;
-//            world.setBlockMetadataWithNotify(x, y, z, side, 2);
-//            if (world.isRemote) {
-//                world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-//                ClientUtil.printChatMessage(LocalUtil.localize("ac.message.side_arg_s", LocalUtil.localize("ac.message.side_" + side)));
-//
-//            }
-//        } else {
-        // open gui
         if (!world.isRemote) {
             int meta = world.getBlockMetadata(x, y, z);
             EnumGui e;
@@ -63,7 +46,6 @@ public class BlockAssemblyRequester extends BlockContainerAPIiTNTPiston implemen
             }
             EnumGuiHandler.openGui(e, AssemblyCartsMod.MODID, player, world, x, y, z);
         }
-        // }
         return true;
 
     }

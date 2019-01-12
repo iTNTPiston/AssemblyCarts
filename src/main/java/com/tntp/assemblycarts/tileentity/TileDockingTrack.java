@@ -8,9 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileDockingTrack extends TileEntityAPIiTNTPiston {
+    private static final int UPDATE = 20;
     private boolean reversed;
     private boolean occupied;
     private EntityMinecart dockedCart;
+    private byte needToUpdateReverse;
 
     public TileDockingTrack() {
     }
@@ -19,6 +21,14 @@ public class TileDockingTrack extends TileEntityAPIiTNTPiston {
     public void updateEntity() {
         if (dockedCart != null && dockedCart.isDead) {
             dockedCart = null;
+        }
+        if (worldObj != null && !worldObj.isRemote) {
+            if (needToUpdateReverse > 0) {
+                needToUpdateReverse--;
+                if (needToUpdateReverse <= 0)
+                    setReversed(reversed);
+
+            }
         }
     }
 
@@ -49,8 +59,9 @@ public class TileDockingTrack extends TileEntityAPIiTNTPiston {
 
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        setReversed(tag.getBoolean("reversed"));
+        reversed = tag.getBoolean("reversed");
         occupied = tag.getBoolean("occupied");
+        needToUpdateReverse = UPDATE;
     }
 
     public boolean canDock(EntityMinecart cart) {

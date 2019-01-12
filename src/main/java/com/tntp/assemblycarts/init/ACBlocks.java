@@ -19,6 +19,7 @@ import com.tntp.assemblycarts.tileentity.TileAssemblyFrame;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyProvider;
+import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 import com.tntp.minecraftmodapi.block.IBlockBehavior;
 import com.tntp.minecraftmodapi.block.IBlockRegisterFactory;
@@ -61,6 +62,7 @@ public class ACBlocks {
         treg.ofTE(TileAssemblyPort.class).register();
         reg.of(new BlockAssemblyRequester(), "assembly_requester").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
         reg.of(new BlockAssemblyRequesterSticky(), "assembly_requester_sticky").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
+        treg.ofTE(TileAssemblyRequester.class).register();
 
         reg.of(new BlockAssemblyProvider(), "assembly_provider").behave(bhvrCrowBar).register();
         treg.ofTE(TileAssemblyProvider.class).register();

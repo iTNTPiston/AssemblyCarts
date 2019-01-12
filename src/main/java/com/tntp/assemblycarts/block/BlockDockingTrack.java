@@ -1,7 +1,8 @@
 package com.tntp.assemblycarts.block;
 
+import com.tntp.assemblycarts.api.Crowbar;
+import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar.ICrowbarRotatable;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
-import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.assemblycarts.render.RenderTrack;
 import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 
@@ -17,7 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvider {
+public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvider, ICrowbarRotatable {
     public IIcon powered;
     public IIcon base;
 
@@ -57,20 +58,20 @@ public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvi
     /**
      * Called upon block activation (right click on the block.)
      */
-//    @Override
-//    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-//        // change direction
-//        ItemStack item = player.getCurrentEquippedItem();
-//        if (item != null && Crowbar.isCrowbar(item.getItem())) {
-//            TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
-//            tile.setReversed(!tile.isReversed());
-//            if (world.isRemote) {
-//                world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-//            }
-//            return true;
-//        }
-//        return false;
-//    }
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+        // change direction
+        ItemStack item = player.getCurrentEquippedItem();
+        if (item != null && Crowbar.isCrowbar(item.getItem())) {
+            TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
+            tile.setReversed(!tile.isReversed());
+            if (world.isRemote) {
+                world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+            }
+            return true;
+        }
+        return false;
+    }
 
     /**
      * The type of render function that is called for this block

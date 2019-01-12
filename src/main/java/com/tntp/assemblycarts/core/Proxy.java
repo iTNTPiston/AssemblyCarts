@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.core;
 
+import com.tntp.assemblycarts.api.Crowbar;
 import com.tntp.assemblycarts.gui.ACGuiHandler;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
@@ -7,7 +8,6 @@ import com.tntp.assemblycarts.init.ACEntities;
 import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.init.ACNetworkInit;
-import com.tntp.assemblycarts.item.Crowbar;
 import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -28,6 +28,7 @@ public class Proxy {
 
     public void init(FMLInitializationEvent event) {
         ACBlocks.validateInjection();
+        ACItems.validateInjection();
         AssemblyCartsMod.log.info("Registering Messages");
         ACNetworkInit.loadNetwork();
     }
