@@ -4,8 +4,8 @@ import java.util.Arrays;
 
 import org.lwjgl.opengl.GL11;
 
-import com.tntp.assemblycarts.api.IMarker;
-import com.tntp.assemblycarts.api.MarkManager;
+import com.tntp.assemblycarts.api.mark.IMarker;
+import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyRequesterMark;
 import com.tntp.assemblycarts.network.ACNtwk;

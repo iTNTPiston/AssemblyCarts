@@ -1,12 +1,12 @@
 package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
-import com.tntp.assemblycarts.api.IMarker;
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.IRequester;
-import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.api.mark.IMarker;
+import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;

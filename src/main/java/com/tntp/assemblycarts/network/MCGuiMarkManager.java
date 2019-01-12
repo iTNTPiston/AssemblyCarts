@@ -1,7 +1,7 @@
 package com.tntp.assemblycarts.network;
 
-import com.tntp.assemblycarts.api.IMarker;
-import com.tntp.assemblycarts.api.MarkManager;
+import com.tntp.assemblycarts.api.mark.IMarker;
+import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.minecraftmodapi.network.MANBT1;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;

@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.gui.container;
 
-import com.tntp.assemblycarts.api.MarkManager;
+import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.gui.SContainerMarkManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 

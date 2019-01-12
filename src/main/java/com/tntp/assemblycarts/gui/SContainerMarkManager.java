@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.gui;
 
-import com.tntp.assemblycarts.api.IMarker;
+import com.tntp.assemblycarts.api.mark.IMarker;
 import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MCGuiMarkManager;
 
