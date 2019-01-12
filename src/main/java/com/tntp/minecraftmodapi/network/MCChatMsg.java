@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.network;
+package com.tntp.minecraftmodapi.network;
 
 import com.tntp.assemblycarts.util.ClientUtil;
 import com.tntp.assemblycarts.util.LocalUtil;

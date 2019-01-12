@@ -1,7 +1,5 @@
 package com.tntp.minecraftmodapi.network;
 
-import com.tntp.assemblycarts.network.SMessage;
-
 public interface IMessageRegisterFactory {
     /**
      * Start the registration of a message
@@ -17,7 +15,7 @@ public interface IMessageRegisterFactory {
      * 
      * @param channelHolder
      */
-    void injectTo(Class<?> channelHolder);
+    IMessageRegisterFactory injectTo(Class<?> channelHolder);
 
     public @interface ChannelHolder {
 

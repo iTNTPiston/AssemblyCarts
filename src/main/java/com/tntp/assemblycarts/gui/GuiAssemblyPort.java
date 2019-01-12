@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyPort;
-import com.tntp.assemblycarts.network.ACNetwork;
+import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.util.LocalUtil;
@@ -61,7 +61,7 @@ public class GuiAssemblyPort extends SGui {
             int j = x / 18;
             int processSlotID = i * 3 + j;
             ((ContainerAssemblyPort) this.inventorySlots).processSlotClick(processSlotID, button);
-            ACNetwork.network.sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
+            ACNtwk.sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
 
         }
         // System.out.println(processSlotID);

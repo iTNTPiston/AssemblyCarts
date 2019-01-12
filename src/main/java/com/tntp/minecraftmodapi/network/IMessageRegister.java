@@ -10,5 +10,5 @@ public interface IMessageRegister extends IRegister {
      * 
      * @param side
      */
-    void side(Side side);
+    IMessageRegister side(Side side);
 }

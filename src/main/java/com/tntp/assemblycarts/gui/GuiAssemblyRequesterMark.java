@@ -8,7 +8,7 @@ import com.tntp.assemblycarts.api.IMarker;
 import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyRequesterMark;
-import com.tntp.assemblycarts.network.ACNetwork;
+import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.util.LocalUtil;
 
@@ -62,7 +62,7 @@ public class GuiAssemblyRequesterMark extends SGui {
             int j = x / 18;
             int processSlotID = i * 3 + j;
             ((SContainer) this.inventorySlots).processSlotClick(processSlotID, button);
-            ACNetwork.network.sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
+            ACNtwk.sendToServer(new MSGuiSlotClick(this.inventorySlots.windowId, processSlotID, button));
 
         }
         // System.out.println(processSlotID);

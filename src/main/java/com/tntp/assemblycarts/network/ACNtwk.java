@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.network;
 
 import com.tntp.minecraftmodapi.network.IMessageRegisterFactory.ChannelHolder;
+import com.tntp.minecraftmodapi.network.SMessage;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -8,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 
 public abstract class ACNtwk {
     @ChannelHolder
-    public static final SimpleNetworkWrapper network = null;
+    private static SimpleNetworkWrapper network = null;
 
     public static void sendToServer(SMessage<?> mes) {
         network.sendToServer(mes);

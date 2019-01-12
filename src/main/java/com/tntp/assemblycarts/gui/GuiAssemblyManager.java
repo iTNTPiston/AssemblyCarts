@@ -6,7 +6,7 @@ import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyManager;
-import com.tntp.assemblycarts.network.ACNetwork;
+import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.util.LocalUtil;
 
@@ -152,10 +152,10 @@ public class GuiAssemblyManager extends SGui {
             textField.setText(String.valueOf(container.getProcessMultiplier()));
         } else if (button == startButton) {
             System.out.println("start");
-            ACNetwork.network.sendToServer(new MSGuiSlotClick(container.windowId, container.selectedProcessID, container.getProcessMultiplier()));
+            ACNtwk.sendToServer(new MSGuiSlotClick(container.windowId, container.selectedProcessID, container.getProcessMultiplier()));
         } else if (button == cancelButton) {
             System.out.println("cancel");
-            ACNetwork.network.sendToServer(new MSGuiSlotClick(container.windowId, -1, container.getProcessMultiplier()));
+            ACNtwk.sendToServer(new MSGuiSlotClick(container.windowId, -1, container.getProcessMultiplier()));
         }
     }
 

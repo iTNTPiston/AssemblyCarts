@@ -13,6 +13,7 @@ public class ClientProxy extends Proxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         ACRender.register();
+        AssemblyCartsMod.log.info("Registering Guis Client");
         EnumGuiInjector.injectGui("com.tntp." + AssemblyCartsMod.MODID + ".gui.Gui", EnumGui.values());
     }
 

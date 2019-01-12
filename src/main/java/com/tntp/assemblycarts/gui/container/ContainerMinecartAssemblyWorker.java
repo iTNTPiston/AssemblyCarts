@@ -6,7 +6,7 @@ import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.gui.SContainerRequestManager;
 import com.tntp.assemblycarts.gui.SlotDecorative;
-import com.tntp.assemblycarts.network.ACNetwork;
+import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MCGuiProvideManager;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +30,7 @@ public class ContainerMinecartAssemblyWorker extends SContainerRequestManager im
     public void sendProvideManager(EntityPlayerMP player) {
         NBTTagCompound tag = new NBTTagCompound();
         getProvideManager().writeToNBT(tag);
-        ACNetwork.network.sendTo(new MCGuiProvideManager(this.windowId, tag), player);
+        ACNtwk.sendTo(new MCGuiProvideManager(this.windowId, tag), player);
     }
 
     @Override

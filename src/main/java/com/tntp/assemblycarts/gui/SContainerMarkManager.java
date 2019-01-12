@@ -1,7 +1,7 @@
 package com.tntp.assemblycarts.gui;
 
 import com.tntp.assemblycarts.api.IMarker;
-import com.tntp.assemblycarts.network.ACNetwork;
+import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MCGuiMarkManager;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,7 +18,7 @@ public abstract class SContainerMarkManager extends SContainer implements IMarke
     public void sendMarkManager(EntityPlayerMP player) {
         NBTTagCompound tag = new NBTTagCompound();
         getMarkManager().writeToNBT(tag);
-        ACNetwork.network.sendTo(new MCGuiMarkManager(this.windowId, tag), player);
+        ACNtwk.sendTo(new MCGuiMarkManager(this.windowId, tag), player);
     }
 
     @Override

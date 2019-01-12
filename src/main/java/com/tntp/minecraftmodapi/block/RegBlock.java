@@ -18,7 +18,7 @@ public class RegBlock extends SuperRegister implements IBlockRegisterFactory {
     private CreativeTabs tab;
 
     public RegBlock() {
-        APIiTNTPiston.log.info("Registering Blocks");
+        APIiTNTPiston.log.info("Registering Blocks for " + modid);
     }
 
     @Override

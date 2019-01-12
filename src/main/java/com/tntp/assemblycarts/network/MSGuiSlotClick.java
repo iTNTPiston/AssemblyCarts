@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.network;
 
 import com.tntp.assemblycarts.gui.SContainer;
+import com.tntp.minecraftmodapi.network.MAInt3;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;

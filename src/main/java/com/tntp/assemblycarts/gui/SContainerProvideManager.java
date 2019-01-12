@@ -1,7 +1,7 @@
 package com.tntp.assemblycarts.gui;
 
 import com.tntp.assemblycarts.api.IProvider;
-import com.tntp.assemblycarts.network.ACNetwork;
+import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MCGuiProvideManager;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,7 +18,7 @@ public abstract class SContainerProvideManager extends SContainer implements IPr
     public void sendProvideManager(EntityPlayerMP player) {
         NBTTagCompound tag = new NBTTagCompound();
         getProvideManager().writeToNBT(tag);
-        ACNetwork.network.sendTo(new MCGuiProvideManager(this.windowId, tag), player);
+        ACNtwk.sendTo(new MCGuiProvideManager(this.windowId, tag), player);
     }
 
     @Override

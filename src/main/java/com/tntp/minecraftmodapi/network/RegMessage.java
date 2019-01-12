@@ -4,8 +4,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.network.SMessage;
 import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.SuperRegister;
 
@@ -17,12 +15,14 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
     private int id;
 
     public RegMessage() {
+        APIiTNTPiston.log.info("Registering Messages for " + modid);
         wrapper = Ntwk.newChannel(modid);
         id = 0;
     }
 
     @Override
     public <REQ extends SMessage<REQ>> IMessageRegister of(Class<REQ> clazz) {
+        APIiTNTPiston.log.info("[Ntwk Registry] Message >> " + clazz.getCanonicalName());
         return new Reg<>(clazz);
     }
 
@@ -47,6 +47,13 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
         @Override
         public void register() {
             if (s == null) {
+                if (clazz.getSimpleName().startsWith("MC"))
+                    s = Side.CLIENT;
+                else if (clazz.getSimpleName().startsWith("MS"))
+                    s = Side.SERVER;
+                APIiTNTPiston.log.info("[Ntwk Registry] Auto-Set-Side >> " + s);
+            }
+            if (s == null) {
                 APIiTNTPiston.log.error("[Ntwk Registry] Side Not Specified: " + clazz.getCanonicalName());
                 throw new RuntimeException("Message Registration Failed!");
             }
@@ -58,14 +65,15 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
         }
 
         @Override
-        public void side(Side side) {
+        public IMessageRegister side(Side side) {
             s = side;
+            return this;
         }
 
     }
 
     @Override
-    public void injectTo(Class<?> channelHolder) {
+    public RegMessage injectTo(Class<?> channelHolder) {
         APIiTNTPiston.log.info("[Ntwk Injector] Injecting Network Wrapper to " + channelHolder.getCanonicalName());
         try {
             Field[] fields = channelHolder.getDeclaredFields();
@@ -82,17 +90,21 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
                         f.set(null, wrapper);
                         // Add final modifier
                         modifiers.setInt(f, f.getModifiers() & Modifier.FINAL);
-                        return;
+                        return this;
                     }
                 }
             }
+            APIiTNTPiston.log.warn("[Ntwk Injector] Annotation Not Found!");
+            return this;
         } catch (Exception e) {
             e.printStackTrace();
             APIiTNTPiston.log.error("[Ntwk Injector] Exception: " + e.getClass().getCanonicalName());
             APIiTNTPiston.log.error("[Ntwk Injector] Network Wrapper not injected!");
+            throw new RuntimeException("Network Wrapper Failed to be Injected");
         } finally {
             APIiTNTPiston.log.info("[Ntwk Injector] Injected Network Wrapper");
         }
+
     }
 
 }
