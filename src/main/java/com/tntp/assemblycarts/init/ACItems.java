@@ -1,5 +1,8 @@
 package com.tntp.assemblycarts.init;
 
+import java.lang.reflect.Field;
+
+import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.item.ItemAssemblyCart;
 import com.tntp.assemblycarts.item.ItemCrowbarAssemblium;
 import com.tntp.assemblycarts.item.ItemProcessBook;
@@ -18,9 +21,27 @@ public class ACItems {
     public static final ItemProcessBook process_book = null;
 
     public static void loadItems() {
+        AssemblyCartsMod.log.info("Registering Items");
         IItemRegisterFactory reg = new RegItem().creativeTabs(ACCreativeTabs.instance);
         reg.of(new ItemAssemblyCart(), "assembly_worker_cart").register();
         reg.of(new ItemCrowbarAssemblium(), "crowbar_assemblium").register();
         reg.of(new ItemProcessBook(), "process_book").register();
     }
+
+    public static void validateInjection() {
+        AssemblyCartsMod.log.info("Validating Injection");
+        Field[] field = ACItems.class.getDeclaredFields();
+        for (Field f : field) {
+            try {
+                if (f.get(null) == null) {
+                    AssemblyCartsMod.log.error("Incomplete Injection!");
+                    throw new IllegalStateException(f.toString() + " is null");
+                }
+                AssemblyCartsMod.log.info("[Injection] " + f.getName() + " validated.");
+            } catch (IllegalArgumentException | IllegalAccessException e) {
+                AssemblyCartsMod.log.warn("Cannot check injection!");
+            }
+        }
+    }
+
 }

@@ -1,11 +1,10 @@
-package com.tntp.assemblycarts.block;
+package com.tntp.minecraftmodapi.block;
 
-import com.tntp.assemblycarts.tileentity.STile;
 import com.tntp.assemblycarts.util.RandomUtil;
+import com.tntp.minecraftmodapi.ExeResult;
+import com.tntp.minecraftmodapi.tileentity.TileEntityAPIiTNTPiston;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -13,20 +12,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public abstract class SBlockContainer extends SBlock implements ITileEntityProvider {
+public class DefaultTileEntityBehavior implements IBlockBehavior {
+    public static final IBlockBehavior INSTANCE = new DefaultTileEntityBehavior();
 
-    public SBlockContainer(Material mat, float hardness, float resistance) {
-        super(mat, hardness, resistance);
-        this.isBlockContainer = true;
-    }
-
-    public void breakBlock(World world, int x, int y, int z, Block block, int p_149749_6_) {
+    @Overlap
+    public ExeResult breakBlock(World world, int x, int y, int z, Block block, int meta) {
         // drop all items
         TileEntity tile = (TileEntity) world.getTileEntity(x, y, z);
 
         if (tile instanceof IInventory) {
-            if (tile instanceof STile) {
-                ((STile) tile).onBreakingContainer();
+            if (tile instanceof TileEntityAPIiTNTPiston) {
+                ((TileEntityAPIiTNTPiston) tile).onBreakingContainer();
             }
             IInventory inventory = (IInventory) tile;
             for (int i1 = 0; i1 < inventory.getSizeInventory(); ++i1) {
@@ -61,8 +57,16 @@ public abstract class SBlockContainer extends SBlock implements ITileEntityProvi
 
             world.func_147453_f(x, y, z, block);
         }
-
-        super.breakBlock(world, x, y, z, block, p_149749_6_);
+        return ExeResult.CONTINUE;
     }
 
+    @Override
+    @FirstTrue
+    public boolean onBlockEventReceived(Block block, World world, int x, int y, int z, int event, int param) {
+        if (block.hasTileEntity(world.getBlockMetadata(x, y, z))) {
+            TileEntity tileentity = world.getTileEntity(x, y, z);
+            return tileentity != null ? tileentity.receiveClientEvent(event, param) : false;
+        }
+        return false;
+    }
 }

@@ -29,11 +29,42 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BehaviorBlock extends Block {
+public class BlockBehaviorAPIiTNTPiston extends BlockAPIiTNTPiston {
     private IBlockBehavior[] behaviors;
+    @SideOnly(Side.CLIENT)
+    private IIcon[] icons;
 
-    public BehaviorBlock(Material material) {
-        super(material);
+    public BlockBehaviorAPIiTNTPiston(Material material, float hardness, float resistance) {
+        super(material, hardness, resistance);
+    }
+
+    @SideOnly(Side.CLIENT)
+    protected IIcon getIconByIndex(int i) {
+        if (i == 0 || icons == null)
+            return blockIcon;
+        i--;
+        if (i >= 0 && i < icons.length)
+            return icons[i];
+        return blockIcon;
+    }
+
+    /**
+     * Automatically instantiate the array to fit the index. Icon with the biggest
+     * index
+     * must be registered first.
+     * 
+     * @param i
+     * @param icon
+     */
+    @SideOnly(Side.CLIENT)
+    protected void setIconByIndex(int i, IIcon icon) {
+        if (i == 0)
+            blockIcon = icon;
+        i--;
+        if (icons == null) {
+            icons = new IIcon[i + 1];
+        }
+        icons[i] = icon;
     }
 
     /**
@@ -51,11 +82,12 @@ public class BehaviorBlock extends Block {
     @FirstNonNull
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-        for (IBlockBehavior b : behaviors) {
-            IIcon icon = b.getIcon(world, x, y, z, side);
-            if (icon != null)
-                return icon;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                IIcon icon = b.getIcon(world, x, y, z, side);
+                if (icon != null)
+                    return icon;
+            }
         return super.getIcon(world, x, y, z, side);
     }
 
@@ -66,11 +98,12 @@ public class BehaviorBlock extends Block {
     @FirstNonNull
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta) {
-        for (IBlockBehavior b : behaviors) {
-            IIcon icon = b.getIcon(side, meta);
-            if (icon != null)
-                return icon;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                IIcon icon = b.getIcon(side, meta);
+                if (icon != null)
+                    return icon;
+            }
         return super.getIcon(side, meta);
     }
 
@@ -83,10 +116,11 @@ public class BehaviorBlock extends Block {
     @Override
     @Overlap
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List collisionBoxes, Entity collidingEntity) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.addCollisionBoxesToList(world, x, y, z, mask, collisionBoxes, collidingEntity) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.addCollisionBoxesToList(world, x, y, z, mask, collisionBoxes, collidingEntity) == ExeResult.BREAK)
+                    return;
+            }
         super.addCollisionBoxesToList(world, x, y, z, mask, collisionBoxes, collidingEntity);
     }
 
@@ -99,11 +133,12 @@ public class BehaviorBlock extends Block {
     @Override
     @FirstNonNull
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            AxisAlignedBB aabb = b.getCollisionBoundingBoxFromPool(world, x, y, z);
-            if (aabb != null)
-                return aabb;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                AxisAlignedBB aabb = b.getCollisionBoundingBoxFromPool(world, x, y, z);
+                if (aabb != null)
+                    return aabb;
+            }
         return super.getCollisionBoundingBoxFromPool(world, x, y, z);
     }
 
@@ -115,11 +150,12 @@ public class BehaviorBlock extends Block {
     @FirstNonNull
     @SideOnly(Side.CLIENT)
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            AxisAlignedBB aabb = b.getSelectedBoundingBoxFromPool(world, x, y, z);
-            if (aabb != null)
-                return aabb;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                AxisAlignedBB aabb = b.getSelectedBoundingBoxFromPool(world, x, y, z);
+                if (aabb != null)
+                    return aabb;
+            }
         return super.getSelectedBoundingBoxFromPool(world, x, y, z);
     }
 
@@ -129,10 +165,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void updateTick(World world, int x, int y, int z, Random rand) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.updateTick(world, x, y, z, rand) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.updateTick(world, x, y, z, rand) == ExeResult.BREAK)
+                    return;
+            }
         super.updateTick(world, x, y, z, rand);
     }
 
@@ -143,10 +180,11 @@ public class BehaviorBlock extends Block {
     @Overlap
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.randomDisplayTick(world, x, y, z, rand) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.randomDisplayTick(world, x, y, z, rand) == ExeResult.BREAK)
+                    return;
+            }
         super.randomDisplayTick(world, x, y, z, rand);
     }
 
@@ -155,10 +193,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockAdded(World world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockAdded(world, x, y, z) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockAdded(world, x, y, z) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockAdded(world, x, y, z);
     }
 
@@ -168,11 +207,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, meta);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, meta);
+                if (i >= 0)
+                    return i;
+            }
         return super.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, meta);
     }
 
@@ -181,10 +221,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockPlacedBy(world, x, y, z, entity, stack) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockPlacedBy(world, x, y, z, entity, stack) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockPlacedBy(world, x, y, z, entity, stack);
     }
 
@@ -193,10 +234,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onPostBlockPlaced(World world, int x, int y, int z, int meta) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onPostBlockPlaced(world, x, y, z, meta) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onPostBlockPlaced(world, x, y, z, meta) == ExeResult.BREAK)
+                    return;
+            }
         super.onPostBlockPlaced(world, x, y, z, meta);
     }
 
@@ -207,10 +249,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onNeighborBlockChange(world, x, y, z, neighbor) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onNeighborBlockChange(world, x, y, z, neighbor) == ExeResult.BREAK)
+                    return;
+            }
         super.onNeighborBlockChange(world, x, y, z, neighbor);
     }
 
@@ -228,10 +271,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onNeighborChange(world, x, y, z, tileX, tileY, tileZ) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onNeighborChange(world, x, y, z, tileX, tileY, tileZ) == ExeResult.BREAK)
+                    return;
+            }
         super.onNeighborChange(world, x, y, z, tileX, tileY, tileZ);
     }
 
@@ -241,10 +285,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onEntityWalking(World world, int x, int y, int z, Entity entity) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onEntityWalking(world, x, y, z, entity) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onEntityWalking(world, x, y, z, entity) == ExeResult.BREAK)
+                    return;
+            }
         super.onEntityWalking(world, x, y, z, entity);
     }
 
@@ -253,20 +298,22 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockClicked(world, x, y, z, player) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockClicked(world, x, y, z, player) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockClicked(world, x, y, z, player);
     }
 
     @FirstCertain
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        for (IBlockBehavior b : behaviors) {
-            Turnary t = b.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
-            if (t != Turnary.UNKNOWN)
-                return t.value();
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Turnary t = b.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
+                if (t != Turnary.UNCERTAIN)
+                    return t.value();
+            }
         return super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ);
     }
 
@@ -277,10 +324,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockPreDestroy(World world, int x, int y, int z, int oldmeta) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockPreDestroy(world, x, y, z, oldmeta) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockPreDestroy(world, x, y, z, oldmeta) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockPreDestroy(world, x, y, z, oldmeta);
     }
 
@@ -290,10 +338,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockDestroyedByPlayer(world, x, y, z, meta) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockDestroyedByPlayer(world, x, y, z, meta) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockDestroyedByPlayer(world, x, y, z, meta);
     }
 
@@ -302,10 +351,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockDestroyedByExplosion(world, x, y, z, explosion) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockDestroyedByExplosion(world, x, y, z, explosion) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockDestroyedByExplosion(world, x, y, z, explosion);
     }
 
@@ -314,19 +364,21 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockHarvested(world, x, y, z, meta, player) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockHarvested(world, x, y, z, meta, player) == ExeResult.BREAK)
+                    return;
+            }
         super.onBlockHarvested(world, x, y, z, meta, player);
     }
 
     @Overlap
     public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.breakBlock(world, x, y, z, block, meta) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.breakBlock(world, x, y, z, block, meta) == ExeResult.BREAK)
+                    return;
+            }
         super.breakBlock(world, x, y, z, block, meta);
     }
 
@@ -336,11 +388,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int quantityDropped(Random rand) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.quantityDropped(rand);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.quantityDropped(rand);
+                if (i >= 0)
+                    return i;
+            }
         return super.quantityDropped(rand);
     }
 
@@ -354,11 +407,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNull
     public Item getItemDropped(int meta, Random rand, int fortune) {
-        for (IBlockBehavior b : behaviors) {
-            Item item = b.getItemDropped(meta, rand, fortune);
-            if (item != null)
-                return item;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Item item = b.getItemDropped(meta, rand, fortune);
+                if (item != null)
+                    return item;
+            }
         return super.getItemDropped(meta, rand, fortune);
     }
 
@@ -368,10 +422,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void velocityToAddToEntity(World world, int x, int y, int z, Entity entity, Vec3 vec) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.velocityToAddToEntity(world, x, y, z, entity, vec) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.velocityToAddToEntity(world, x, y, z, entity, vec) == ExeResult.BREAK)
+                    return;
+            }
         super.velocityToAddToEntity(world, x, y, z, entity, vec);
     }
 
@@ -380,10 +435,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.setBlockBoundsBasedOnState(world, x, y, z) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.setBlockBoundsBasedOnState(world, x, y, z) == ExeResult.BREAK)
+                    return;
+            }
         super.setBlockBoundsBasedOnState(world, x, y, z);
     }
 
@@ -394,11 +450,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int direction) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.isProvidingWeakPower(world, x, y, z, direction);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.isProvidingWeakPower(world, x, y, z, direction);
+                if (i >= 0)
+                    return i;
+            }
         return super.isProvidingWeakPower(world, x, y, z, direction);
     }
 
@@ -409,11 +466,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int direction) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.isProvidingStrongPower(world, x, y, z, direction);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.isProvidingStrongPower(world, x, y, z, direction);
+                if (i >= 0)
+                    return i;
+            }
         return super.isProvidingStrongPower(world, x, y, z, direction);
     }
 
@@ -424,11 +482,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int getComparatorInputOverride(World world, int x, int y, int z, int direction) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.getComparatorInputOverride(world, x, y, z, direction);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.getComparatorInputOverride(world, x, y, z, direction);
+                if (i >= 0)
+                    return i;
+            }
         return super.getComparatorInputOverride(world, x, y, z, direction);
     }
 
@@ -438,10 +497,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onEntityCollidedWithBlock(world, x, y, z, entity) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onEntityCollidedWithBlock(world, x, y, z, entity) == ExeResult.BREAK)
+                    return;
+            }
         super.onEntityCollidedWithBlock(world, x, y, z, entity);
     }
 
@@ -450,10 +510,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void setBlockBoundsForItemRender() {
-        for (IBlockBehavior b : behaviors) {
-            if (b.setBlockBoundsForItemRender() == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.setBlockBoundsForItemRender() == ExeResult.BREAK)
+                    return;
+            }
         super.setBlockBoundsForItemRender();
     }
 
@@ -463,20 +524,22 @@ public class BehaviorBlock extends Block {
      */
     @FirstCertain
     public boolean canBlockStay(World world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            Turnary t = b.canBlockStay(world, x, y, z);
-            if (t != Turnary.UNKNOWN)
-                return t.value();
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Turnary t = b.canBlockStay(world, x, y, z);
+                if (t != Turnary.UNCERTAIN)
+                    return t.value();
+            }
         return super.canBlockStay(world, x, y, z);
     }
 
     @FirstTrue
     public boolean onBlockEventReceived(World world, int x, int y, int z, int event, int param) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onBlockEventReceived(world, x, y, z, event, param))
-                return true;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onBlockEventReceived(this, world, x, y, z, event, param))
+                    return true;
+            }
         return super.onBlockEventReceived(world, x, y, z, event, param);
     }
 
@@ -485,10 +548,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void onFallenUpon(World world, int x, int y, int z, Entity entity, float fallDistance) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.onFallenUpon(world, x, y, z, entity, fallDistance) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.onFallenUpon(world, x, y, z, entity, fallDistance) == ExeResult.BREAK)
+                    return;
+            }
         super.onFallenUpon(world, x, y, z, entity, fallDistance);
     }
 
@@ -497,11 +561,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int getDamageValue(World world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.getDamageValue(world, x, y, z);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.getDamageValue(world, x, y, z);
+                if (i >= 0)
+                    return i;
+            }
         return super.getDamageValue(world, x, y, z);
     }
 
@@ -510,10 +575,11 @@ public class BehaviorBlock extends Block {
      */
     @Overlap
     public void fillWithRain(World world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            if (b.fillWithRain(world, x, y, z) == ExeResult.BREAK)
-                return;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                if (b.fillWithRain(world, x, y, z) == ExeResult.BREAK)
+                    return;
+            }
         super.fillWithRain(world, x, y, z);
     }
 
@@ -529,11 +595,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstNonNeg
     public int getLightValue(IBlockAccess world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            int i = b.getLightValue(world, x, y, z);
-            if (i >= 0)
-                return i;
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                int i = b.getLightValue(world, x, y, z);
+                if (i >= 0)
+                    return i;
+            }
         return super.getLightValue(world, x, y, z);
     }
 
@@ -550,11 +617,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstCertain
     public boolean isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-        for (IBlockBehavior b : behaviors) {
-            Turnary t = b.isLadder(world, x, y, z, entity);
-            if (t != Turnary.UNKNOWN)
-                return t.value();
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Turnary t = b.isLadder(world, x, y, z, entity);
+                if (t != Turnary.UNCERTAIN)
+                    return t.value();
+            }
         return super.isLadder(world, x, y, z, entity);
     }
 
@@ -574,11 +642,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstCertain
     public boolean canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
-        for (IBlockBehavior b : behaviors) {
-            Turnary t = b.canCreatureSpawn(type, world, x, y, z);
-            if (t != Turnary.UNKNOWN)
-                return t.value();
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Turnary t = b.canCreatureSpawn(type, world, x, y, z);
+                if (t != Turnary.UNCERTAIN)
+                    return t.value();
+            }
         return super.canCreatureSpawn(type, world, x, y, z);
     }
 
@@ -601,11 +670,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstCertain
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
-        for (IBlockBehavior b : behaviors) {
-            Turnary t = b.rotateBlock(worldObj, x, y, z, axis);
-            if (t != Turnary.UNKNOWN)
-                return t.value();
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Turnary t = b.rotateBlock(worldObj, x, y, z, axis);
+                if (t != Turnary.UNCERTAIN)
+                    return t.value();
+            }
         return super.rotateBlock(worldObj, x, y, z, axis);
     }
 
@@ -622,11 +692,12 @@ public class BehaviorBlock extends Block {
      */
     @FirstCertain
     public boolean recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
-        for (IBlockBehavior b : behaviors) {
-            Turnary t = b.recolourBlock(world, x, y, z, side, colour);
-            if (t != Turnary.UNKNOWN)
-                return t.value();
-        }
+        if (behaviors != null)
+            for (IBlockBehavior b : behaviors) {
+                Turnary t = b.recolourBlock(world, x, y, z, side, colour);
+                if (t != Turnary.UNCERTAIN)
+                    return t.value();
+            }
         return super.recolourBlock(world, x, y, z, side, colour);
     }
 

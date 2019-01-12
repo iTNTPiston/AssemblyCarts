@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.SuperRegister;
 
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 
@@ -16,7 +17,7 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
 
     public RegMessage() {
         APIiTNTPiston.log.info("Registering Messages for " + modid);
-        wrapper = Ntwk.newChannel(modid);
+        wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(modid);
         id = 0;
     }
 

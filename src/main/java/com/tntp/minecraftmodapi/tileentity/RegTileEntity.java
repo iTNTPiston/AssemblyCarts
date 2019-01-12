@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class RegTileEntity extends SuperRegister implements ITileEntityRegisterFactory {
     public RegTileEntity() {
-        APIiTNTPiston.log.info("Registering TileEntities");
+        APIiTNTPiston.log.info("Registering TileEntities for " + modid);
     }
 
     @Override

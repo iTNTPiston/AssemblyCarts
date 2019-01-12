@@ -1,12 +1,13 @@
 package com.tntp.assemblycarts.tileentity;
 
 import com.tntp.assemblycarts.util.DirUtil;
+import com.tntp.minecraftmodapi.tileentity.TileEntityAPIiTNTPiston;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileDockingTrack extends STile {
+public class TileDockingTrack extends TileEntityAPIiTNTPiston {
     private boolean reversed;
     private boolean occupied;
     private EntityMinecart dockedCart;
@@ -28,7 +29,7 @@ public class TileDockingTrack extends STile {
     public void setReversed(boolean reversed) {
         this.reversed = reversed;
         if (worldObj != null && !worldObj.isRemote)
-            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), EVENT_TRACK_REVERSE, reversed ? 1 : 0);
+            this.worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), ACTEEvents.REVERSE_TRACK.ordinal(), reversed ? 1 : 0);
     }
 
     public boolean isOccupied() {
@@ -77,7 +78,8 @@ public class TileDockingTrack extends STile {
     public boolean receiveClientEvent(int event, int param) {
         if (super.receiveClientEvent(event, param))
             return true;
-        if (event == EVENT_TRACK_REVERSE) {
+        ACTEEvents e = ACTEEvents.getEventSafe(event);
+        if (e == ACTEEvents.REVERSE_TRACK) {
             reversed = param == 1;
             worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
             return true;

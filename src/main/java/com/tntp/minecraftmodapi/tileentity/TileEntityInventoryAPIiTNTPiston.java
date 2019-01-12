@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.tileentity;
+package com.tntp.minecraftmodapi.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -7,10 +7,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class STileInventory extends STile implements IInventory {
+public class TileEntityInventoryAPIiTNTPiston extends TileEntityAPIiTNTPiston implements IInventory {
     private ItemStack[] inventory;
 
-    public STileInventory(int size) {
+    public TileEntityInventoryAPIiTNTPiston(int size) {
         inventory = new ItemStack[size];
     }
 

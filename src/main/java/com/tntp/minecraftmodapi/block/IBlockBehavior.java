@@ -182,7 +182,7 @@ public interface IBlockBehavior {
 
     @FirstCertain
     default Turnary onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        return Turnary.UNKNOWN;
+        return Turnary.UNCERTAIN;
     }
 
     /**
@@ -317,11 +317,11 @@ public interface IBlockBehavior {
      */
     @FirstCertain
     default Turnary canBlockStay(World world, int x, int y, int z) {
-        return Turnary.UNKNOWN;
+        return Turnary.UNCERTAIN;
     }
 
     @FirstTrue
-    default boolean onBlockEventReceived(World world, int x, int y, int z, int event, int param) {
+    default boolean onBlockEventReceived(Block b, World world, int x, int y, int z, int event, int param) {
         return false;
     }
 
@@ -377,7 +377,7 @@ public interface IBlockBehavior {
      */
     @FirstCertain
     default Turnary isLadder(IBlockAccess world, int x, int y, int z, EntityLivingBase entity) {
-        return Turnary.UNKNOWN;
+        return Turnary.UNCERTAIN;
     }
 
     /**
@@ -396,7 +396,7 @@ public interface IBlockBehavior {
      */
     @FirstCertain
     default Turnary canCreatureSpawn(EnumCreatureType type, IBlockAccess world, int x, int y, int z) {
-        return Turnary.UNKNOWN;
+        return Turnary.UNCERTAIN;
     }
 
     /**
@@ -418,7 +418,7 @@ public interface IBlockBehavior {
      */
     @FirstCertain
     default Turnary rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis) {
-        return Turnary.UNKNOWN;
+        return Turnary.UNCERTAIN;
     }
 
     /**
@@ -434,7 +434,7 @@ public interface IBlockBehavior {
      */
     @FirstCertain
     default Turnary recolourBlock(World world, int x, int y, int z, ForgeDirection side, int colour) {
-        return Turnary.UNKNOWN;
+        return Turnary.UNCERTAIN;
     }
 
     public @interface Overlap {

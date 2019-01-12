@@ -13,6 +13,7 @@ import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.util.DirUtil;
+import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -20,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyRequester extends STileInventory implements IAssemblyStructure, IRequester, IProvider, IMarker, ICartStation {
+public class TileAssemblyRequester extends TileEntityInventoryAPIiTNTPiston implements IAssemblyStructure, IRequester, IProvider, IMarker, ICartStation {
 
     private int trackPowerTimeLeft;
     /**

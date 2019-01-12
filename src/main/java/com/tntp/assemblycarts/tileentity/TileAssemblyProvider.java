@@ -6,6 +6,7 @@ import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.util.DirUtil;
+import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -16,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 
-public class TileAssemblyProvider extends STileInventory implements IProvider, ICartStation {
+public class TileAssemblyProvider extends TileEntityInventoryAPIiTNTPiston implements IProvider, ICartStation {
     private ProvideManager provideManager;
     private int trackPowerTimeLeft;
 

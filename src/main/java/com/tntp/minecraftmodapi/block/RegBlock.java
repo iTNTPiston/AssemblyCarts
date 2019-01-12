@@ -36,8 +36,8 @@ public class RegBlock extends SuperRegister implements IBlockRegisterFactory {
     }
 
     private static void injectBehavior(List<IBlockBehavior> behaviors, Block b) throws Exception {
-        if (b instanceof BehaviorBlock) {
-            Field field = b.getClass().getDeclaredField("behaviors");
+        if (b instanceof BlockBehaviorAPIiTNTPiston) {
+            Field field = BlockBehaviorAPIiTNTPiston.class.getDeclaredField("behaviors");
             field.setAccessible(true);
             IBlockBehavior[] be = new IBlockBehavior[behaviors.size()];
             be = behaviors.toArray(be);
@@ -106,7 +106,7 @@ public class RegBlock extends SuperRegister implements IBlockRegisterFactory {
 
         @Override
         public IBlockRegister behave(IBlockBehavior behavior) {
-            if (!(block instanceof BehaviorBlock)) {
+            if (!(block instanceof BlockBehaviorAPIiTNTPiston)) {
                 APIiTNTPiston.log.error("[Block Registry] Not Behavior Block!");
                 return this;
             }

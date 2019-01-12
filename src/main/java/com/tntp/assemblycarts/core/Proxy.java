@@ -27,6 +27,7 @@ public class Proxy {
     }
 
     public void init(FMLInitializationEvent event) {
+        ACBlocks.validateInjection();
         AssemblyCartsMod.log.info("Registering Messages");
         ACNetworkInit.loadNetwork();
     }

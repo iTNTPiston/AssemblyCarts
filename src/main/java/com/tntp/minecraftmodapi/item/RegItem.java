@@ -11,7 +11,7 @@ public class RegItem extends SuperRegister implements IItemRegisterFactory {
     private CreativeTabs tab;
 
     public RegItem() {
-        APIiTNTPiston.log.info("Registering Items");
+        APIiTNTPiston.log.info("Registering Items for " + modid);
     }
 
     @Override

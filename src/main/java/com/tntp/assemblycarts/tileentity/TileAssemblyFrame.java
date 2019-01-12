@@ -1,18 +1,20 @@
 package com.tntp.assemblycarts.tileentity;
 
-public class TileAssemblyFrame extends STile implements IAssemblyStructure {
-  private TileAssemblyManager manager;
+import com.tntp.minecraftmodapi.tileentity.TileEntityAPIiTNTPiston;
 
-  @Override
-  public TileAssemblyManager getManager() {
-    if (manager != null && !manager.isValidInWorld())
-      manager = null;
-    return manager;
-  }
+public class TileAssemblyFrame extends TileEntityAPIiTNTPiston implements IAssemblyStructure {
+    private TileAssemblyManager manager;
 
-  @Override
-  public void setManager(TileAssemblyManager tile) {
-    manager = tile;
-  }
+    @Override
+    public TileAssemblyManager getManager() {
+        if (manager != null && !manager.isValidInWorld())
+            manager = null;
+        return manager;
+    }
+
+    @Override
+    public void setManager(TileAssemblyManager tile) {
+        manager = tile;
+    }
 
 }

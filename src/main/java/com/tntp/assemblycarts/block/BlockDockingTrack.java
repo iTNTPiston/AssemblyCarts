@@ -57,20 +57,20 @@ public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvi
     /**
      * Called upon block activation (right click on the block.)
      */
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-        // change direction
-        ItemStack item = player.getCurrentEquippedItem();
-        if (item != null && Crowbar.isCrowbar(item.getItem())) {
-            TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
-            tile.setReversed(!tile.isReversed());
-            if (world.isRemote) {
-                world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-            }
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+//        // change direction
+//        ItemStack item = player.getCurrentEquippedItem();
+//        if (item != null && Crowbar.isCrowbar(item.getItem())) {
+//            TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
+//            tile.setReversed(!tile.isReversed());
+//            if (world.isRemote) {
+//                world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
     /**
      * The type of render function that is called for this block

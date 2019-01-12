@@ -10,12 +10,13 @@ import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.util.ItemUtil;
+import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyManager extends STileInventory implements IRequester {
+public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implements IRequester {
     private RequestManager requestManager;
     private boolean formed;
     private boolean bypassInsertionCheck;

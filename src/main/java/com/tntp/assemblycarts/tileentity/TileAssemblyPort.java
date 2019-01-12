@@ -4,6 +4,7 @@ import com.tntp.assemblycarts.api.IMarker;
 import com.tntp.assemblycarts.api.MarkManager;
 import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.assemblycarts.util.ItemUtil;
+import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -11,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileAssemblyPort extends STileInventory implements IAssemblyStructure, ISidedInventory, IMarker {
+public class TileAssemblyPort extends TileEntityInventoryAPIiTNTPiston implements IAssemblyStructure, ISidedInventory, IMarker {
     private int[] cachedSlots;
     private int iteratingSlot;
     private MarkManager markManager;
