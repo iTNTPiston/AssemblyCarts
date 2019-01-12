@@ -1,21 +1,11 @@
 package com.tntp.minecraftmodapi.item;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.init.ACCreativeTabs;
 import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.SuperRegister;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 
 public class RegItem extends SuperRegister implements IItemRegisterFactory {
     private CreativeTabs tab;

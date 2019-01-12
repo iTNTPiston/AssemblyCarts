@@ -1,7 +1,6 @@
 package com.tntp.minecraftmodapi.item;
 
 import com.tntp.minecraftmodapi.IRegister;
-import com.tntp.minecraftmodapi.block.IBlockRegister;
 
 public interface IItemRegister extends IRegister {
     /**

@@ -1,5 +1,9 @@
 package com.tntp.minecraftmodapi.network;
 
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+
 public interface IMessageRegisterFactory {
     /**
      * Start the registration of a message
@@ -17,6 +21,7 @@ public interface IMessageRegisterFactory {
      */
     IMessageRegisterFactory injectTo(Class<?> channelHolder);
 
+    @Retention(value = RUNTIME)
     public @interface ChannelHolder {
 
     }
