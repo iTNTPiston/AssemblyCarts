@@ -7,6 +7,7 @@ import com.tntp.assemblycarts.util.ItemUtil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreItemStack implements IMarkItem {
@@ -18,6 +19,10 @@ public class OreItemStack implements IMarkItem {
 
     public OreItemStack(String ore) {
         oreDictEntry = ore;
+    }
+
+    public OreItemStack() {
+        this(null);
     }
 
     @Override
@@ -49,6 +54,16 @@ public class OreItemStack implements IMarkItem {
                 displayIndex++;
             }
         }
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag) {
+        tag.setString("ore", oreDictEntry);
+    }
+
+    @Override
+    public IMarkItem readFromNBT(NBTTagCompound tag) {
+        return new OreItemStack(tag.getString("ore"));
     }
 
 }
