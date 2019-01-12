@@ -19,3 +19,12 @@ bin/
 libs/
 /build.gradle
 /crash-reports/
+/usercache.json
+
+/banned-ips.json
+/banned-players.json
+/eula.txt
+/whitelist.json
+/servers.dat
+/server.properties
+/ops.json

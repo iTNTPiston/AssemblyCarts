@@ -24,7 +24,6 @@ public class ContainerAssemblyRequester extends SContainerRequestManager {
     @Override
     public void setupMachineSlots(IInventory machine) {
         Slot bookSlot = new Slot(machine, 0, 26, 67);
-        bookSlot.setBackgroundIcon(ItemProcessBook.getEmptySlotIcon());
         this.addSlotToContainer(bookSlot);
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 9; j++) {
