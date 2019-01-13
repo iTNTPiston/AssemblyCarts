@@ -19,7 +19,7 @@ public class ContainerProcessBook extends SContainer {
     private AssemblyProcess process;
     private InventoryPlayer playerInv;
 
-    public ContainerProcessBook(IInventory playerInventory, IInventory proc) {
+    public ContainerProcessBook(IInventory playerInventory, Object proc) {
         super(playerInventory, 0, null, 8, 140);
         process = (AssemblyProcess) proc;
         playerInv = (InventoryPlayer) playerInventory;

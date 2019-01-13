@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiProcessBook extends SGui {
     static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/process_book.png");
 
-    public GuiProcessBook(IInventory playerInventory, IInventory proc) {
+    public GuiProcessBook(IInventory playerInventory, Object proc) {
         super(new ContainerProcessBook(playerInventory, proc), "ac.gui.processbook");
         xSize = 176;
         ySize = 222;

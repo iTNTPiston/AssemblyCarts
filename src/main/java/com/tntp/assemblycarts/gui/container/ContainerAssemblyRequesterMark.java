@@ -14,8 +14,8 @@ public class ContainerAssemblyRequesterMark extends SContainerMarkManager {
     private TileAssemblyRequester tile;
     private InventoryPlayer playerInv;
 
-    public ContainerAssemblyRequesterMark(IInventory playerInventory, IInventory machine) {
-        super(playerInventory, 0, machine, 8, 86);
+    public ContainerAssemblyRequesterMark(IInventory playerInventory, Object machine) {
+        super(playerInventory, 0, (IInventory) machine, 8, 86);
         tile = (TileAssemblyRequester) machine;
         playerInv = (InventoryPlayer) playerInventory;
     }

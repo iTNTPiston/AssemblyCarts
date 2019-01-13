@@ -13,8 +13,8 @@ import net.minecraft.util.ResourceLocation;
 public class GuiMinecartAssemblyWorker extends SGui {
     private static final ResourceLocation background = GuiProcessBook.background;
 
-    public GuiMinecartAssemblyWorker(IInventory playerInventory, IInventory cart) {
-        super(new ContainerMinecartAssemblyWorker(playerInventory, cart), cart.getInventoryName());
+    public GuiMinecartAssemblyWorker(IInventory playerInventory, Object cart) {
+        super(new ContainerMinecartAssemblyWorker(playerInventory, cart), ((IInventory) cart).getInventoryName());
         xSize = 176;
         ySize = 222;
     }

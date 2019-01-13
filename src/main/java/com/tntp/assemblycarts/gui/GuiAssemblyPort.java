@@ -9,6 +9,7 @@ import com.tntp.assemblycarts.gui.container.ContainerAssemblyPort;
 import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
+import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 import com.tntp.minecraftmodapi.util.LocalUtil;
 
 import net.minecraft.client.renderer.RenderHelper;
@@ -18,8 +19,8 @@ import net.minecraft.util.ResourceLocation;
 public class GuiAssemblyPort extends SGui {
     private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/assembly_port.png");
 
-    public GuiAssemblyPort(IInventory player, IInventory tile) {
-        super(new ContainerAssemblyPort(player, tile), tile.getInventoryName());
+    public GuiAssemblyPort(IInventory player, Object tile) {
+        super(new ContainerAssemblyPort(player, tile), ((IInventory) tile).getInventoryName());
         xSize = 176;
         ySize = 168;
     }

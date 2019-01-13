@@ -19,8 +19,8 @@ import net.minecraft.util.ResourceLocation;
 public class GuiAssemblyRequesterMark extends SGui {
     private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/assembly_requester_mark.png");
 
-    public GuiAssemblyRequesterMark(IInventory player, IInventory tile) {
-        super(new ContainerAssemblyRequesterMark(player, tile), tile.getInventoryName());
+    public GuiAssemblyRequesterMark(IInventory player, Object tile) {
+        super(new ContainerAssemblyRequesterMark(player, tile), ((IInventory) tile).getInventoryName());
         xSize = 176;
         ySize = 168;
     }

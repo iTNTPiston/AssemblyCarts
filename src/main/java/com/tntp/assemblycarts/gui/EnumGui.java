@@ -38,7 +38,7 @@ public enum EnumGui implements IEnumGui {
     @Override
     public Constructor<?> containerConstructor() {
         try {
-            return container.getConstructor(IInventory.class, IInventory.class);
+            return container.getConstructor(IInventory.class, Object.class);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (SecurityException e) {

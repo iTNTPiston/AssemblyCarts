@@ -4,6 +4,7 @@ import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.gui.SContainerMarkManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
+import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,8 +16,8 @@ public class ContainerAssemblyPort extends SContainerMarkManager {
     private TileAssemblyPort tile;
     private InventoryPlayer playerInv;
 
-    public ContainerAssemblyPort(IInventory playerInventory, IInventory machine) {
-        super(playerInventory, machine.getSizeInventory(), machine, 8, 86);
+    public ContainerAssemblyPort(IInventory playerInventory, Object machine) {
+        super(playerInventory, ((IInventory) machine).getSizeInventory(), (IInventory) machine, 8, 86);
         tile = (TileAssemblyPort) machine;
         playerInv = (InventoryPlayer) playerInventory;
     }

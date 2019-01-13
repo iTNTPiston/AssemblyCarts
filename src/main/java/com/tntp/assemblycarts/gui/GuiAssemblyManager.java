@@ -43,8 +43,8 @@ public class GuiAssemblyManager extends SGui {
     private GuiButton startButton;
     private GuiButton cancelButton;
 
-    public GuiAssemblyManager(IInventory player, IInventory tile) {
-        super(new ContainerAssemblyManager(player, tile), tile.getInventoryName());
+    public GuiAssemblyManager(IInventory player, Object tile) {
+        super(new ContainerAssemblyManager(player, tile), ((IInventory) tile).getInventoryName());
         xSize = 176;
         ySize = 222;
 

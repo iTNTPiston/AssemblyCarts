@@ -18,8 +18,8 @@ import net.minecraft.nbt.NBTTagCompound;
 public class ContainerMinecartAssemblyWorker extends SContainerRequestManager implements IProvider {
     private EntityMinecartAssemblyWorker cart;
 
-    public ContainerMinecartAssemblyWorker(IInventory playerInventory, IInventory cart) {
-        super(playerInventory, cart.getSizeInventory(), cart, 8, 140);
+    public ContainerMinecartAssemblyWorker(IInventory playerInventory, Object cart) {
+        super(playerInventory, ((EntityMinecartAssemblyWorker) cart).getSizeInventory(), (IInventory) cart, 8, 140);
         this.cart = (EntityMinecartAssemblyWorker) cart;
     }
 

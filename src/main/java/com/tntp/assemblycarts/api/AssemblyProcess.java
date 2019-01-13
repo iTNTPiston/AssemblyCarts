@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
 
-public class AssemblyProcess implements IInventory {
+public class AssemblyProcess {
     private IMarkItem[] inputs;
     private IMarkItem mainOutput;
     private IMarkItem[] otherOutputs;
@@ -146,75 +146,6 @@ public class AssemblyProcess implements IInventory {
             return s;
         }
 
-    }
-
-    @Override
-    public int getSizeInventory() {
-        return 37;
-    }
-
-    @Override
-    public ItemStack getStackInSlot(int i) {
-        if (i == 0)
-            return MarkerUtil.getDisplayStackSafe(getMainOutput());
-        if (i < 19)
-            return MarkerUtil.getDisplayStackSafe(getInput(i - 1));
-        return MarkerUtil.getDisplayStackSafe(getOtherOutput(i - 19));
-    }
-
-    @Override
-    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-        return null;
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-        return null;
-    }
-
-    @Override
-    public void setInventorySlotContents(int i, ItemStack stack) {
-
-    }
-
-    @Override
-    public String getInventoryName() {
-        return "ac.gui.processbook";
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return false;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 0;
-    }
-
-    @Override
-    public void markDirty() {
-
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
-        return true;
-    }
-
-    @Override
-    public void openInventory() {
-
-    }
-
-    @Override
-    public void closeInventory() {
-
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-        return false;
     }
 
 }

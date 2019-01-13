@@ -28,14 +28,14 @@ public class ACGuiHandler extends EnumGuiHandler {
     private ACGuiHandler() {
     }
 
-    private IInventory getEntityInventoryForGui(IEnumGui gui, Entity entity) {
+    private Object getArgFromEntity(IEnumGui gui, Entity entity) {
         if (gui == EnumGui.MinecartAssemblyWorker && entity instanceof EntityMinecartAssemblyWorker)
-            return (IInventory) entity;
+            return entity;
         return null;
     }
 
-    private IInventory getTileInventoryForGui(IEnumGui gui, TileEntity tile) {
-        return validateTEForGui(gui, tile) ? (IInventory) tile : null;
+    private Object getArgFromTE(IEnumGui gui, TileEntity tile) {
+        return validateTEForGui(gui, tile) ? tile : null;
     }
 
     private boolean validateTEForGui(IEnumGui gui, TileEntity tile) {
@@ -48,7 +48,7 @@ public class ACGuiHandler extends EnumGuiHandler {
         return false;
     }
 
-    private IInventory getItemInventoryForGui(IEnumGui gui, ItemStack stack) {
+    private Object getArgFromItem(IEnumGui gui, ItemStack stack) {
         if (gui == EnumGui.ProcessBook) {
             if (stack != null) {
                 TagProcessBook tag = ItemUtil.getItemTag(stack, new TagProcessBook());
@@ -63,7 +63,7 @@ public class ACGuiHandler extends EnumGuiHandler {
     @Override
     public Object getContainer(IEnumGui gui, EntityPlayer player, World world, int x, int y, int z) {
         IInventory playerInv = player.inventory;
-        IInventory guiInv = getTileInventoryForGui(gui, world.getTileEntity(x, y, z));
+        Object guiInv = getArgFromTE(gui, world.getTileEntity(x, y, z));
         if (guiInv != null)
             return gui.buildContainer(playerInv, guiInv);
         return null;
@@ -72,7 +72,7 @@ public class ACGuiHandler extends EnumGuiHandler {
     @Override
     public Object getContainerFromEntity(IEnumGui gui, EntityPlayer player, World world, int entityID) {
         IInventory playerInv = player.inventory;
-        IInventory guiInv = getEntityInventoryForGui(gui, world.getEntityByID(entityID));
+        Object guiInv = getArgFromEntity(gui, world.getEntityByID(entityID));
         if (guiInv != null)
             return gui.buildContainer(playerInv, guiInv);
         return null;
@@ -80,7 +80,7 @@ public class ACGuiHandler extends EnumGuiHandler {
 
     public Object getContainerFromCurrentItem(IEnumGui gui, ItemStack mainHand, EntityPlayer player, World world) {
         IInventory playerInv = player.inventory;
-        IInventory guiInv = getItemInventoryForGui(gui, mainHand);
+        Object guiInv = getArgFromItem(gui, mainHand);
         if (guiInv != null)
             return gui.buildContainer(playerInv, guiInv);
         return null;
@@ -89,7 +89,7 @@ public class ACGuiHandler extends EnumGuiHandler {
     @Override
     public Object getGui(IEnumGui gui, EntityPlayer player, World world, int x, int y, int z) {
         IInventory playerInv = player.inventory;
-        IInventory guiInv = getTileInventoryForGui(gui, world.getTileEntity(x, y, z));
+        Object guiInv = getArgFromTE(gui, world.getTileEntity(x, y, z));
         if (guiInv != null)
             return gui.buildGui(playerInv, guiInv);
         return null;
@@ -98,7 +98,7 @@ public class ACGuiHandler extends EnumGuiHandler {
     @Override
     public Object getGuiFromEntity(IEnumGui gui, EntityPlayer player, World world, int entityID) {
         IInventory playerInv = player.inventory;
-        IInventory guiInv = getEntityInventoryForGui(gui, world.getEntityByID(entityID));
+        Object guiInv = getArgFromEntity(gui, world.getEntityByID(entityID));
         if (guiInv != null)
             return gui.buildGui(playerInv, guiInv);
         return null;
@@ -106,7 +106,7 @@ public class ACGuiHandler extends EnumGuiHandler {
 
     public Object getGuiFromCurrentItem(IEnumGui gui, ItemStack mainHand, EntityPlayer player, World world) {
         IInventory playerInv = player.inventory;
-        IInventory guiInv = getItemInventoryForGui(gui, mainHand);
+        Object guiInv = getArgFromItem(gui, mainHand);
         if (guiInv != null)
             return gui.buildGui(playerInv, guiInv);
         return null;

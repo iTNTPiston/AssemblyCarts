@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 public class GuiAssemblyManagerBooks extends SGui {
     private static final ResourceLocation background = new ResourceLocation(AssemblyCartsMod.MODID, "textures/guis/assembly_manager_book.png");
 
-    public GuiAssemblyManagerBooks(IInventory player, IInventory manager) {
+    public GuiAssemblyManagerBooks(IInventory player, Object manager) {
         super(new ContainerAssemblyManagerBooks(player, manager), "ac.gui.assembly_manager_books");
         xSize = 176;
         ySize = 132;

@@ -9,9 +9,9 @@ import net.minecraft.inventory.Slot;
 public class ContainerAssemblyManagerBooks extends SContainer {
     private IInventory machine;
 
-    public ContainerAssemblyManagerBooks(IInventory playerInventory, IInventory machine) {
-        super(playerInventory, 9, machine, 8, 50);
-        this.machine = machine;
+    public ContainerAssemblyManagerBooks(IInventory playerInventory, Object machine) {
+        super(playerInventory, 9, (IInventory) machine, 8, 50);
+        this.machine = (IInventory) machine;
     }
 
     @Override

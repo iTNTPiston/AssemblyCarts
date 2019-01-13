@@ -19,8 +19,8 @@ public class ContainerAssemblyManager extends SContainerRequestManager {
     public int selectedProcessID;
     private int processMultiplier;
 
-    public ContainerAssemblyManager(IInventory playerInventory, IInventory machine) {
-        super(playerInventory, 9, machine, 8, 198);
+    public ContainerAssemblyManager(IInventory playerInventory, Object machine) {
+        super(playerInventory, 9, (IInventory) machine, 8, 198);
         tile = (TileAssemblyManager) machine;
         processMultiplier = 1;
         selectedProcessID = -1;
