@@ -1,7 +1,7 @@
 package com.tntp.assemblycarts.tileentity;
 
-import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.minecraftmodapi.tileentity.TileEntityAPIiTNTPiston;
+import com.tntp.minecraftmodapi.util.DirUtil;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;

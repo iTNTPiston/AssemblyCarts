@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.util;
+package com.tntp.minecraftmodapi.util;
 
 public class DirUtil {
   public static final int DOWN_MY = 0;

@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.util;
+package com.tntp.minecraftmodapi.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;

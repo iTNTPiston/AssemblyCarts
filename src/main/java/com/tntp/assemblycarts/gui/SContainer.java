@@ -2,7 +2,6 @@ package com.tntp.assemblycarts.gui;
 
 import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.MarkerUtil;
-import com.tntp.assemblycarts.util.ItemUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

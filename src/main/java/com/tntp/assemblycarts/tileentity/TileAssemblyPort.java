@@ -3,9 +3,9 @@ package com.tntp.assemblycarts.tileentity;
 import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.IMarker;
 import com.tntp.assemblycarts.api.mark.MarkManager;
-import com.tntp.assemblycarts.util.DirUtil;
-import com.tntp.assemblycarts.util.ItemUtil;
 import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
+import com.tntp.minecraftmodapi.util.DirUtil;
+import com.tntp.minecraftmodapi.util.ItemUtil;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;

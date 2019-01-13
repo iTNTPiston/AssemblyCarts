@@ -1,8 +1,8 @@
 package com.tntp.minecraftmodapi.block;
 
-import com.tntp.assemblycarts.util.RandomUtil;
 import com.tntp.minecraftmodapi.ExeResult;
 import com.tntp.minecraftmodapi.tileentity.TileEntityAPIiTNTPiston;
+import com.tntp.minecraftmodapi.util.RandomUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;

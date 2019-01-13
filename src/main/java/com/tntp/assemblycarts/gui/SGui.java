@@ -11,7 +11,7 @@ import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.MarkerUtil;
-import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.util.LocalUtil;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;

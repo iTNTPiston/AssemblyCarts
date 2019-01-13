@@ -1,13 +1,11 @@
 package com.tntp.minecraftmodapi.block;
 
-import com.tntp.assemblycarts.util.UniversalUtil;
+import com.tntp.minecraftmodapi.util.UniversalUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 /**
  * A template for blocks

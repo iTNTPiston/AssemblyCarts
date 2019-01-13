@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.util;
+package com.tntp.minecraftmodapi.util;
 
 import java.util.List;
 

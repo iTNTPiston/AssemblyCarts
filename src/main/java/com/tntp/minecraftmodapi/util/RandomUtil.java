@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.util;
+package com.tntp.minecraftmodapi.util;
 
 import java.security.SecureRandom;
 import java.util.Random;

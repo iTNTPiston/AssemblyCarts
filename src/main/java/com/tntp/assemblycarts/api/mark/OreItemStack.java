@@ -2,7 +2,7 @@ package com.tntp.assemblycarts.api.mark;
 
 import java.util.List;
 
-import com.tntp.assemblycarts.util.ItemUtil;
+import com.tntp.minecraftmodapi.util.ItemUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

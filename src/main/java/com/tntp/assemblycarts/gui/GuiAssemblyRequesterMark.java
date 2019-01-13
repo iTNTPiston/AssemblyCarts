@@ -10,7 +10,7 @@ import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyRequesterMark;
 import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
-import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.util.LocalUtil;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.IInventory;

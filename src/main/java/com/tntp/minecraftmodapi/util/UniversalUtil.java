@@ -1,4 +1,4 @@
-package com.tntp.assemblycarts.util;
+package com.tntp.minecraftmodapi.util;
 
 public class UniversalUtil {
   public static final int VERSION = 1;

@@ -5,8 +5,8 @@ import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;
-import com.tntp.assemblycarts.util.DirUtil;
 import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
+import com.tntp.minecraftmodapi.util.DirUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;

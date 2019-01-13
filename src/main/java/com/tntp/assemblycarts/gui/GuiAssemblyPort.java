@@ -9,7 +9,7 @@ import com.tntp.assemblycarts.gui.container.ContainerAssemblyPort;
 import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
-import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.util.LocalUtil;
 
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.IInventory;

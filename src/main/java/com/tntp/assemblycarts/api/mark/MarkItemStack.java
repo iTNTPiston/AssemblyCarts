@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.api.mark;
 
-import com.tntp.assemblycarts.util.ItemUtil;
+import com.tntp.minecraftmodapi.util.ItemUtil;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

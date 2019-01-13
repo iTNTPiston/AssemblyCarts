@@ -8,7 +8,7 @@ import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.container.ContainerAssemblyManager;
 import com.tntp.assemblycarts.network.ACNtwk;
 import com.tntp.assemblycarts.network.MSGuiSlotClick;
-import com.tntp.assemblycarts.util.LocalUtil;
+import com.tntp.minecraftmodapi.util.LocalUtil;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;

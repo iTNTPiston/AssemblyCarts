@@ -7,9 +7,9 @@ import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACItems;
-import com.tntp.assemblycarts.util.KeyUtil;
-import com.tntp.assemblycarts.util.LocalUtil;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
+import com.tntp.minecraftmodapi.util.KeyUtil;
+import com.tntp.minecraftmodapi.util.LocalUtil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
