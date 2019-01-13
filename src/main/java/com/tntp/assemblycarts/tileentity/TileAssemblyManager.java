@@ -10,6 +10,7 @@ import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 import com.tntp.minecraftmodapi.util.ItemUtil;
 
@@ -113,9 +114,10 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
             return null;
         }
         ItemStack book = getStackInSlot(slot);
-        if (book != null && book.getItem() == ACItems.process_book) {
-            if (ItemProcessBook.hasProcess(book)) {
-                AssemblyProcess process = ItemProcessBook.getProcessFromStack(book);
+        if (book != null) {
+            TagProcessBook tag = ItemUtil.getItemTag(book, new TagProcessBook());
+            if (tag != null) {
+                AssemblyProcess process = tag.process;
                 if (process.getMainOutput() != null)
                     return process;
             }

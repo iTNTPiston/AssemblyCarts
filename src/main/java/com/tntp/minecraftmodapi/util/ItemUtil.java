@@ -2,9 +2,14 @@ package com.tntp.minecraftmodapi.util;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
+import com.tntp.minecraftmodapi.item.IItemTag;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -104,6 +109,95 @@ public class ItemUtil {
         if (inventoryChanged)
             inventory.markDirty();
         return inventoryChanged;
+    }
+
+    /**
+     * Set the tag to the stack. If the tag is invalid, it will be removed from the
+     * stack.
+     * 
+     * @param stack
+     * @param tag
+     */
+    public static void setItemTagTo(@Nonnull ItemStack stack, @Nonnull IItemTag tag) {
+        if (stack == null || tag == null)
+            throw new IllegalArgumentException();
+        if (tag.isTagValid()) {
+            addItemTagTo(stack, tag);
+        } else {
+            removeItemTagFrom(stack, tag.getTagName());
+        }
+    }
+
+    /**
+     * Add the item tag to the stack. The stack must have the valid item/
+     * This will override any existing tag with the same name
+     * 
+     * @param stack
+     * @param tag
+     * @return true if the tag is added
+     */
+    public static boolean addItemTagTo(@Nonnull ItemStack stack, @Nonnull IItemTag tag) {
+        if (stack == null || tag == null)
+            throw new IllegalArgumentException();
+        if (stack.getItem() == null || !tag.isValidFor(stack.getItem()))
+            return false;
+        NBTTagCompound stackTag = stack.hasTagCompound() ? stack.getTagCompound() : new NBTTagCompound();
+        NBTTagCompound itemTag = new NBTTagCompound();
+        tag.writeToNBT(itemTag);
+        stackTag.setTag(tag.getTagName(), itemTag);
+        stack.setTagCompound(stackTag);
+        return true;
+    }
+
+    public static void removeItemTagFrom(@Nonnull ItemStack stack, String tagName) {
+        if (stack == null)
+            throw new IllegalArgumentException();
+        if (tagName == null)
+            return;
+        if (stack.hasTagCompound()) {
+            NBTTagCompound stackTag = stack.getTagCompound();
+            stackTag.removeTag(tagName);
+            return;
+        }
+        return;
+    }
+
+    /**
+     * Get the tag from the stack.
+     * 
+     * @param stack
+     * @param emptyTag
+     * @return null if the tag doesn't exist. Otherwise the tag will be written to
+     *         the second argument and returned
+     */
+    public static <TAG extends IItemTag> TAG getItemTag(@Nonnull ItemStack stack, @Nonnull TAG emptyTag) {
+        if (stack == null || emptyTag == null)
+            throw new IllegalArgumentException();
+        if (stack.getItem() == null || !emptyTag.isValidFor(stack.getItem()))
+            return null;
+        if (stack.hasTagCompound()) {
+            NBTTagCompound stackTag = stack.getTagCompound();
+            if (stackTag.hasKey(emptyTag.getTagName())) {
+                NBTTagCompound itemTag = stackTag.getCompoundTag(emptyTag.getTagName());
+                emptyTag.readFromNBT(itemTag);
+                return emptyTag;
+            }
+        }
+        return null;
+    }
+
+    public static boolean hasItemTag(@Nonnull ItemStack stack, String tag) {
+        if (stack == null)
+            throw new IllegalArgumentException();
+        if (tag == null)
+            return false;
+        if (stack.hasTagCompound()) {
+            NBTTagCompound stackTag = stack.getTagCompound();
+            if (stackTag.hasKey(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static String toTwoDigitStackSizeDisplay(int stacksize) {

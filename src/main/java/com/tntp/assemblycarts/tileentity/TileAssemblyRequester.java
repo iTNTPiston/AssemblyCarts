@@ -12,8 +12,10 @@ import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 import com.tntp.minecraftmodapi.util.DirUtil;
+import com.tntp.minecraftmodapi.util.ItemUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
@@ -55,8 +57,9 @@ public class TileAssemblyRequester extends TileEntityInventoryAPIiTNTPiston impl
     private void updateBook() {
         if (getManager() == null && requestManager.getCraftingTarget() == null) {
             ItemStack stack = getStackInSlot(0);
-            if (stack != null && stack.getItem() == ACItems.process_book) {
-                AssemblyProcess process = ItemProcessBook.getProcessFromStack(stack);
+            if (stack != null) {
+                TagProcessBook tag = ItemUtil.getItemTag(stack, new TagProcessBook());
+                AssemblyProcess process = tag.process;
                 if (process.getMainOutput() != null) {
                     requestManager.initRequestWithProcess(process, 1);
                     markDirty();

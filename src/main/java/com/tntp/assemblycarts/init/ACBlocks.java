@@ -67,7 +67,7 @@ public class ACBlocks {
         reg.of(new BlockAssemblyProvider(), "assembly_provider").behave(bhvrCrowBar).register();
         treg.ofTE(TileAssemblyProvider.class).register();
 
-        reg.of(new BlockDockingTrack(), "docking_track").item(ItemBlockDockingTrack.class).behave(bhvrCrowBar).register();
+        reg.of(new BlockDockingTrack(), "docking_track").item(ItemBlockDockingTrack.class).register();
         treg.ofTE(TileDockingTrack.class).register();
 
     }

@@ -1,14 +1,17 @@
 package com.tntp.assemblycarts.gui;
 
+import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 import com.tntp.minecraftmodapi.gui.IEnumGui;
+import com.tntp.minecraftmodapi.util.ItemUtil;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 import net.minecraft.entity.Entity;
@@ -49,8 +52,11 @@ public class ACGuiHandler extends EnumGuiHandler {
 
     private IInventory getItemInventoryForGui(IEnumGui gui, ItemStack stack) {
         if (gui == EnumGui.ProcessBook) {
-            if (stack != null && stack.getItem() == ACItems.process_book) {
-                return ItemProcessBook.getProcessFromStack(stack);
+            if (stack != null) {
+                TagProcessBook tag = ItemUtil.getItemTag(stack, new TagProcessBook());
+                if (tag == null)
+                    return new AssemblyProcess();
+                return tag.process;
             }
         }
         return null;

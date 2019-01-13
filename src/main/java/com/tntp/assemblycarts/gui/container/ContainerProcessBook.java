@@ -6,6 +6,8 @@ import com.tntp.assemblycarts.gui.SContainer;
 import com.tntp.assemblycarts.gui.SlotDecorative;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.assemblycarts.item.tag.TagProcessBook;
+import com.tntp.minecraftmodapi.util.ItemUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -76,8 +78,10 @@ public class ContainerProcessBook extends SContainer {
     @Override
     public void onContainerClosed(EntityPlayer player) {
         ItemStack current = player.inventory.getCurrentItem();
-        if (current != null && current.getItem() == ACItems.process_book) {
-            ItemProcessBook.writeProcessToStack(current, process);
+        if (current != null) {
+            TagProcessBook tag = new TagProcessBook();
+            tag.process = process;
+            ItemUtil.setItemTagTo(current, tag);
             player.inventory.setInventorySlotContents(player.inventory.currentItem, current);
         }
         super.onContainerClosed(player);

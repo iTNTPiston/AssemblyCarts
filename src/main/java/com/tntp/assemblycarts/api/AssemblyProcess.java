@@ -17,6 +17,18 @@ public class AssemblyProcess implements IInventory {
     private IMarkItem mainOutput;
     private IMarkItem[] otherOutputs;
 
+    public boolean isEmpty() {
+        if (mainOutput != null)
+            return false;
+        for (IMarkItem e : inputs)
+            if (e != null)
+                return false;
+        for (IMarkItem e : otherOutputs)
+            if (e != null)
+                return false;
+        return true;
+    }
+
     public AssemblyProcess() {
         inputs = new IMarkItem[18];
         otherOutputs = new IMarkItem[18];
@@ -52,7 +64,7 @@ public class AssemblyProcess implements IInventory {
             otherOutputs[i] = mark;
     }
 
-    public static AssemblyProcess loadProcessFromNBT(NBTTagCompound tag) {
+    public static AssemblyProcess loadProcessFromNBT(NBTTagCompound tag, boolean ensureNonNull) {
         AssemblyProcess p = new AssemblyProcess();
         NBTTagCompound main = tag.getCompoundTag("mainOut");
         p.mainOutput = MarkerUtil.readFromNBT(main);
@@ -69,6 +81,10 @@ public class AssemblyProcess implements IInventory {
             IMarkItem stack = MarkerUtil.readFromNBT(outStack);
             if (stack != null)
                 p.otherOutputs[i] = stack;
+        }
+        if (!ensureNonNull) {
+            if (p.mainOutput == null && in.tagCount() == 0 && out.tagCount() == 0)
+                return null;
         }
         return p;
     }
