@@ -6,6 +6,7 @@ import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
+import com.tntp.minecraftmodapi.item.ItemAPIiTNTPiston;
 import com.tntp.minecraftmodapi.util.ItemUtil;
 import com.tntp.minecraftmodapi.util.KeyUtil;
 
@@ -17,16 +18,10 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemProcessBook extends SItem {
+public class ItemProcessBook extends ItemAPIiTNTPiston {
 
     public ItemProcessBook() {
         this.setMaxStackSize(1);
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public void registerIcons(IIconRegister reg) {
-        super.registerIcons(reg);
     }
 
     @Override

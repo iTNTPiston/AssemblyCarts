@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.item.ItemAssemblyCart;
 import com.tntp.assemblycarts.item.ItemCrowbarAssemblium;
+import com.tntp.assemblycarts.item.ItemOreLookupTable;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.minecraftmodapi.item.IItemRegisterFactory;
 import com.tntp.minecraftmodapi.item.RegItem;
@@ -18,7 +19,8 @@ public class ACItems {
 
     public static final Item crowbar_assemblium = null;
 
-    public static final ItemProcessBook process_book = null;
+    public static final Item process_book = null;
+    public static final Item ore_lookup_table = null;
 
     public static void loadItems() {
         AssemblyCartsMod.log.info("Registering Items");
@@ -26,6 +28,7 @@ public class ACItems {
         reg.of(new ItemAssemblyCart(), "assembly_worker_cart").register();
         reg.of(new ItemCrowbarAssemblium(), "crowbar_assemblium").register();
         reg.of(new ItemProcessBook(), "process_book").register();
+        reg.of(new ItemOreLookupTable(), "ore_lookup_table").register();
     }
 
     public static void validateInjection() {

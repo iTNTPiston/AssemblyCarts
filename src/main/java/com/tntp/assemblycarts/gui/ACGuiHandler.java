@@ -3,8 +3,6 @@ package com.tntp.assemblycarts.gui;
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
-import com.tntp.assemblycarts.init.ACItems;
-import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;

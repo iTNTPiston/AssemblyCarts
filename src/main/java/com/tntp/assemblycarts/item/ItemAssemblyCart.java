@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.item;
 
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
+import com.tntp.minecraftmodapi.item.ItemAPIiTNTPiston;
 
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
@@ -8,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemAssemblyCart extends SItem {
+public class ItemAssemblyCart extends ItemAPIiTNTPiston {
 
     public ItemAssemblyCart() {
         this.maxStackSize = 3;
