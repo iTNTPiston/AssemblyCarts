@@ -5,7 +5,7 @@ import com.tntp.minecraftmodapi.util.NBTUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 
-public abstract class MANBT1<M extends MANBT1<M>> extends SMessage<M> {
+public abstract class MANBT1<M extends MANBT1<M>> extends MessageAPIiTNTPiston<M> {
     private NBTTagCompound nbt1;
 
     public MANBT1(NBTTagCompound nbt1) {

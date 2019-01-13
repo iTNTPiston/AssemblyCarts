@@ -22,12 +22,12 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
     }
 
     @Override
-    public <REQ extends SMessage<REQ>> IMessageRegister of(Class<REQ> clazz) {
+    public <REQ extends MessageAPIiTNTPiston<REQ>> IMessageRegister of(Class<REQ> clazz) {
         APIiTNTPiston.log.info("[Ntwk Registry] Message >> " + clazz.getCanonicalName());
         return new Reg<>(clazz);
     }
 
-    private <REQ extends SMessage<REQ>> void registerMessage(Class<REQ> c, Side side) throws Exception {
+    private <REQ extends MessageAPIiTNTPiston<REQ>> void registerMessage(Class<REQ> c, Side side) throws Exception {
         try {
             REQ req = c.newInstance();
             wrapper.registerMessage(req, c, id++, side);
@@ -37,7 +37,7 @@ public class RegMessage extends SuperRegister implements IMessageRegisterFactory
         }
     }
 
-    private class Reg<REQ extends SMessage<REQ>> implements IMessageRegister {
+    private class Reg<REQ extends MessageAPIiTNTPiston<REQ>> implements IMessageRegister {
         Class<REQ> clazz;
         Side s = null;
 

@@ -7,8 +7,6 @@ import java.util.List;
 import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.SuperRegister;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;

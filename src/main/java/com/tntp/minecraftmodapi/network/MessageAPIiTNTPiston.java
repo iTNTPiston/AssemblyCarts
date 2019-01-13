@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
  *
  * @param <REQ>
  */
-public abstract class SMessage<REQ extends SMessage<REQ>> implements IMessage, IMessageHandler<REQ, IMessage> {
+public abstract class MessageAPIiTNTPiston<REQ extends MessageAPIiTNTPiston<REQ>> implements IMessage, IMessageHandler<REQ, IMessage> {
   protected static void writeStringToBuf(ByteBuf buf, String str) {
     buf.writeInt(str.length());
     for (char c : str.toCharArray()) {

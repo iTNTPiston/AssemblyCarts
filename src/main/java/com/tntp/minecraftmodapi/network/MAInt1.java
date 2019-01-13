@@ -2,7 +2,7 @@ package com.tntp.minecraftmodapi.network;
 
 import io.netty.buffer.ByteBuf;
 
-public abstract class MAInt1<M extends MAInt1<M>> extends SMessage<M> {
+public abstract class MAInt1<M extends MAInt1<M>> extends MessageAPIiTNTPiston<M> {
   private int i1;
 
   public MAInt1(int int1) {

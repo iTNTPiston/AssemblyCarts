@@ -11,7 +11,7 @@ public interface IMessageRegisterFactory {
      * @param clazz
      * @return
      */
-    <REQ extends SMessage<REQ>> IMessageRegister of(Class<REQ> clazz);
+    <REQ extends MessageAPIiTNTPiston<REQ>> IMessageRegister of(Class<REQ> clazz);
 
     /**
      * Inject the network channel to a static field in that class with ChannelHolder
