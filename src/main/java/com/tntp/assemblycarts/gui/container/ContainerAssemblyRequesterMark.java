@@ -8,7 +8,6 @@ import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 
 public class ContainerAssemblyRequesterMark extends SContainerMarkManager {
     private TileAssemblyRequester tile;

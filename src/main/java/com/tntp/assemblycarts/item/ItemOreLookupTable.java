@@ -2,11 +2,8 @@ package com.tntp.assemblycarts.item;
 
 import java.util.List;
 
-import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.item.tag.TagOreLookupTable;
 import com.tntp.assemblycarts.item.tag.TagProcessBook;
-import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 import com.tntp.minecraftmodapi.item.ItemAPIiTNTPiston;
 import com.tntp.minecraftmodapi.util.ItemUtil;
 import com.tntp.minecraftmodapi.util.KeyUtil;

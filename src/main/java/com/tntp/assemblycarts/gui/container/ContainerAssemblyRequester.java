@@ -2,9 +2,7 @@ package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.gui.SContainerRequestManager;
-import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
-import com.tntp.minecraftmodapi.tileentity.TileEntityInventoryAPIiTNTPiston;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

@@ -3,7 +3,6 @@ package com.tntp.assemblycarts.gui;
 import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.mark.IMarkItem;
-import com.tntp.assemblycarts.api.mark.MarkerUtil;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.gui.container.ContainerMinecartAssemblyWorker;
 

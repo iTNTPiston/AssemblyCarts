@@ -2,14 +2,9 @@ package com.tntp.minecraftmodapi.item;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.Validate;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
