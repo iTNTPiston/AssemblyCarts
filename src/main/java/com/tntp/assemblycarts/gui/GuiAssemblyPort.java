@@ -41,7 +41,7 @@ public class GuiAssemblyPort extends SGui {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                this.drawItemStack(tile.getMarkedItemStack(i * 3 + j), 26 + j * 18, 18 + i * 18, mx, my, Arrays.asList(LocalUtil.localize("ac.tooltip.mark")));
+                this.drawMarkItem(tile.getMarkedItemStack(i * 3 + j), 26 + j * 18, 18 + i * 18, mx, my, Arrays.asList(LocalUtil.localize("ac.tooltip.mark")), 1);
             }
         }
 

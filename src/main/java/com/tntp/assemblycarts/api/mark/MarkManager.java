@@ -1,17 +1,15 @@
 package com.tntp.assemblycarts.api.mark;
 
-import com.tntp.assemblycarts.util.ItemUtil;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class MarkManager {
-    private ItemStack[] markedItems;
+    private IMarkItem[] markedItems;
 
     public MarkManager(int markSize) {
-        markedItems = new ItemStack[markSize];
+        markedItems = new IMarkItem[markSize];
     }
 
     /**
@@ -20,7 +18,7 @@ public class MarkManager {
      * @return true if at least 1 itemstack in the mark contents is not null
      */
     public boolean hasMark() {
-        for (ItemStack s : markedItems) {
+        for (IMarkItem s : markedItems) {
             if (s != null)
                 return true;
         }
@@ -28,8 +26,20 @@ public class MarkManager {
     }
 
     public boolean isMarked(ItemStack stack) {
+        if (stack == null)
+            return false;
         for (int i = 0; i < markedItems.length; i++) {
-            if (ItemUtil.areItemAndTagEqual(stack, markedItems[i]))
+            if (markedItems[i] != null && markedItems[i].matchesStack(stack))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isMarked(IMarkItem mark) {
+        if (mark == null)
+            return false;
+        for (int i = 0; i < markedItems.length; i++) {
+            if (markedItems[i] != null && markedItems[i].isMarkEquivalentTo(mark))
                 return true;
         }
         return false;
@@ -39,16 +49,16 @@ public class MarkManager {
         return markedItems.length;
     }
 
-    public ItemStack getMarkedItem(int i) {
-        return ItemStack.copyItemStack(markedItems[i]);
+    public IMarkItem getMarkedItem(int i) {
+        return markedItems[i];
     }
 
-    public ItemStack[] getAllMarked() {
+    public IMarkItem[] getAllMarked() {
         return markedItems;
     }
 
-    public void setMarkedItem(int i, ItemStack s) {
-        markedItems[i] = ItemStack.copyItemStack(s);
+    public void setMarkedItem(int i, IMarkItem s) {
+        markedItems[i] = s;
     }
 
     public void writeToNBT(NBTTagCompound tag) {
@@ -58,7 +68,7 @@ public class MarkManager {
                 NBTTagCompound entry = new NBTTagCompound();
                 entry.setInteger("slot", i);
                 NBTTagCompound stack = new NBTTagCompound();
-                markedItems[i].writeToNBT(stack);
+                MarkerUtil.writeToNBT(stack, markedItems[i]);
                 entry.setTag("item", stack);
                 markedList.appendTag(entry);
             }
@@ -75,7 +85,7 @@ public class MarkManager {
             NBTTagCompound entry = markedList.getCompoundTagAt(i);
             int slot = entry.getInteger("slot");
             if (slot >= 0 && slot < markedItems.length) {
-                ItemStack item = ItemStack.loadItemStackFromNBT(entry.getCompoundTag("item"));
+                IMarkItem item = MarkerUtil.readFromNBT(entry.getCompoundTag("item"));
                 markedItems[slot] = item;
             }
         }

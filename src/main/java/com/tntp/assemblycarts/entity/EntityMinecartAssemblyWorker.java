@@ -1,11 +1,14 @@
 package com.tntp.assemblycarts.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.api.mark.IMarkItem;
+import com.tntp.assemblycarts.api.mark.MarkerUtil;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
@@ -43,7 +46,7 @@ public class EntityMinecartAssemblyWorker extends EntityMinecartContainer implem
         provideManager = new ProvideManager(this, slots);
     }
 
-    public void setTarget(ItemStack stack, List<ItemStack> need) {
+    public void setTarget(IMarkItem stack, List<IMarkItem> need) {
         requestManager.initRequestDirectly(stack, need);
         provideManager.setProvideTarget(stack);
     }

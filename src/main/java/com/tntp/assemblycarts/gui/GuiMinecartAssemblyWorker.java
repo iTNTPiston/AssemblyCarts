@@ -2,11 +2,12 @@ package com.tntp.assemblycarts.gui;
 
 import org.lwjgl.opengl.GL11;
 
+import com.tntp.assemblycarts.api.mark.IMarkItem;
+import com.tntp.assemblycarts.api.mark.MarkerUtil;
 import com.tntp.assemblycarts.entity.EntityMinecartAssemblyWorker;
 import com.tntp.assemblycarts.gui.container.ContainerMinecartAssemblyWorker;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiMinecartAssemblyWorker extends SGui {
@@ -32,11 +33,11 @@ public class GuiMinecartAssemblyWorker extends SGui {
         super.drawGuiContainerForegroundLayer(mx, my);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         EntityMinecartAssemblyWorker cart = ((ContainerMinecartAssemblyWorker) this.inventorySlots).getCart();
-        ItemStack main = cart.getRequestManager().getCraftingTarget();
+        IMarkItem main = cart.getRequestManager().getCraftingTarget();
         if (main == null)
             main = cart.getProvideManager().getProvideTarget();
 
-        drawBigStack(main, mx, my);
+        drawBigStack(main, mx, my, 1);
         drawRequestManagerStacks(cart.getRequestManager(), mx, my);
     }
 }

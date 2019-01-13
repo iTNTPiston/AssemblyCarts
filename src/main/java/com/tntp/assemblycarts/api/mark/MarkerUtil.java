@@ -3,6 +3,7 @@ package com.tntp.assemblycarts.api.mark;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class MarkerUtil {
@@ -19,6 +20,12 @@ public class MarkerUtil {
         }
     }
 
+    /**
+     * Write the IMarkItem to a NBT. This NBT also contains the type
+     * 
+     * @param tag
+     * @param mark
+     */
     public static void writeToNBT(NBTTagCompound tag, IMarkItem mark) {
         NBTTagCompound wrapped = new NBTTagCompound();
         mark.writeToNBT(wrapped);
@@ -27,8 +34,20 @@ public class MarkerUtil {
     }
 
     public static IMarkItem readFromNBT(NBTTagCompound tag) {
+        if (tag == null || !tag.hasKey("markType"))
+            return null;
         NBTTagCompound wrapped = tag.getCompoundTag("wrapped");
         IMarkItem template = idToMarkType.get(tag.getInteger("markType"));
         return template.readFromNBT(wrapped);
+    }
+
+    public static IMarkItem stackToMark(ItemStack stack) {
+        if (stack == null)
+            return null;
+        return new MarkItemStack(stack);
+    }
+
+    public static ItemStack getDisplayStackSafe(IMarkItem mark) {
+        return mark == null ? null : mark.getDisplayStack();
     }
 }

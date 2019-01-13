@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.api.mark.IMarkItem;
+import com.tntp.assemblycarts.api.mark.MarkerUtil;
 import com.tntp.assemblycarts.util.LocalUtil;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -28,11 +30,24 @@ public class SGui extends GuiContainer {
     protected int tooltipY;
     protected List<String> tooltips;
 
+    private int nextDisplayTick;
+
     public SGui(Container container, String title) {
         super(container);
 
         tooltips = new ArrayList<String>();
         unlocalizedTitle = title;
+    }
+
+    public void updateScreen() {
+        super.updateScreen();
+        if (nextDisplayTick <= 0)
+            nextDisplayTick = 20;
+        nextDisplayTick--;
+    }
+
+    public boolean isNextDisplayTick() {
+        return nextDisplayTick == 0;
     }
 
     @Override
@@ -75,6 +90,15 @@ public class SGui extends GuiContainer {
 
     public boolean withInRect(int x, int y, int fromX, int fromY, int w, int h) {
         return x >= fromX && y >= fromY && x <= fromX + w && y <= fromY + h;
+    }
+
+    protected void drawMarkItem(IMarkItem mark, int x, int y, int mx, int my, List<String> extraTooltip, int multiplier) {
+        if (isNextDisplayTick() && mark != null)
+            mark.nextDisplayStack();
+        ItemStack stack = MarkerUtil.getDisplayStackSafe(mark);
+        if (stack != null)
+            stack.stackSize *= multiplier;
+        drawItemStack(stack, x, y, mx, my, extraTooltip);// TODO: fluid stack
     }
 
     protected void drawItemStack(ItemStack stack, int x, int y, int mx, int my, List<String> extraTooltip) {
@@ -152,60 +176,39 @@ public class SGui extends GuiContainer {
     }
 
     protected void drawProcess(AssemblyProcess process, int mouseX, int mouseY, int multiplier) {
-        if (process != null) {
-            ItemStack main = ItemStack.copyItemStack(process.getMainOutput());
+//        ItemStack main = null;
+//        if (process != null) {
+//            IMarkItem mark = process.getMainOutput();
+//            if (mark != null && isNextDisplayTick()) {
+//                mark.nextDisplayStack();
+//            }
+//            main = MarkerUtil.getDisplayStackSafe(mark);
+//            if (main != null)
+//                main.stackSize *= multiplier;
+//        }
 
-            if (main != null) {
-                main.stackSize *= multiplier;
-                GL11.glPushMatrix();
-                GL11.glTranslatef(15, 28, 0);
-                GL11.glScalef(2, 2, 1);
-                RenderHelper.enableGUIStandardItemLighting();
-                GL11.glDisable(GL11.GL_BLEND);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.getTextureManager(), main, 0, 0);
-                itemRender.renderItemOverlayIntoGUI(fontRendererObj, this.mc.getTextureManager(), main, 0, 0);
-                GL11.glEnable(GL11.GL_BLEND);
-                RenderHelper.disableStandardItemLighting();
-                if (withInRect(mouseX, mouseY, 15 + guiLeft, 28 + guiTop, 32, 32)) {
-                    this.setStackTooltip(main);
-                    tooltipX = mouseX - guiLeft;
-                    tooltipY = mouseY - guiTop;
-                }
-                GL11.glPopMatrix();
-            }
-        }
-        if (withInRect(mouseX, mouseY, 14 + guiLeft, 27 + guiTop, 34, 34)) {
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
-            GL11.glColorMask(true, true, true, false);
-            this.drawGradientRect(14, 27, 48, 61, -2130706433, -2130706433);
-            GL11.glColorMask(true, true, true, true);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
-        }
+        drawBigStack(process.getMainOutput(), mouseX, mouseY, multiplier);
 
         // GL11.glTranslatef(-guiLeft, -guiTop, 0);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 6; j++) {
-                ItemStack stack = process != null ? ItemStack.copyItemStack(process.getInput(i * 6 + j)) : null;
-                if (stack != null)
-                    stack.stackSize *= multiplier;
-                this.drawItemStack(stack, 62 + j * 18, 18 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST);
+                this.drawMarkItem(process.getInput(i * 6 + j), 62 + j * 18, 18 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST, multiplier);
             }
         }
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 9; j++) {
-                ItemStack stack = process != null ? ItemStack.copyItemStack(process.getOtherOutput(i * 9 + j)) : null;
-                if (stack != null)
-                    stack.stackSize *= multiplier;
-                this.drawItemStack(stack, 8 + j * 18, 90 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST);
+                this.drawMarkItem(process.getOtherOutput(i * 9 + j), 8 + j * 18, 90 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST, multiplier);
             }
         }
         RenderHelper.enableGUIStandardItemLighting();
     }
 
-    protected void drawBigStack(ItemStack stack, int mx, int my) {
+    protected void drawBigStack(IMarkItem mark, int mx, int my, int multiplier) {
+        if (isNextDisplayTick() && mark != null)
+            mark.nextDisplayStack();
+        ItemStack stack = MarkerUtil.getDisplayStackSafe(mark);
+        if (stack != null)
+            stack.stackSize *= multiplier;
         if (stack != null) {
             GL11.glPushMatrix();
             GL11.glTranslatef(15, 28, 0);
@@ -237,12 +240,12 @@ public class SGui extends GuiContainer {
     }
 
     protected void drawRequestManagerStacks(RequestManager rm, int mx, int my) {
-        List<ItemStack> need = rm.getNeed();
+        List<IMarkItem> need = rm.getNeed();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 6; j++) {
                 int index = i * 6 + j;
                 if (index < need.size())
-                    this.drawItemStack(need.get(index), 62 + j * 18, 18 + i * 18, mx, my, Collections.EMPTY_LIST);
+                    this.drawMarkItem(need.get(index), 62 + j * 18, 18 + i * 18, mx, my, Collections.EMPTY_LIST, 1);
                 else
                     this.drawItemStack(null, 62 + j * 18, 18 + i * 18, mx, my, Collections.EMPTY_LIST);
             }

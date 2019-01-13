@@ -2,6 +2,9 @@ package com.tntp.assemblycarts.api;
 
 import java.util.Iterator;
 
+import com.tntp.assemblycarts.api.mark.IMarkItem;
+import com.tntp.assemblycarts.api.mark.MarkerUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,60 +13,60 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants.NBT;
 
 public class AssemblyProcess implements IInventory {
-    private ItemStack[] inputs;
-    private ItemStack mainOutput;
-    private ItemStack[] otherOutputs;
+    private IMarkItem[] inputs;
+    private IMarkItem mainOutput;
+    private IMarkItem[] otherOutputs;
 
     public AssemblyProcess() {
-        inputs = new ItemStack[18];
-        otherOutputs = new ItemStack[18];
+        inputs = new IMarkItem[18];
+        otherOutputs = new IMarkItem[18];
     }
 
-    public ItemStack getMainOutput() {
+    public IMarkItem getMainOutput() {
         return mainOutput;
     }
 
-    public void setMainOutput(ItemStack stack) {
-        mainOutput = ItemStack.copyItemStack(stack);
+    public void setMainOutput(IMarkItem mark) {
+        mainOutput = mark;
     }
 
-    public ItemStack getInput(int i) {
+    public IMarkItem getInput(int i) {
         if (i >= 0 && i < inputs.length)
             return inputs[i];
         return null;
     }
 
-    public void setInput(int i, ItemStack stack) {
+    public void setInput(int i, IMarkItem mark) {
         if (i >= 0 && i < inputs.length)
-            inputs[i] = ItemStack.copyItemStack(stack);
+            inputs[i] = mark;
     }
 
-    public ItemStack getOtherOutput(int i) {
+    public IMarkItem getOtherOutput(int i) {
         if (i >= 0 && i < otherOutputs.length)
             return otherOutputs[i];
         return null;
     }
 
-    public void setOtherOutput(int i, ItemStack stack) {
+    public void setOtherOutput(int i, IMarkItem mark) {
         if (i >= 0 && i < otherOutputs.length)
-            otherOutputs[i] = ItemStack.copyItemStack(stack);
+            otherOutputs[i] = mark;
     }
 
     public static AssemblyProcess loadProcessFromNBT(NBTTagCompound tag) {
         AssemblyProcess p = new AssemblyProcess();
         NBTTagCompound main = tag.getCompoundTag("mainOut");
-        p.mainOutput = ItemStack.loadItemStackFromNBT(main);
+        p.mainOutput = MarkerUtil.readFromNBT(main);
         NBTTagList in = tag.getTagList("inputs", NBT.TAG_COMPOUND);
         for (int i = 0; i < in.tagCount(); i++) {
             NBTTagCompound inStack = in.getCompoundTagAt(i);
-            ItemStack stack = ItemStack.loadItemStackFromNBT(inStack);
+            IMarkItem stack = MarkerUtil.readFromNBT(inStack);
             if (stack != null)
                 p.inputs[i] = stack;
         }
         NBTTagList out = tag.getTagList("otherOut", NBT.TAG_COMPOUND);
         for (int i = 0; i < out.tagCount(); i++) {
             NBTTagCompound outStack = out.getCompoundTagAt(i);
-            ItemStack stack = ItemStack.loadItemStackFromNBT(outStack);
+            IMarkItem stack = MarkerUtil.readFromNBT(outStack);
             if (stack != null)
                 p.otherOutputs[i] = stack;
         }
@@ -72,36 +75,37 @@ public class AssemblyProcess implements IInventory {
 
     public void writeToNBT(NBTTagCompound tag) {
         NBTTagCompound main = new NBTTagCompound();
-        if (mainOutput != null)
-            mainOutput.writeToNBT(main);
-        tag.setTag("mainOut", main);
+        if (mainOutput != null) {
+            MarkerUtil.writeToNBT(main, mainOutput);
+            tag.setTag("mainOut", main);
+        }
 
         NBTTagList in = new NBTTagList();
-        for (ItemStack stack : inputs) {
-            if (stack != null) {
+        for (IMarkItem mark : inputs) {
+            if (mark != null) {
                 NBTTagCompound inStack = new NBTTagCompound();
-                stack.writeToNBT(inStack);
+                MarkerUtil.writeToNBT(inStack, mark);
                 in.appendTag(inStack);
             }
         }
         tag.setTag("inputs", in);
 
         NBTTagList out = new NBTTagList();
-        for (ItemStack stack : otherOutputs) {
-            if (stack != null) {
+        for (IMarkItem mark : otherOutputs) {
+            if (mark != null) {
                 NBTTagCompound outStack = new NBTTagCompound();
-                stack.writeToNBT(outStack);
+                MarkerUtil.writeToNBT(outStack, mark);
                 out.appendTag(outStack);
             }
         }
         tag.setTag("otherOut", out);
     }
 
-    public Iterator<ItemStack> inputIterator() {
+    public Iterator<IMarkItem> inputIterator() {
         return new InputIterator();
     }
 
-    private class InputIterator implements Iterator<ItemStack> {
+    private class InputIterator implements Iterator<IMarkItem> {
         private int i = 0;
 
         private InputIterator() {
@@ -119,8 +123,8 @@ public class AssemblyProcess implements IInventory {
         }
 
         @Override
-        public ItemStack next() {
-            ItemStack s = inputs[i];
+        public IMarkItem next() {
+            IMarkItem s = inputs[i];
             i++;
             findNext();
             return s;
@@ -136,10 +140,10 @@ public class AssemblyProcess implements IInventory {
     @Override
     public ItemStack getStackInSlot(int i) {
         if (i == 0)
-            return getMainOutput();
+            return MarkerUtil.getDisplayStackSafe(getMainOutput());
         if (i < 19)
-            return getInput(i - 1);
-        return getOtherOutput(i - 19);
+            return MarkerUtil.getDisplayStackSafe(getInput(i - 1));
+        return MarkerUtil.getDisplayStackSafe(getOtherOutput(i - 19));
     }
 
     @Override

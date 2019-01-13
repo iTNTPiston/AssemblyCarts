@@ -3,6 +3,7 @@ package com.tntp.assemblycarts.item;
 import java.util.List;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACItems;
@@ -94,24 +95,24 @@ public class ItemProcessBook extends SItem {
         if (hasProcess(stack)) {
             if (KeyUtil.isShiftDown()) {
                 AssemblyProcess process = getProcessFromStack(stack);
-                ItemStack main = process.getMainOutput();
+                IMarkItem main = process.getMainOutput();
                 if (main != null) {
-                    tooltip.add(LocalUtil.localize("ac.tooltip.process_book.craft") + " " + LocalUtil.localize("ac.tooltip.process_book.stack_arg_s_d", main.getDisplayName(), main.stackSize));
+                    tooltip.add(LocalUtil.localize("ac.tooltip.process_book.craft") + " " + LocalUtil.localize("ac.tooltip.process_book.stack_arg_s_d", main.displayName(), main.stacksize()));
                 }
                 if (KeyUtil.isCtrlDown()) {
                     tooltip.add(LocalUtil.localize("ac.tooltip.process_book.input"));
                     for (int i = 0; i < 18; i++) {
-                        ItemStack in = process.getInput(i);
+                        IMarkItem in = process.getInput(i);
                         if (in == null)
                             break;
-                        tooltip.add(LocalUtil.localize("ac.tooltip.process_book.stack_arg_s_d", in.getDisplayName(), in.stackSize));
+                        tooltip.add(LocalUtil.localize("ac.tooltip.process_book.stack_arg_s_d", in.displayName(), in.stacksize()));
                     }
                     tooltip.add(LocalUtil.localize("ac.tooltip.process_book.other_output"));
                     for (int i = 0; i < 18; i++) {
-                        ItemStack out = process.getOtherOutput(i);
+                        IMarkItem out = process.getOtherOutput(i);
                         if (out == null)
                             break;
-                        tooltip.add(LocalUtil.localize("ac.tooltip.process_book.stack_arg_s_d", out.getDisplayName(), out.stackSize));
+                        tooltip.add(LocalUtil.localize("ac.tooltip.process_book.stack_arg_s_d", out.displayName(), out.stacksize()));
                     }
                 } else {
                     tooltip.add(LocalUtil.localize("ac.tooltip.hold_ctrl"));

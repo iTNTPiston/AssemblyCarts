@@ -42,7 +42,7 @@ public class GuiAssemblyRequesterMark extends SGui {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                this.drawItemStack(markManager.getMarkedItem(i * 3 + j), 62 + j * 18, 18 + i * 18, mx, my, Arrays.asList(LocalUtil.localize("ac.tooltip.mark")));
+                this.drawMarkItem(markManager.getMarkedItem(i * 3 + j), 62 + j * 18, 18 + i * 18, mx, my, Arrays.asList(LocalUtil.localize("ac.tooltip.mark")), 1);
             }
         }
 

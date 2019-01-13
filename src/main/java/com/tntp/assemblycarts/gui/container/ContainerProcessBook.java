@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.gui.container;
 
 import com.tntp.assemblycarts.api.AssemblyProcess;
+import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.gui.SContainer;
 import com.tntp.assemblycarts.gui.SlotDecorative;
 import com.tntp.assemblycarts.init.ACItems;
@@ -56,15 +57,15 @@ public class ContainerProcessBook extends SContainer {
         // both server and client
         ItemStack current = playerInv.getItemStack();
         if (slotID == 0) {
-            ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getMainOutput());
+            IMarkItem mark = this.processMarkSlotClick(mouseButton, current, process.getMainOutput());
             process.setMainOutput(mark);
         } else if (slotID <= 18) {
             slotID--;// match list id
-            ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getInput(slotID));
+            IMarkItem mark = this.processMarkSlotClick(mouseButton, current, process.getInput(slotID));
             process.setInput(slotID, mark);
         } else if (slotID <= 36) {
             slotID -= 19;// match list id
-            ItemStack mark = this.processMarkSlotClick(mouseButton, current, process.getOtherOutput(slotID));
+            IMarkItem mark = this.processMarkSlotClick(mouseButton, current, process.getOtherOutput(slotID));
             process.setOtherOutput(slotID, mark);
         }
     }

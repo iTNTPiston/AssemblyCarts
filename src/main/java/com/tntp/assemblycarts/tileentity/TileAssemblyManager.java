@@ -7,6 +7,7 @@ import java.util.List;
 import com.tntp.assemblycarts.api.AssemblyProcess;
 import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.RequestManager;
+import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.assemblycarts.util.ItemUtil;
@@ -148,10 +149,10 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
             requestManager.initRequestWithProcess(p, multiplier);
 
             // Init requesters
-            ItemStack target = requestManager.getCraftingTarget();
-            LinkedList<ItemStack> needCopied = new LinkedList<ItemStack>();
-            for (ItemStack s : requestManager.getNeed()) {
-                needCopied.add(ItemStack.copyItemStack(s));
+            IMarkItem target = requestManager.getCraftingTarget();
+            LinkedList<IMarkItem> needCopied = new LinkedList<IMarkItem>();
+            for (IMarkItem s : requestManager.getNeed()) {
+                needCopied.add(s);
             }
 
             // Find all requesters
@@ -164,16 +165,16 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
 
             System.out.println("Find " + requesters.size() + " requesters");
             // Create a list for each requester
-            ArrayList<ArrayList<ItemStack>> needList = new ArrayList<ArrayList<ItemStack>>(requesters.size());
+            ArrayList<ArrayList<IMarkItem>> needList = new ArrayList<>(requesters.size());
             for (int i = 0; i < requesters.size(); i++) {
-                needList.add(new ArrayList<ItemStack>());
+                needList.add(new ArrayList<>());
             }
 
             // Distribute the request to all requesters
             ArrayList<Integer> selectedRequesters = new ArrayList<Integer>();
             while (!needCopied.isEmpty()) {
                 selectedRequesters.clear();
-                ItemStack toRequest = needCopied.removeFirst();
+                IMarkItem toRequest = needCopied.removeFirst();
                 // Search marked requesters first
                 for (int i = 0; i < requesters.size(); i++) {
                     if (requesters.get(i).getMarkManager().isMarked(toRequest)) {
@@ -194,23 +195,22 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
                     System.out.println("No requester available, cancel!");
                     return false;
                 }
-                int distributionAmount = toRequest.stackSize / selectedRequesters.size();
-                int remainder = toRequest.stackSize % selectedRequesters.size();
+                int distributionAmount = toRequest.stacksize() / selectedRequesters.size();
+                int remainder = toRequest.stacksize() % selectedRequesters.size();
                 for (int i = 0; i < selectedRequesters.size(); i++) {
                     int r = selectedRequesters.get(i);
-                    ArrayList<ItemStack> need = needList.get(r);
+                    ArrayList<IMarkItem> need = needList.get(r);
                     int amount = i < remainder ? distributionAmount + 1 : distributionAmount;
                     boolean added = false;
-                    for (ItemStack s : need) {
-                        if (ItemUtil.areItemAndTagEqual(s, toRequest)) {
-                            s.stackSize += amount;
+                    for (int j = 0; j < need.size(); j++) {
+                        IMarkItem mark = need.get(j);
+                        if (mark.isMarkEquivalentTo(toRequest)) {
+                            need.set(j, mark.setStackSize(mark.stacksize() + amount));
                             added = true;
                         }
                     }
                     if (!added) {
-                        ItemStack add = ItemStack.copyItemStack(toRequest);
-                        add.stackSize = amount;
-                        need.add(add);
+                        need.add(toRequest.setStackSize(amount));
                     }
                 }
 
@@ -218,7 +218,7 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
             System.out.println("Sending Request to Requesters");
             // Add the request to the requesters
             for (int i = 0; i < requesters.size(); i++) {
-                ArrayList<ItemStack> need = needList.get(i);
+                ArrayList<IMarkItem> need = needList.get(i);
                 if (!need.isEmpty()) {
                     requesters.get(i).getRequestManager().initRequestDirectly(target, need);
                     requesters.get(i).markDirty();

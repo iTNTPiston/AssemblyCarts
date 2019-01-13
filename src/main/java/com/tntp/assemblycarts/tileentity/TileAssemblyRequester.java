@@ -92,7 +92,7 @@ public class TileAssemblyRequester extends TileEntityInventoryAPIiTNTPiston impl
                     } else if (cart.getProvideManager().canProvideTo(requestManager)) {
                         if (cart.getProvideManager().getProvideTarget() == null) {
                             // If the cart doesn't have a target, set the target
-                            cart.setTarget(requestManager.getCraftingTarget().copy(), requestManager.getNeed());
+                            cart.setTarget(requestManager.getCraftingTarget(), requestManager.getNeed());
                         } else if (!cart.getProvideManager().tryProvide(requestManager, -1)) {
                             // Let the cart provide. If cannot provide then let the cart go.
                             powerTrack(30);

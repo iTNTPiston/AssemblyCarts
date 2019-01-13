@@ -33,8 +33,7 @@ public class GuiAssemblyRequester extends SGui {
         super.drawGuiContainerForegroundLayer(mx, my);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         TileAssemblyRequester tile = ((ContainerAssemblyRequester) this.inventorySlots).getTile();
-        ItemStack main = tile.getRequestManager().getCraftingTarget();
-        drawBigStack(main, mx, my);
+        drawBigStack(tile.getRequestManager().getCraftingTarget(), mx, my, 1);
         drawRequestManagerStacks(tile.getRequestManager(), mx, my);
     }
 

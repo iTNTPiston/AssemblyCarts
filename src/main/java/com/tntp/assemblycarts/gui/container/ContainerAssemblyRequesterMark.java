@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.gui.container;
 
+import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.gui.SContainerMarkManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
@@ -37,7 +38,7 @@ public class ContainerAssemblyRequesterMark extends SContainerMarkManager {
     @Override
     public void processSlotClick(int slotID, int mouseButton) {
         if (slotID >= 0 && slotID < 9) {
-            ItemStack mark = this.processMarkSlotClick(mouseButton, playerInv.getItemStack(), tile.getMarkManager().getMarkedItem(slotID));
+            IMarkItem mark = this.processMarkSlotClick(mouseButton, playerInv.getItemStack(), tile.getMarkManager().getMarkedItem(slotID));
             tile.getMarkManager().setMarkedItem(slotID, mark);
         }
     }

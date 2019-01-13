@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.gui.container;
 
+import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.gui.SContainerMarkManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
@@ -34,10 +35,6 @@ public class ContainerAssemblyPort extends SContainerMarkManager {
 
     }
 
-    public void setMarkedItemStack(int i, ItemStack s) {
-        tile.setMarkedItemStack(i, s);
-    }
-
     @Override
     public boolean canInteractWith(EntityPlayer player) {
         return tile.isUseableByPlayer(player);
@@ -46,8 +43,8 @@ public class ContainerAssemblyPort extends SContainerMarkManager {
     @Override
     public void processSlotClick(int slotID, int mouseButton) {
         if (slotID >= 0 && slotID < 9) {
-            ItemStack mark = this.processMarkSlotClick(mouseButton, playerInv.getItemStack(), tile.getMarkedItemStack(slotID));
-            setMarkedItemStack(slotID, mark);
+            IMarkItem mark = this.processMarkSlotClick(mouseButton, playerInv.getItemStack(), tile.getMarkedItemStack(slotID));
+            tile.setMarkedItemStack(slotID, mark);
         }
     }
 

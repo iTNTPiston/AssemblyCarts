@@ -12,17 +12,19 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class OreItemStack implements IMarkItem {
     private final String oreDictEntry;
+    private final int stacksize;
     @SideOnly(Side.CLIENT)
     private int displayIndex;
     @SideOnly(Side.CLIENT)
     private ItemStack[] cachedDisplayStack;
 
-    public OreItemStack(String ore) {
+    public OreItemStack(String ore, int stacksize) {
         oreDictEntry = ore;
+        this.stacksize = stacksize;
     }
 
     public OreItemStack() {
-        this(null);
+        this(null, 0);
     }
 
     @Override
@@ -42,7 +44,9 @@ public class OreItemStack implements IMarkItem {
         if (displayIndex < 0 || displayIndex >= cachedDisplayStack.length)
             displayIndex = 0;
 
-        return cachedDisplayStack[displayIndex];
+        ItemStack s = ItemStack.copyItemStack(cachedDisplayStack[displayIndex]);
+        s.stackSize = stacksize;
+        return s;
     }
 
     @SideOnly(Side.CLIENT)
@@ -59,11 +63,38 @@ public class OreItemStack implements IMarkItem {
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         tag.setString("ore", oreDictEntry);
+        tag.setInteger("stacksize", stacksize);
     }
 
     @Override
     public IMarkItem readFromNBT(NBTTagCompound tag) {
-        return new OreItemStack(tag.getString("ore"));
+        return new OreItemStack(tag.getString("ore"), tag.getInteger("stacksize"));
+    }
+
+    @Override
+    public int stacksize() {
+        return stacksize;
+    }
+
+    @Override
+    public IMarkItem setStackSize(int size) {
+        return new OreItemStack(oreDictEntry, size);
+    }
+
+    @Override
+    public String displayName() {
+        return oreDictEntry;
+    }
+
+    @Override
+    public boolean isMarkEquivalentTo(IMarkItem mark) {
+        if (mark instanceof OreItemStack) {
+            if (oreDictEntry == null)
+                return ((OreItemStack) mark).oreDictEntry == null;
+            else
+                return oreDictEntry.equals(((OreItemStack) mark).oreDictEntry);
+        }
+        return false;
     }
 
 }

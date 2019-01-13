@@ -1,5 +1,7 @@
 package com.tntp.assemblycarts.api;
 
+import com.tntp.assemblycarts.api.mark.IMarkItem;
+import com.tntp.assemblycarts.api.mark.MarkerUtil;
 import com.tntp.assemblycarts.util.ItemUtil;
 import com.tntp.assemblycarts.util.UniversalUtil;
 
@@ -10,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class ProvideManager {
     public boolean update;
-    private ItemStack target;
+    private IMarkItem target;
     private IInventory providingInventory;
     private int[] providingSlots;
 
@@ -32,11 +34,11 @@ public class ProvideManager {
      * 
      * @return
      */
-    public ItemStack getProvideTarget() {
+    public IMarkItem getProvideTarget() {
         return target;
     }
 
-    public void setProvideTarget(ItemStack t) {
+    public void setProvideTarget(IMarkItem t) {
         target = t;
         update = true;
     }
@@ -44,8 +46,8 @@ public class ProvideManager {
     public boolean canProvideTo(RequestManager rm) {
         if (target == null)
             return true;
-        ItemStack requestTarget = rm.getCraftingTarget();
-        if (ItemUtil.areItemAndTagEqual(requestTarget, target))
+        IMarkItem requestTarget = rm.getCraftingTarget();
+        if (requestTarget != null && requestTarget.isMarkEquivalentTo(target))
             return true;
         return false;
     }
@@ -93,16 +95,17 @@ public class ProvideManager {
 
     public void readFromNBT(NBTTagCompound tag) {
         NBTTagCompound provideTag = tag.getCompoundTag("provideTarget");
-        target = ItemStack.loadItemStackFromNBT(provideTag);
+        target = MarkerUtil.readFromNBT(provideTag);
         providingSlots = tag.getIntArray("providingSlots");
     }
 
     public void writeToNBT(NBTTagCompound tag) {
         NBTTagCompound provideTag = new NBTTagCompound();
 
-        if (target != null)
-            target.writeToNBT(provideTag);
-        tag.setTag("provideTarget", provideTag);
+        if (target != null) {
+            MarkerUtil.writeToNBT(provideTag, target);
+            tag.setTag("provideTarget", provideTag);
+        }
         tag.setIntArray("providingSlots", providingSlots);
     }
 

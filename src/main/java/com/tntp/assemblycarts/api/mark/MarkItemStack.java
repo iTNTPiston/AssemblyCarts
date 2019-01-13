@@ -8,12 +8,18 @@ import net.minecraft.nbt.NBTTagCompound;
 public class MarkItemStack implements IMarkItem {
     private final ItemStack wrapped;
 
+    public MarkItemStack(ItemStack s, int stackSize) {
+        wrapped = ItemStack.copyItemStack(s);
+        if (wrapped != null)
+            wrapped.stackSize = stackSize;
+    }
+
     public MarkItemStack(ItemStack s) {
-        wrapped = s;
+        this(s, s == null ? 0 : s.stackSize);
     }
 
     public MarkItemStack() {
-        this(null);
+        this(null, 0);
     }
 
     @Override
@@ -23,7 +29,7 @@ public class MarkItemStack implements IMarkItem {
 
     @Override
     public ItemStack getDisplayStack() {
-        return wrapped;
+        return ItemStack.copyItemStack(wrapped);
     }
 
     @Override
@@ -35,6 +41,31 @@ public class MarkItemStack implements IMarkItem {
     @Override
     public IMarkItem readFromNBT(NBTTagCompound tag) {
         return new MarkItemStack(ItemStack.loadItemStackFromNBT(tag));
+    }
+
+    @Override
+    public int stacksize() {
+        return wrapped.stackSize;
+    }
+
+    @Override
+    public IMarkItem setStackSize(int size) {
+        return new MarkItemStack(wrapped, size);
+    }
+
+    @Override
+    public String displayName() {
+        if (wrapped != null)
+            return wrapped.getDisplayName();
+        return "";
+    }
+
+    @Override
+    public boolean isMarkEquivalentTo(IMarkItem mark) {
+        if (mark instanceof MarkItemStack) {
+            return ItemUtil.areItemAndTagEqual(wrapped, ((MarkItemStack) mark).wrapped);
+        }
+        return false;
     }
 
 }

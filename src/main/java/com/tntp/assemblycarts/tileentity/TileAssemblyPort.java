@@ -1,5 +1,6 @@
 package com.tntp.assemblycarts.tileentity;
 
+import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.api.mark.IMarker;
 import com.tntp.assemblycarts.api.mark.MarkManager;
 import com.tntp.assemblycarts.util.DirUtil;
@@ -26,16 +27,16 @@ public class TileAssemblyPort extends TileEntityInventoryAPIiTNTPiston implement
 
     }
 
-    public void setMarkedItemStack(int i, ItemStack s) {
+    public void setMarkedItemStack(int i, IMarkItem s) {
         markManager.setMarkedItem(i, s);
         markDirty();
     }
 
-    public ItemStack getMarkedItemStack(int i) {
+    public IMarkItem getMarkedItemStack(int i) {
         return markManager.getMarkedItem(i);
     }
 
-    public ItemStack[] getMarkedItemStacks() {
+    public IMarkItem[] getMarkedItemStacks() {
         return markManager.getAllMarked();
     }
 
@@ -145,7 +146,10 @@ public class TileAssemblyPort extends TileEntityInventoryAPIiTNTPiston implement
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!markManager.hasMark())
             return bypassInsertionSide;
-        return stack != null && ItemUtil.areItemAndTagEqual(stack, markManager.getMarkedItem(slot));
+        IMarkItem mark = markManager.getMarkedItem(slot);
+        if (mark == null)
+            return false;
+        return stack != null && mark.matchesStack(stack);
     }
 
     @Override

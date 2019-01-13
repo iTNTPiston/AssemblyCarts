@@ -114,7 +114,7 @@ public class GuiAssemblyManager extends SGui {
 
             drawProcess(process, mx, my, multiplier);
         } else {
-            drawBigStack(rm.getCraftingTarget(), mx, my);
+            drawBigStack(rm.getCraftingTarget(), mx, my, 1);
             drawRequestManagerStacks(rm, mx, my);
         }
         // GL11.glTranslatef(guiLeft, guiTop, 0);
