@@ -46,4 +46,9 @@ public enum EnumGui implements IEnumGui {
         }
         throw new RuntimeException("Cannot get Container Constructor!");
     }
+
+    @Override
+    public int id() {
+        return ordinal();
+    }
 }
