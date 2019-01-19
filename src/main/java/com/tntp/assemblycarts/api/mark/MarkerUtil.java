@@ -1,5 +1,7 @@
 package com.tntp.assemblycarts.api.mark;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,8 +15,9 @@ public class MarkerUtil {
     public static void register(Class<? extends IMarkItem> clazz) {
         markTypeToId.put(clazz.getCanonicalName(), idToMarkType.size());
         try {
-            idToMarkType.add(clazz.newInstance());
-        } catch (InstantiationException | IllegalAccessException e) {
+            Constructor<? extends IMarkItem> constructor = clazz.getConstructor();
+            idToMarkType.add(constructor.newInstance());
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
             throw new RuntimeException("AssemblyCarts cannot register a mark type!");
         }
