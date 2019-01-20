@@ -1,7 +1,7 @@
 package com.tntp.assemblycarts.tileentity;
 
 public enum ACTEEvents {
-    UNKNOWN, REVERSE_TRACK;
+    UNKNOWN, REVERSE_TRACK, ASSEMBLY_STRUCTURE_REDETECT;
 
     public static ACTEEvents getEventSafe(int i) {
         ACTEEvents[] e = values();

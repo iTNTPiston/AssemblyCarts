@@ -187,17 +187,17 @@ public class SGui extends GuiContainer {
 //                main.stackSize *= multiplier;
 //        }
 
-        drawBigStack(process.getMainOutput(), mouseX, mouseY, multiplier);
+        drawBigStack(process == null ? null : process.getMainOutput(), mouseX, mouseY, multiplier);
 
         // GL11.glTranslatef(-guiLeft, -guiTop, 0);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 6; j++) {
-                this.drawMarkItem(process.getInput(i * 6 + j), 62 + j * 18, 18 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST, multiplier);
+                this.drawMarkItem(process == null ? null : process.getInput(i * 6 + j), 62 + j * 18, 18 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST, multiplier);
             }
         }
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 9; j++) {
-                this.drawMarkItem(process.getOtherOutput(i * 9 + j), 8 + j * 18, 90 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST, multiplier);
+                this.drawMarkItem(process == null ? null : process.getOtherOutput(i * 9 + j), 8 + j * 18, 90 + i * 18, mouseX, mouseY, Collections.EMPTY_LIST, multiplier);
             }
         }
         RenderHelper.enableGUIStandardItemLighting();

@@ -7,6 +7,7 @@ import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACEntities;
 import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACItems;
+import com.tntp.assemblycarts.init.ACMarks;
 import com.tntp.assemblycarts.init.ACNetworkInit;
 import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
 
@@ -24,6 +25,8 @@ public class Proxy {
         AssemblyCartsMod.log.info("Registering Guis");
         EnumGuiInjector.injectContainer("com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container", EnumGui.values());
         ACGuiHandler.registerGuiHandler();
+
+        ACMarks.registerMarkClasses();
     }
 
     public void init(FMLInitializationEvent event) {

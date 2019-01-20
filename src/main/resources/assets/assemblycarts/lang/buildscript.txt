@@ -103,7 +103,7 @@ Assembly Carts
 			流程书
 		
 		#NAME
-			assembly_mamager_books
+			assembly_manager_books
 			Assembly Manager Books
 			装配线主管 流程书
 			

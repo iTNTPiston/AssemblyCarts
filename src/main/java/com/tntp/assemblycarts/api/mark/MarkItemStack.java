@@ -34,13 +34,14 @@ public class MarkItemStack implements IMarkItem {
 
     @Override
     public void writeToNBT(NBTTagCompound tag) {
-        if (wrapped != null)
-            wrapped.writeToNBT(tag);
+        if (wrapped != null) {
+            ItemUtil.writeItemStackToNBTWithIntSize(wrapped, tag);
+        }
     }
 
     @Override
     public IMarkItem readFromNBT(NBTTagCompound tag) {
-        return new MarkItemStack(ItemStack.loadItemStackFromNBT(tag));
+        return new MarkItemStack(ItemUtil.readItemStackFromNBTWithIntSize(tag));
     }
 
     @Override

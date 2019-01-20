@@ -26,7 +26,7 @@ public enum EnumGui implements IEnumGui {
     @SideOnly(Side.CLIENT)
     public Constructor<?> guiConstructor() {
         try {
-            return gui.getConstructor(IInventory.class, IInventory.class);
+            return gui.getConstructor(IInventory.class, Object.class);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (SecurityException e) {

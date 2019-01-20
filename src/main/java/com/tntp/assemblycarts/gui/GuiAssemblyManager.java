@@ -133,7 +133,6 @@ public class GuiAssemblyManager extends SGui {
             this.playButtonSound();
             int i = (x - 7) / 18;
             ((ContainerAssemblyManager) this.inventorySlots).selectProcessBySlot(i);
-            System.out.println("selected " + i);
         }
 
     }

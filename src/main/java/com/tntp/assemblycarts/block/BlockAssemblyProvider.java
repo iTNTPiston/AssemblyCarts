@@ -22,6 +22,7 @@ public class BlockAssemblyProvider extends BlockContainerAPIiTNTPiston implement
 
     public BlockAssemblyProvider() {
         super(Assemblium.BLOCK_MATERIAL, 5.0f, 10.0f);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     @Override

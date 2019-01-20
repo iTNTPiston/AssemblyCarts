@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implements IRequester {
     private RequestManager requestManager;
     private boolean formed;
+    private boolean redetect = true;
     private boolean bypassInsertionCheck;
     private boolean isStructureCached;
     private List<IAssemblyStructure> cachedStructure;
@@ -34,11 +35,18 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
         super.updateEntity();
         isStructureCached = false;
         if (worldObj != null && !worldObj.isRemote) {
-            if (!formed) {
+            if (!formed || redetect) {
                 setFormed(detectStructure());
+                redetect = false;
             } else {
                 supplyToPorts();
             }
+        }
+    }
+
+    public void redetect() {
+        if (this.isValidInWorld()) {
+            worldObj.addBlockEvent(xCoord, yCoord, zCoord, getBlockType(), ACTEEvents.ASSEMBLY_STRUCTURE_REDETECT.ordinal(), 0);
         }
     }
 
@@ -97,7 +105,7 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
 
     public void setFormed(boolean f) {
         if (formed != f) {
-            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, f ? 8 : 0, 3);
+            worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, f ? 8 : 0, 2);
             worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
             formed = f;
         }
@@ -198,8 +206,7 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
                 int distributionAmount = toRequest.stacksize() / selectedRequesters.size();
                 int remainder = toRequest.stacksize() % selectedRequesters.size();
                 for (int i = 0; i < selectedRequesters.size(); i++) {
-                    int r = selectedRequesters.get(i);
-                    ArrayList<IMarkItem> need = needList.get(r);
+                    ArrayList<IMarkItem> need = needList.get(selectedRequesters.get(i));
                     int amount = i < remainder ? distributionAmount + 1 : distributionAmount;
                     boolean added = false;
                     for (int j = 0; j < need.size(); j++) {
@@ -210,6 +217,7 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
                         }
                     }
                     if (!added) {
+                        System.out.println(amount);
                         need.add(toRequest.setStackSize(amount));
                     }
                 }
@@ -304,6 +312,19 @@ public class TileAssemblyManager extends TileEntityInventoryAPIiTNTPiston implem
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
         requestManager.readFromNBT(tag);
+    }
+
+    @Override
+    public boolean receiveClientEvent(int event, int param) {
+        if (super.receiveClientEvent(event, param))
+            return true;
+        ACTEEvents e = ACTEEvents.getEventSafe(event);
+        if (e == ACTEEvents.ASSEMBLY_STRUCTURE_REDETECT) {
+            redetect = true;
+            worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+            return true;
+        }
+        return false;
     }
 
 }

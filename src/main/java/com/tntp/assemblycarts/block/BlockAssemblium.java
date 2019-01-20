@@ -7,6 +7,7 @@ public class BlockAssemblium extends BlockAPIiTNTPiston {
 
     public BlockAssemblium() {
         super(Assemblium.BLOCK_MATERIAL, 5.0f, 10.0f);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
 }

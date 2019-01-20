@@ -58,7 +58,6 @@ public class ContainerMinecartAssemblyWorker extends SContainerRequestManager im
     public void setupMachineSlots(IInventory machine) {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 9; j++) {
-                System.out.println("AddSLot");
                 this.addSlotToContainer(new SlotDecorative(machine, i * 9 + j, 8 + j * 18, 90 + i * 18));
             }
         }

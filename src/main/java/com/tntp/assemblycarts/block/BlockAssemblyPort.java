@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 public class BlockAssemblyPort extends BlockContainerAPIiTNTPiston implements ICrowbarRotatable {
     public BlockAssemblyPort() {
         super(Assemblium.BLOCK_MATERIAL, 5.0f, 10.0f);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     private IIcon base;

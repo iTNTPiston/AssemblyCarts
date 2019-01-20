@@ -110,15 +110,17 @@ public class RequestManager {
         System.out.println(stackSizeChange);
         if (stackSizeChange < 0) {
 
-            for (Iterator<IMarkItem> iter = need.iterator(); iter.hasNext();) {
-                IMarkItem needStack = iter.next();
+            for (int i = 0; i < need.size(); i++) {// Iterator<IMarkItem> iter = need.iterator(); iter.hasNext();) {
+                IMarkItem needStack = need.get(i);
                 if (needStack.matchesStack(stack)) {
                     System.out.println("need before " + needStack.stacksize());
                     needStack = needStack.setStackSize(needStack.stacksize() + stackSizeChange);
+                    need.set(i, needStack);
                     System.out.println("need after " + needStack.stacksize());
                     update = true;
                     if (needStack.stacksize() <= 0) {
-                        iter.remove();// remove the need;
+                        need.remove(i); // remove the need;
+                        i--;
                     }
                     break;
                 }
@@ -155,7 +157,7 @@ public class RequestManager {
 
         NBTTagList needList = new NBTTagList();
         for (IMarkItem needStack : need) {
-            if (needStack.stacksize() > 0) {
+            if (needStack != null && needStack.stacksize() > 0) {
                 NBTTagCompound needTag = new NBTTagCompound();
                 MarkerUtil.writeToNBT(needTag, needStack);
                 needList.appendTag(needTag);

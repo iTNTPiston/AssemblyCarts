@@ -56,7 +56,7 @@ public class ACBlocks {
 
         reg.of(new BlockAssemblyFrame(), "assembly_frame").behave(bhvrAssemStruc).register();
         treg.ofTE(TileAssemblyFrame.class).register();
-        reg.of(new BlockAssemblyManager(), "assembly_manager").behave(bhvrAssemStruc).register();
+        reg.of(new BlockAssemblyManager(), "assembly_manager").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
         treg.ofTE(TileAssemblyManager.class).register();
         reg.of(new BlockAssemblyPort(), "assembly_port").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
         treg.ofTE(TileAssemblyPort.class).register();

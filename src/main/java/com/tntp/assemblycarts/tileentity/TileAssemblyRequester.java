@@ -98,6 +98,8 @@ public class TileAssemblyRequester extends TileEntityInventoryAPIiTNTPiston impl
                             // Let the cart provide. If cannot provide then let the cart go.
                             powerTrack(30);
                         }
+                    } else {
+                        powerTrack(30);
                     }
                 }
             }

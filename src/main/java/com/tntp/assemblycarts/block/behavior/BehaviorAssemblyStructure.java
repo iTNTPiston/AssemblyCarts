@@ -10,15 +10,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class BehaviorAssemblyStructure implements IBlockBehavior {
-    private void setManagerUnFormedFromComponentCoord(World world, int x, int y, int z) {
+    private void setManagerRedetectFromComponentCoord(World world, int x, int y, int z) {
         TileEntity tile = world.getTileEntity(x, y, z);
         if (tile instanceof IAssemblyStructure) {
             IAssemblyStructure t = (IAssemblyStructure) tile;
             if (t.getManager() != null) {
-                t.getManager().setFormed(false);
+                TileAssemblyManager tm = t.getManager();
+                tm.redetect();
             }
         } else if (tile instanceof TileAssemblyManager) {
-            ((TileAssemblyManager) tile).setFormed(false);
+            ((TileAssemblyManager) tile).redetect();
         }
     }
 
@@ -26,7 +27,7 @@ public class BehaviorAssemblyStructure implements IBlockBehavior {
     @Overlap
     public ExeResult breakBlock(World world, int x, int y, int z, Block block, int meta) {
         if (!world.isRemote) {
-            setManagerUnFormedFromComponentCoord(world, x, y, z);
+            setManagerRedetectFromComponentCoord(world, x, y, z);
         }
         return ExeResult.CONTINUE;
     }
@@ -35,7 +36,7 @@ public class BehaviorAssemblyStructure implements IBlockBehavior {
     @Overlap
     public ExeResult onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
         if (!world.isRemote) {
-            setManagerUnFormedFromComponentCoord(world, x, y, z);
+            setManagerRedetectFromComponentCoord(world, x, y, z);
         }
         return ExeResult.CONTINUE;
     }
