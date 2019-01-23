@@ -51,9 +51,9 @@ public class BlockAssemblyProvider extends BlockContainerAPIiTNTPiston implement
         port = reg.registerIcon(this.getTextureName() + "_port");
     }
 
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
-        world.setBlockMetadataWithNotify(x, y, z, l, 2);
-    }
+//    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+//        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
+//        world.setBlockMetadataWithNotify(x, y, z, l, 2);
+//    }
 
 }

@@ -7,6 +7,7 @@ import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
+import com.tntp.assemblycarts.tileentity.TileDetectorAssembly;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 import com.tntp.minecraftmodapi.gui.IEnumGui;
 import com.tntp.minecraftmodapi.util.ItemUtil;
@@ -29,7 +30,7 @@ public class ACGuiHandler extends EnumGuiHandler {
     }
 
     private Object getArgFromEntity(IEnumGui gui, Entity entity) {
-        if (gui == EnumGui.MinecartAssemblyWorker && entity instanceof EntityMinecartAssemblyWorker)
+        if (gui == ACEnumGui.MinecartAssemblyWorker && entity instanceof EntityMinecartAssemblyWorker)
             return entity;
         return null;
     }
@@ -39,17 +40,19 @@ public class ACGuiHandler extends EnumGuiHandler {
     }
 
     private boolean validateTEForGui(IEnumGui gui, TileEntity tile) {
-        if (gui == EnumGui.AssemblyManager || gui == EnumGui.AssemblyManagerBooks)
+        if (gui == ACEnumGui.AssemblyManager || gui == ACEnumGui.AssemblyManagerBooks)
             return tile instanceof TileAssemblyManager;
-        if (gui == EnumGui.AssemblyRequester || gui == EnumGui.AssemblyRequesterMark)
+        if (gui == ACEnumGui.AssemblyRequester || gui == ACEnumGui.AssemblyRequesterMark)
             return tile instanceof TileAssemblyRequester;
-        if (gui == EnumGui.AssemblyPort)
+        if (gui == ACEnumGui.AssemblyPort)
             return tile instanceof TileAssemblyPort;
+        if (gui == ACEnumGui.DetectorMark)
+            return tile instanceof TileDetectorAssembly;
         return false;
     }
 
     private Object getArgFromItem(IEnumGui gui, ItemStack stack) {
-        if (gui == EnumGui.ProcessBook) {
+        if (gui == ACEnumGui.ProcessBook) {
             if (stack != null) {
                 TagProcessBook tag = ItemUtil.getItemTag(stack, new TagProcessBook());
                 if (tag == null)
@@ -114,7 +117,7 @@ public class ACGuiHandler extends EnumGuiHandler {
 
     @Override
     public Class<? extends IEnumGui> getEnumClass() {
-        return EnumGui.class;
+        return ACEnumGui.class;
     }
 
 }

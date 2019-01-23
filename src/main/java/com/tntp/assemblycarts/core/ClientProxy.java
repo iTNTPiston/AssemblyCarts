@@ -1,6 +1,6 @@
 package com.tntp.assemblycarts.core;
 
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.init.ACCompats;
 import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACRender;
@@ -15,7 +15,7 @@ public class ClientProxy extends Proxy {
         super.preInit(event);
         ACRender.register();
         AssemblyCartsMod.log.info("Registering Guis Client");
-        EnumGuiInjector.injectGui("com.tntp." + AssemblyCartsMod.MODID + ".gui.Gui", EnumGui.values());
+        EnumGuiInjector.injectGui("com.tntp." + AssemblyCartsMod.MODID + ".gui.Gui", ACEnumGui.values());
     }
 
     public void init(FMLInitializationEvent event) {

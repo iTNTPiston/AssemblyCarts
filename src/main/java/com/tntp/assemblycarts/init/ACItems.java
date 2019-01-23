@@ -9,7 +9,6 @@ import com.tntp.assemblycarts.item.ItemOreLookupTable;
 import com.tntp.assemblycarts.item.ItemProcessBook;
 import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.item.IItemRegisterFactory;
-import com.tntp.minecraftmodapi.item.RegItem;
 
 import cpw.mods.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraft.item.Item;

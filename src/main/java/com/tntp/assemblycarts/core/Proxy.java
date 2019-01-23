@@ -2,7 +2,7 @@ package com.tntp.assemblycarts.core;
 
 import com.tntp.assemblycarts.api.Crowbar;
 import com.tntp.assemblycarts.gui.ACGuiHandler;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.init.ACCompats;
 import com.tntp.assemblycarts.init.ACEntities;
@@ -24,7 +24,7 @@ public class Proxy {
         ACEntities.loadEntities();
 
         AssemblyCartsMod.log.info("Registering Guis");
-        EnumGuiInjector.injectContainer("com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container", EnumGui.values());
+        EnumGuiInjector.injectContainer("com.tntp." + AssemblyCartsMod.MODID + ".gui.container.Container", ACEnumGui.values());
         ACGuiHandler.registerGuiHandler();
 
         ACMarks.registerMarkClasses();

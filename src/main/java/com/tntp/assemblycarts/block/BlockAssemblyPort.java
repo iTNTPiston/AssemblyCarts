@@ -3,7 +3,7 @@ package com.tntp.assemblycarts.block;
 import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar.ICrowbarRotatable;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.minecraftmodapi.block.BlockContainerAPIiTNTPiston;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
@@ -36,7 +36,7 @@ public class BlockAssemblyPort extends BlockContainerAPIiTNTPiston implements IC
         if (super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ))
             return true;
         if (!world.isRemote) {
-            EnumGuiHandler.openGui(EnumGui.AssemblyPort, AssemblyCartsMod.MODID, player, world, x, y, z);
+            EnumGuiHandler.openGui(ACEnumGui.AssemblyPort, AssemblyCartsMod.MODID, player, world, x, y, z);
         }
         return true;
     }
@@ -66,9 +66,4 @@ public class BlockAssemblyPort extends BlockContainerAPIiTNTPiston implements IC
         return new TileAssemblyPort();
     }
 
-    @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
-        world.setBlockMetadataWithNotify(x, y, z, l, 2);
-    }
 }

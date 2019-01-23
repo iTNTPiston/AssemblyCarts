@@ -2,7 +2,7 @@ package com.tntp.assemblycarts.block.behavior;
 
 import com.tntp.assemblycarts.api.Crowbar;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 import com.tntp.minecraftmodapi.Turnary;
@@ -32,14 +32,14 @@ public class BehaviorCrowbar implements IBlockBehavior {
         if (b instanceof ICrowbarRotatable) {
             if (meta == side)
                 side ^= 1;
-            world.setBlockMetadataWithNotify(x, y, z, side, 2);
+            world.setBlockMetadataWithNotify(x, y, z, (meta & 8) + side, 2);
             if (world.isRemote) {
                 world.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
                 ClientUtil.printChatMessage(LocalUtil.localize("ac.message.side_arg_s", LocalUtil.localize("ac.message.side_" + side)));
             }
             return true;
         } else if (b == ACBlocks.assembly_manager) {
-            EnumGuiHandler.openGui(EnumGui.AssemblyManagerBooks, AssemblyCartsMod.MODID, player, world, x, y, z);
+            EnumGuiHandler.openGui(ACEnumGui.AssemblyManagerBooks, AssemblyCartsMod.MODID, player, world, x, y, z);
             return true;
         } else if (b == ACBlocks.docking_track) {
             TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);

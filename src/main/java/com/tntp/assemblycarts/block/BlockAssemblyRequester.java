@@ -3,7 +3,7 @@ package com.tntp.assemblycarts.block;
 import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar.ICrowbarRotatable;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
 import com.tntp.minecraftmodapi.block.BlockContainerAPIiTNTPiston;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
@@ -39,11 +39,11 @@ public class BlockAssemblyRequester extends BlockContainerAPIiTNTPiston implemen
             return true;
         if (!world.isRemote) {
             int meta = world.getBlockMetadata(x, y, z);
-            EnumGui e;
+            ACEnumGui e;
             if (meta == (side ^ 1)) {
-                e = EnumGui.AssemblyRequesterMark;
+                e = ACEnumGui.AssemblyRequesterMark;
             } else {
-                e = EnumGui.AssemblyRequester;
+                e = ACEnumGui.AssemblyRequester;
             }
             EnumGuiHandler.openGui(e, AssemblyCartsMod.MODID, player, world, x, y, z);
         }
@@ -69,9 +69,9 @@ public class BlockAssemblyRequester extends BlockContainerAPIiTNTPiston implemen
         back = reg.registerIcon(AssemblyCartsMod.MODID + ":assembly_requester_back");
     }
 
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
-        world.setBlockMetadataWithNotify(x, y, z, l, 2);
-    }
+//    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
+//        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
+//        world.setBlockMetadataWithNotify(x, y, z, l, 2);
+//    }
 
 }

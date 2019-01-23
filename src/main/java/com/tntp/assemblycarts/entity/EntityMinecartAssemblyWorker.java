@@ -2,13 +2,14 @@ package com.tntp.assemblycarts.entity;
 
 import java.util.List;
 
+import com.tntp.assemblycarts.api.Crowbar;
 import com.tntp.assemblycarts.api.IProvider;
 import com.tntp.assemblycarts.api.IRequester;
 import com.tntp.assemblycarts.api.ProvideManager;
 import com.tntp.assemblycarts.api.RequestManager;
 import com.tntp.assemblycarts.api.mark.IMarkItem;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 
@@ -130,10 +131,13 @@ public class EntityMinecartAssemblyWorker extends EntityMinecartContainer implem
 
     @Override
     public boolean interactFirst(EntityPlayer player) {
-        if (!this.worldObj.isRemote) {
-            EnumGuiHandler.openGuiEntity(EnumGui.MinecartAssemblyWorker, AssemblyCartsMod.MODID, player, worldObj, this.getEntityId());
+        if (!Crowbar.isCrowbar(player.getCurrentEquippedItem())) {
+            if (!this.worldObj.isRemote) {
+                EnumGuiHandler.openGuiEntity(ACEnumGui.MinecartAssemblyWorker, AssemblyCartsMod.MODID, player, worldObj, this.getEntityId());
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
 }

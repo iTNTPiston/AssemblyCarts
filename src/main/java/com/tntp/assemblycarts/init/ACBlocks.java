@@ -14,6 +14,7 @@ import com.tntp.assemblycarts.block.BlockDetectorAssembly;
 import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.block.behavior.BehaviorAssemblyStructure;
 import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar;
+import com.tntp.assemblycarts.block.behavior.BehaviorPlaceDirection;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
 import com.tntp.assemblycarts.item.ItemBlockDockingTrack;
 import com.tntp.assemblycarts.tileentity.TileAssemblyFrame;
@@ -26,9 +27,7 @@ import com.tntp.assemblycarts.tileentity.TileDockingTrack;
 import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.block.IBlockBehavior;
 import com.tntp.minecraftmodapi.block.IBlockRegisterFactory;
-import com.tntp.minecraftmodapi.block.RegBlock;
 import com.tntp.minecraftmodapi.tileentity.ITileEntityRegisterFactory;
-import com.tntp.minecraftmodapi.tileentity.RegTileEntity;
 
 import cpw.mods.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraft.block.Block;
@@ -53,6 +52,7 @@ public class ACBlocks {
     public static void loadBlocks() {
         IBlockBehavior bhvrAssemStruc = new BehaviorAssemblyStructure();
         IBlockBehavior bhvrCrowBar = new BehaviorCrowbar();
+        IBlockBehavior bhvrDirection = new BehaviorPlaceDirection();
 
         IBlockRegisterFactory reg = APIiTNTPiston.newBlockRegister().creativeTabs(ACCreativeTabs.instance);
         ITileEntityRegisterFactory treg = APIiTNTPiston.newTileRegister();
@@ -63,19 +63,19 @@ public class ACBlocks {
         treg.ofTE(TileAssemblyFrame.class).register();
         reg.of(new BlockAssemblyManager(), "assembly_manager").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
         treg.ofTE(TileAssemblyManager.class).register();
-        reg.of(new BlockAssemblyPort(), "assembly_port").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
+        reg.of(new BlockAssemblyPort(), "assembly_port").behave(bhvrAssemStruc).behave(bhvrCrowBar).behave(bhvrDirection).register();
         treg.ofTE(TileAssemblyPort.class).register();
-        reg.of(new BlockAssemblyRequester(), "assembly_requester").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
-        reg.of(new BlockAssemblyRequesterSticky(), "assembly_requester_sticky").behave(bhvrAssemStruc).behave(bhvrCrowBar).register();
+        reg.of(new BlockAssemblyRequester(), "assembly_requester").behave(bhvrAssemStruc).behave(bhvrCrowBar).behave(bhvrDirection).register();
+        reg.of(new BlockAssemblyRequesterSticky(), "assembly_requester_sticky").behave(bhvrAssemStruc).behave(bhvrCrowBar).behave(bhvrDirection).register();
         treg.ofTE(TileAssemblyRequester.class).register();
 
-        reg.of(new BlockAssemblyProvider(), "assembly_provider").behave(bhvrCrowBar).register();
+        reg.of(new BlockAssemblyProvider(), "assembly_provider").behave(bhvrCrowBar).behave(bhvrDirection).register();
         treg.ofTE(TileAssemblyProvider.class).register();
 
         reg.of(new BlockDockingTrack(), "docking_track").item(ItemBlockDockingTrack.class).register();
         treg.ofTE(TileDockingTrack.class).register();
 
-        reg.of(new BlockDetectorAssembly(), "detector_assembly").behave(bhvrCrowBar).register();
+        reg.of(new BlockDetectorAssembly(), "detector_assembly").behave(bhvrCrowBar).behave(bhvrDirection).register();
         treg.ofTE(TileDetectorAssembly.class).register();
 
     }

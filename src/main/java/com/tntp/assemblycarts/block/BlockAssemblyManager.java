@@ -2,7 +2,7 @@ package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.api.Assemblium;
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.minecraftmodapi.block.BlockContainerAPIiTNTPiston;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
@@ -46,7 +46,7 @@ public class BlockAssemblyManager extends BlockContainerAPIiTNTPiston {
         if (super.onBlockActivated(world, x, y, z, player, side, hitX, hitY, hitZ))
             return true;
         if (!world.isRemote) {
-            EnumGuiHandler.openGui(EnumGui.AssemblyManager, AssemblyCartsMod.MODID, player, world, x, y, z);
+            EnumGuiHandler.openGui(ACEnumGui.AssemblyManager, AssemblyCartsMod.MODID, player, world, x, y, z);
         }
         return true;
     }

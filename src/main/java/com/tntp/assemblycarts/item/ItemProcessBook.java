@@ -3,7 +3,7 @@ package com.tntp.assemblycarts.item;
 import java.util.List;
 
 import com.tntp.assemblycarts.core.AssemblyCartsMod;
-import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.gui.ACEnumGui;
 import com.tntp.assemblycarts.item.tag.TagProcessBook;
 import com.tntp.minecraftmodapi.gui.EnumGuiHandler;
 import com.tntp.minecraftmodapi.item.ItemAPIiTNTPiston;
@@ -27,7 +27,7 @@ public class ItemProcessBook extends ItemAPIiTNTPiston {
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         if (player.isSneaking()) {
             if (!world.isRemote) {
-                EnumGuiHandler.openGuiCurrentItem(EnumGui.ProcessBook, AssemblyCartsMod.MODID, player, world);
+                EnumGuiHandler.openGuiCurrentItem(ACEnumGui.ProcessBook, AssemblyCartsMod.MODID, player, world);
             }
         }
         return stack;
