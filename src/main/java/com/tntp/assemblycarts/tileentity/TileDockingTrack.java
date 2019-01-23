@@ -29,6 +29,10 @@ public class TileDockingTrack extends TileEntityAPIiTNTPiston {
                     setReversed(reversed);
 
             }
+            if (dockedCart == null || dockedCart.isDead) {
+                dockedCart = null;
+                occupied = false;
+            }
         }
     }
 

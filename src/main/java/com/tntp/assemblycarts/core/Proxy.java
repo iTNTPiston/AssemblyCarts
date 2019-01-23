@@ -4,6 +4,7 @@ import com.tntp.assemblycarts.api.Crowbar;
 import com.tntp.assemblycarts.gui.ACGuiHandler;
 import com.tntp.assemblycarts.gui.EnumGui;
 import com.tntp.assemblycarts.init.ACBlocks;
+import com.tntp.assemblycarts.init.ACCompats;
 import com.tntp.assemblycarts.init.ACEntities;
 import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACItems;
@@ -37,10 +38,9 @@ public class Proxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
-        Crowbar.addToCrowbar(ACItems.crowbar_assemblium);
+        ACCompats.loadCompats(this instanceof ClientProxy);
         ACEvents.loadServerEvents();
 
-        // MNMCompat.loadCompats(this instanceof ClientProxy);
     }
 
 }

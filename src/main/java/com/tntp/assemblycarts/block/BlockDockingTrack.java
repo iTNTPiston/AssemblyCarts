@@ -62,7 +62,7 @@ public class BlockDockingTrack extends BlockRailBase implements ITileEntityProvi
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         // change direction
         ItemStack item = player.getCurrentEquippedItem();
-        if (item != null && Crowbar.isCrowbar(item.getItem())) {
+        if (item != null && Crowbar.isCrowbar(item)) {
             TileDockingTrack tile = (TileDockingTrack) world.getTileEntity(x, y, z);
             tile.setReversed(!tile.isReversed());
             if (world.isRemote) {

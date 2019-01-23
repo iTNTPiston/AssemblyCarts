@@ -1,6 +1,7 @@
 package com.tntp.assemblycarts.core;
 
 import com.tntp.assemblycarts.gui.EnumGui;
+import com.tntp.assemblycarts.init.ACCompats;
 import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACRender;
 import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
@@ -24,6 +25,7 @@ public class ClientProxy extends Proxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
         ACEvents.loadClientEvents();
+
     }
 
 }

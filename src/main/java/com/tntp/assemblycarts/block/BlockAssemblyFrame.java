@@ -1,11 +1,9 @@
 package com.tntp.assemblycarts.block;
 
 import com.tntp.assemblycarts.api.Assemblium;
-import com.tntp.assemblycarts.tileentity.IAssemblyStructure;
 import com.tntp.assemblycarts.tileentity.TileAssemblyFrame;
 import com.tntp.minecraftmodapi.block.BlockBehaviorAPIiTNTPiston;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;

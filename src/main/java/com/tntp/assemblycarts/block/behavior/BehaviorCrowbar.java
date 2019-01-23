@@ -21,7 +21,7 @@ public class BehaviorCrowbar implements IBlockBehavior {
     @FirstCertain
     public Turnary onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
         ItemStack item = player.getCurrentEquippedItem();
-        if (item != null && Crowbar.isCrowbar(item.getItem())) {
+        if (item != null && Crowbar.isCrowbar(item)) {
             if (crowBarHit(world, world.getBlock(x, y, z), x, y, z, world.getBlockMetadata(x, y, z), side, player))
                 return Turnary.TRUE;
         }

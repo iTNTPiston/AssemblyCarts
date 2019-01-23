@@ -1,18 +1,18 @@
 package com.tntp.assemblycarts.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 
 public class Crowbar {
-  private static List<Item> crowbar = new ArrayList<Item>();
 
-  public static void addToCrowbar(Item i) {
-    crowbar.add(i);
-  }
-
-  public static boolean isCrowbar(Item i) {
-    return crowbar.contains(i);
-  }
+    public static boolean isCrowbar(ItemStack stack) {
+        if (stack != null) {
+            Item i = stack.getItem();
+            if (i instanceof ItemTool) {
+                return i.getToolClasses(stack).contains("crowbar");
+            }
+        }
+        return false;
+    }
 }

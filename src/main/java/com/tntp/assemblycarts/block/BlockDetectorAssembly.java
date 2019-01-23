@@ -1,0 +1,65 @@
+package com.tntp.assemblycarts.block;
+
+import com.tntp.assemblycarts.api.Assemblium;
+import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar.ICrowbarRotatable;
+import com.tntp.assemblycarts.core.AssemblyCartsMod;
+import com.tntp.assemblycarts.tileentity.TileDetectorAssembly;
+import com.tntp.minecraftmodapi.block.BlockBehaviorAPIiTNTPiston;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+public class BlockDetectorAssembly extends BlockBehaviorAPIiTNTPiston implements ICrowbarRotatable, ITileEntityProvider {
+    private IIcon port_off;
+    private IIcon port_on;
+
+    public BlockDetectorAssembly() {
+        super(Assemblium.BLOCK_MATERIAL, 5.0f, 10.0f);
+        this.setHarvestLevel("pickaxe", 1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void registerBlockIcons(IIconRegister reg) {
+        blockIcon = reg.registerIcon(AssemblyCartsMod.MODID + ":assemblium_block");
+        port_off = reg.registerIcon(getTextureName() + "_off");
+        port_on = reg.registerIcon(getTextureName() + "_on");
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public IIcon getIcon(int side, int meta) {
+        if (side == (meta & 7)) {
+            if ((meta & 8) == 8)
+                return port_on;
+            return port_off;
+        }
+        return blockIcon;
+    }
+
+    @Override
+    public boolean canProvidePower() {
+        return true;
+    }
+
+    @Override
+    public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int direction) {
+        int meta = world.getBlockMetadata(x, y, z);
+        if ((meta & 8) == 8 && (meta & 7) == direction)
+            return 15;
+        return 0;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+        return new TileDetectorAssembly();
+    }
+
+}

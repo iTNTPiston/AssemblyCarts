@@ -10,6 +10,7 @@ import com.tntp.assemblycarts.block.BlockAssemblyProvider;
 import com.tntp.assemblycarts.block.BlockAssemblyRequester;
 import com.tntp.assemblycarts.block.BlockAssemblyRequesterSticky;
 import com.tntp.assemblycarts.block.BlockAssemblyWorker;
+import com.tntp.assemblycarts.block.BlockDetectorAssembly;
 import com.tntp.assemblycarts.block.BlockDockingTrack;
 import com.tntp.assemblycarts.block.behavior.BehaviorAssemblyStructure;
 import com.tntp.assemblycarts.block.behavior.BehaviorCrowbar;
@@ -20,7 +21,9 @@ import com.tntp.assemblycarts.tileentity.TileAssemblyManager;
 import com.tntp.assemblycarts.tileentity.TileAssemblyPort;
 import com.tntp.assemblycarts.tileentity.TileAssemblyProvider;
 import com.tntp.assemblycarts.tileentity.TileAssemblyRequester;
+import com.tntp.assemblycarts.tileentity.TileDetectorAssembly;
 import com.tntp.assemblycarts.tileentity.TileDockingTrack;
+import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.block.IBlockBehavior;
 import com.tntp.minecraftmodapi.block.IBlockRegisterFactory;
 import com.tntp.minecraftmodapi.block.RegBlock;
@@ -45,12 +48,14 @@ public class ACBlocks {
 
     public static final Block docking_track = null;
 
+    public static final Block detector_assembly = null;
+
     public static void loadBlocks() {
         IBlockBehavior bhvrAssemStruc = new BehaviorAssemblyStructure();
         IBlockBehavior bhvrCrowBar = new BehaviorCrowbar();
 
-        IBlockRegisterFactory reg = new RegBlock().creativeTabs(ACCreativeTabs.instance);
-        ITileEntityRegisterFactory treg = new RegTileEntity();
+        IBlockRegisterFactory reg = APIiTNTPiston.newBlockRegister().creativeTabs(ACCreativeTabs.instance);
+        ITileEntityRegisterFactory treg = APIiTNTPiston.newTileRegister();
         reg.of(new BlockAssemblium(), "assemblium_block").register();
         reg.of(new BlockAssemblyWorker(), "assembly_worker").behave(bhvrCrowBar).register();
 
@@ -69,6 +74,9 @@ public class ACBlocks {
 
         reg.of(new BlockDockingTrack(), "docking_track").item(ItemBlockDockingTrack.class).register();
         treg.ofTE(TileDockingTrack.class).register();
+
+        reg.of(new BlockDetectorAssembly(), "detector_assembly").behave(bhvrCrowBar).register();
+        treg.ofTE(TileDetectorAssembly.class).register();
 
     }
 

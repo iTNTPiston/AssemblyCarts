@@ -7,6 +7,7 @@ import com.tntp.assemblycarts.item.ItemAssemblyCart;
 import com.tntp.assemblycarts.item.ItemCrowbarAssemblium;
 import com.tntp.assemblycarts.item.ItemOreLookupTable;
 import com.tntp.assemblycarts.item.ItemProcessBook;
+import com.tntp.minecraftmodapi.APIiTNTPiston;
 import com.tntp.minecraftmodapi.item.IItemRegisterFactory;
 import com.tntp.minecraftmodapi.item.RegItem;
 
@@ -24,7 +25,7 @@ public class ACItems {
 
     public static void loadItems() {
         AssemblyCartsMod.log.info("Registering Items");
-        IItemRegisterFactory reg = new RegItem().creativeTabs(ACCreativeTabs.instance);
+        IItemRegisterFactory reg = APIiTNTPiston.newItemRegister().creativeTabs(ACCreativeTabs.instance);
         reg.of(new ItemAssemblyCart(), "assembly_worker_cart").register();
         reg.of(new ItemCrowbarAssemblium(), "crowbar_assemblium").register();
         reg.of(new ItemProcessBook(), "process_book").register();
