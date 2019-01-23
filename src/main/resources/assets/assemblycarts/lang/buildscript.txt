@@ -62,6 +62,11 @@ Blocks
 		Assembly Worker
 		装配工
 		
+	#NAME
+		detector_assembly
+		Detector - Assembly
+		传感器-装配
+		
 	#SUFFIX
 	
 #RETURN tile

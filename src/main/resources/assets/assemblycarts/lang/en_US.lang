@@ -31,4 +31,5 @@ tile.assembly_provider.name=Assembly Provider
 tile.assembly_requester.name=Assembly Requester
 tile.assembly_requester_sticky.name=Sticky Assembly Requester
 tile.assembly_worker.name=Assembly Worker
+tile.detector_assembly.name=Detector - Assembly
 tile.docking_track.name=Assembly Docking Track

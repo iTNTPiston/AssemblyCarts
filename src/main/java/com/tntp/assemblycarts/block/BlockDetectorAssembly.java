@@ -35,15 +35,17 @@ public class BlockDetectorAssembly extends BlockBehaviorAPIiTNTPiston implements
         port_on = reg.registerIcon(getTextureName() + "_on");
     }
 
-    @SideOnly(Side.CLIENT)
     @Override
-    public IIcon getIcon(int side, int meta) {
-        if (side == (meta & 7)) {
-            if ((meta & 8) == 8)
-                return port_on;
-            return port_off;
-        }
-        return blockIcon;
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        int meta = world.getBlockMetadata(x, y, z);
+        return side == meta ? ((meta & 8) == 8 ? port_on : port_off) : blockIcon;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public IIcon getIcon(int s, int meta) {
+        return s == 3 ? port_on : blockIcon;
     }
 
     @Override

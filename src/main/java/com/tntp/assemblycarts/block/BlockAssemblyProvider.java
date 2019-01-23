@@ -8,10 +8,7 @@ import com.tntp.minecraftmodapi.block.BlockContainerAPIiTNTPiston;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
@@ -50,10 +47,5 @@ public class BlockAssemblyProvider extends BlockContainerAPIiTNTPiston implement
         side = reg.registerIcon(this.getTextureName() + "_side");
         port = reg.registerIcon(this.getTextureName() + "_port");
     }
-
-//    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack) {
-//        int l = BlockPistonBase.determineOrientation(world, x, y, z, entity);
-//        world.setBlockMetadataWithNotify(x, y, z, l, 2);
-//    }
 
 }

@@ -31,4 +31,5 @@ tile.assembly_provider.name=装配供应机
 tile.assembly_requester.name=装配请求机
 tile.assembly_requester_sticky.name=粘性装配请求机
 tile.assembly_worker.name=装配工
+tile.detector_assembly.name=传感器-装配
 tile.docking_track.name=装配停泊轨道

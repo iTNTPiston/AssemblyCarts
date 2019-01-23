@@ -1,7 +1,6 @@
 package com.tntp.assemblycarts.core;
 
 import com.tntp.assemblycarts.gui.ACEnumGui;
-import com.tntp.assemblycarts.init.ACCompats;
 import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACRender;
 import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
