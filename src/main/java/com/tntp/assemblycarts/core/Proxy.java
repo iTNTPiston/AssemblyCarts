@@ -9,6 +9,7 @@ import com.tntp.assemblycarts.init.ACEvents;
 import com.tntp.assemblycarts.init.ACItems;
 import com.tntp.assemblycarts.init.ACMarks;
 import com.tntp.assemblycarts.init.ACNetworkInit;
+import com.tntp.assemblycarts.init.ACRecipes;
 import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -38,6 +39,7 @@ public class Proxy {
 
     public void postInit(FMLPostInitializationEvent event) {
         ACCompats.loadCompats(this instanceof ClientProxy);
+        ACRecipes.registerRecipes();
         ACEvents.loadServerEvents();
 
     }
