@@ -15,6 +15,7 @@ import com.tntp.minecraftmodapi.gui.EnumGuiInjector;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class Proxy {
 
@@ -33,6 +34,11 @@ public class Proxy {
     public void init(FMLInitializationEvent event) {
         ACBlocks.validateInjection();
         ACItems.validateInjection();
+
+        OreDictionary.registerOre("ingotAssemblium", ACItems.ingot_assemblium);
+        OreDictionary.registerOre("plateAssemblium", ACItems.plate_assemblium);
+        OreDictionary.registerOre("blockAssemblium", ACBlocks.assemblium_block);
+
         AssemblyCartsMod.log.info("Registering Messages");
         ACNetworkInit.loadNetwork();
     }
